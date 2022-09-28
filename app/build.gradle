@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+
+    id 'com.squareup.sqldelight'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -76,4 +79,14 @@ dependencies {
     // SQL Delight
     implementation "com.squareup.sqldelight:android-driver:1.5.3"
     implementation "com.squareup.sqldelight:coroutines-extensions-jvm:1.5.3"
+
+    //Dagger - Hilt
+    implementation "com.google.dagger:hilt-android:2.38.1"
+    kapt "com.google.dagger:hilt-android-compiler:2.38.1"
+}
+
+sqldelight{
+    KanjiDatabase{
+        packageName = "com.talisol.kankenkakitori"
+    }
 }

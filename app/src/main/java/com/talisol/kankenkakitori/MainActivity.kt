@@ -30,9 +30,7 @@ class MainActivity : ComponentActivity() {
                 val drawingVM = viewModel<DrawingVM>()
                 val drawingState by drawingVM.drawingState.collectAsState()
                 val currentPath by drawingVM.currentPath.collectAsState()
-
                 val recognizerVM = viewModel<KanjiRecognitionVM>()
-
 
                 KanjiRecognitionScreen(
                     currentPath,
@@ -40,6 +38,7 @@ class MainActivity : ComponentActivity() {
                     drawingVM::onAction,
                     recognizerVM::predictKanji
                 )
+
             }
         }
     }

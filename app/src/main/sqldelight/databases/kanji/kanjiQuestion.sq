@@ -1,0 +1,84 @@
+CREATE TABLE  kakitoriQuestion(
+    id INTEGER PRIMARY KEY NOT NULL,
+    question TEXT NOT NULL ,
+    target TEXT NOT NULL,
+    answer TEXT NOT NULL,
+    kanken_kyu INTEGER NOT NULL,
+    total_correct INTEGER  DEFAULT 0 NOT NULL,
+    total_wrong INTEGER  DEFAULT 0 NOT NULL,
+    correct_streak INTEGER  DEFAULT 0 NOT NULL,
+    last_correct_date TEXT,
+    available INTEGER  DEFAULT 1 NOT NULL,
+    marked_for_review INTEGER DEFAULT 0 NOT NULL
+);
+
+
+getKankenKyulist:
+SELECT DISTINCT kanken_kyu
+FROM kakitoriQuestion
+ORDER BY kanken_kyu;
+
+selectByKankenKyu:
+SELECT *
+FROM kakitoriQuestion
+WHERE kanken_kyu = :kanken_kyu;
+
+updateTotalCorrect:
+UPDATE  kakitoriQuestion
+SET total_correct = :total_correct
+WHERE id = :id;
+
+updateTotalWrong:
+UPDATE  kakitoriQuestion
+SET total_wrong = :total_wrong
+WHERE id = :id;
+
+updateCorrectStreak:
+UPDATE  kakitoriQuestion
+SET correct_streak = :correct_streak
+WHERE id = :id;
+
+updateLastCorrectDate:
+UPDATE  kakitoriQuestion
+SET last_correct_date = :last_correct_date
+WHERE id = :id;
+
+makeUnavailable:
+UPDATE kakitoriQuestion
+SET available = 0
+WHERE id = :id;
+
+makeAvailable:
+UPDATE kakitoriQuestion
+SET available = 1
+WHERE id = :id;
+
+markForReview:
+UPDATE kakitoriQuestion
+SET marked_for_review = 1
+WHERE id = :id;
+
+INSERT INTO kakitoriQuestion(
+question,
+target,
+answer,
+kanken_kyu,
+total_correct,
+total_wrong,
+correct_streak,
+last_correct_date,
+available
+)
+
+VALUES
+(
+"ニ本",
+"ニ",
+"日",
+10,
+0,
+0,
+0,
+NULL,
+1
+);
