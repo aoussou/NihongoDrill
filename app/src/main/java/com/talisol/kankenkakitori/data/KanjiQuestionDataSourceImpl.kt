@@ -10,7 +10,7 @@ class KanjiQuestionDataSourceImpl(
 
     private val queries = db.kanjiQuestionQueries
 
-    override fun getAllKankenEntriesByKyu(kyu:Long): List<KakitoriQuestion> {
+    override fun getAllKankenEntriesByKyu(kyu:String): List<KakitoriQuestion> {
         return queries.selectByKankenKyu(kyu).executeAsList()
     }
 
@@ -30,7 +30,7 @@ class KanjiQuestionDataSourceImpl(
         queries.updateLastCorrectDate(lastCorrectDate,id)
     }
 
-    override fun getKankenKyuList(): List<Long> {
+    override fun getKankenKyuList(): List<String> {
         return queries.getKankenKyulist().executeAsList()
     }
 

@@ -20,6 +20,5 @@ data class QuizState(
     val quizType: String? = null,
     val isLastQuestion: Boolean = false,
     val isFirstQuestion: Boolean = true,
-    val chosenNumberOfQuestions: Int? = null,
-    val actualNumberOfQuestions: Int? = null,
+
     )

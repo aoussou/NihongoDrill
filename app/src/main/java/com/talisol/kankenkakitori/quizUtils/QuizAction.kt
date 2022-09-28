@@ -11,7 +11,7 @@ sealed class QuizAction{
     object ConfirmAnswer: QuizAction()
     object StartQuiz: QuizAction()
     data class InputAnswer(val answerString: String): QuizAction()
-    data class SelectQuestionGroup(val questionGroupID: String) : QuizAction()
+    data class SelectQuestionLevel(val questionGroupID: String) : QuizAction()
     data class SelectQuizType(val quizType: String) : QuizAction()
     object EndQuiz: QuizAction()
 
@@ -28,6 +28,9 @@ sealed class QuizAction{
 
     data class ShowAlertDialog(val dialogState: DialogState): QuizAction()
     object CloseAlertDialog: QuizAction()
+
+    data class LoadSelectedGroupQuestions(val groupId: Int): QuizAction()
+    object MakeLocalQuizQuestionList: QuizAction()
 
 
 }

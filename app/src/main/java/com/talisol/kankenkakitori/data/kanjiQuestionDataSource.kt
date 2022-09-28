@@ -4,7 +4,7 @@ import databases.kanji.KakitoriQuestion
 
 interface KanjiQuestionDataSource {
 
-    fun getAllKankenEntriesByKyu(kyu:Long): List<KakitoriQuestion>
+    fun getAllKankenEntriesByKyu(kyu:String): List<KakitoriQuestion>
 
     fun updateTotalCorrectNumber(id:Long, nCorrect: Long)
 
@@ -14,7 +14,7 @@ interface KanjiQuestionDataSource {
 
     fun updateLastCorrectDate(id:Long, lastCorrectDate:String)
 
-    fun getKankenKyuList(): List<Long>
+    fun getKankenKyuList(): List<String>
 
     fun makeUnavailable(id: Long)
 
