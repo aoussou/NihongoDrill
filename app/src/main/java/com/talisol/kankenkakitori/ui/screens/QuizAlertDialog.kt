@@ -4,9 +4,6 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.text.input.TextFieldValue
 import com.talisol.kankenkakitori.quizUtils.DialogState
 import com.talisol.kankenkakitori.quizUtils.QuizAction
 
@@ -28,7 +25,7 @@ fun QuizAlertDialog(
                 Button(
                     onClick = dialogState.onConfirmAction!!
                 ) {
-                    Text(dialogState.comfirmButtonText)
+                    Text(dialogState.confirmButtonText)
                 }
             },
             dismissButton = {
