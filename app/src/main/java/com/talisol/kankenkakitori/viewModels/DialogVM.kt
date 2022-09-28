@@ -17,13 +17,13 @@ class DialogVM: ViewModel() {
         when (action) {
 
             is QuizAction.ShowAlertDialog -> showAlertDialog(action.dialogState)
+            is QuizAction.CloseAlertDialog -> closeAlertDialog()
             else -> {}
         }
 
     }
 
     private fun showAlertDialog(newDialogState: DialogState) {
-
         _dialogState.update {
             it.copy(
                 isAlertDialogShown = true,
@@ -32,6 +32,10 @@ class DialogVM: ViewModel() {
             )
         }
 
+    }
+
+    private fun closeAlertDialog() {
+        _dialogState.value = DialogState()
     }
 
 }
