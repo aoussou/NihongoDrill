@@ -6,13 +6,11 @@ import com.squareup.sqldelight.db.SqlDriver
 import com.talisol.kankenkakitori.KanjiDatabase
 import com.talisol.kankenkakitori.data.KanjiQuestionDataSource
 import com.talisol.kankenkakitori.data.KanjiQuestionDataSourceImpl
-
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import kotlin.text.Typography.dagger
 
 @Module
 @InstallIn(SingletonComponent::class)

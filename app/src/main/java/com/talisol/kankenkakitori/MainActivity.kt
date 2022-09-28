@@ -19,7 +19,9 @@ import com.talisol.kanjirecognizercompose.screens.KanjiRecognitionScreen
 import com.talisol.kanjirecognizercompose.viewModels.KanjiRecognitionVM
 import com.talisol.kankenkakitori.ui.theme.KankenKakitoriTheme
 import com.talisol.kankenkakitori.viewModels.DrawingVM
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {

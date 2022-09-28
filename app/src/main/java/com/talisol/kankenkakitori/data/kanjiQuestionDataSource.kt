@@ -8,7 +8,7 @@ interface KanjiQuestionDataSource {
 
     fun updateTotalCorrectNumber(id:Long, nCorrect: Long)
 
-    fun updateTotalWrongNumber(id:Long, nCorrect: Long)
+    fun updateTotalWrongNumber(id:Long, nWrong: Long)
 
     fun updateCorrectStreak(id:Long, nCorrectStreak: Long)
 
