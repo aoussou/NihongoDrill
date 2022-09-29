@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.talisol.kankenkakitori.quizUtils.QuizAction
+import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.ui.screens.KankenQuizScreen
 import com.talisol.kankenkakitori.ui.screens.SelectKyuScreen
 import com.talisol.kankenkakitori.ui.theme.KankenKakitoriTheme
@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
                 val quizVM = viewModel<QuizVM>()
                 val quizState by quizVM.quizState.collectAsState()
 
-                val trackinVM = viewModel<ProgressTrackingVM>()
+                val trackingVM = viewModel<ProgressTrackingVM>()
 
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -58,8 +58,9 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     if (
-                        localQuizState.chosenNumberOfQuestions == null ||
-                        localQuizState.groupChosen == null
+                        !quizState.isQuizStarted
+
+
                     ) {
                         Text(text = "SELECT LEVEL")
 
@@ -70,14 +71,14 @@ class MainActivity : ComponentActivity() {
 
                     } else {
 
-                        if (!quizState.isQuizStarted) {
+                        if (localQuizState.chosenNumberOfQuestions != null &&
+                            localQuizState.groupChosen != null
+                        ) {
                             Button(onClick = {
                                 questionListSelectionVM.onAction(QuizAction.LoadSelectedGroupQuestions)
                                 questionListSelectionVM.onAction(QuizAction.MakeLocalQuizQuestionList)
                                 quizVM.onAction(QuizAction.LoadQuestionList(questionListSelectionVM.localQAlist.value))
                                 quizVM.onAction(QuizAction.StartQuiz)
-
-
                             }) {
                                 Text(text = "Start quiz, ${localQuizState.chosenNumberOfQuestions} questions of ${localQuizState.groupChosen}")
                             }
@@ -92,26 +93,12 @@ class MainActivity : ComponentActivity() {
                                 drawingAction = drawingVM::onAction,
                                 kanjiRecognizerOnAction = recognizerVM::onAction,
                                 predictedKanji = predictedKanji.value,
-                                trackingOnAction = trackinVM::onAction
+                                trackingOnAction = trackingVM::onAction,
+                                onDialogAction = dialogVM::onAction
                             )
 
-
                         }
-
-
-
-
-
-//                        KanjiRecognitionScreen(
-//                            currentPath,
-//                            drawingState,
-//                            drawingVM::onAction,
-//                            recognizerVM::predictKanji
-//                        )
-
                     }
-
-
                 }
 
             }
@@ -120,17 +107,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    KankenKakitoriTheme {
-        Greeting("Android")
-    }
 }

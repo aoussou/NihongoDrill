@@ -1,14 +1,12 @@
 package com.talisol.kankenkakitori.viewModels
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import com.talisol.kankenkakitori.data.KanjiQuestionDataSource
-import com.talisol.kankenkakitori.quizUtils.TrackingAction
+import com.talisol.kankenkakitori.actions.TrackingAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,6 +14,7 @@ class ProgressTrackingVM @Inject constructor(
     private val kanjiQuestionDataSource: KanjiQuestionDataSource
 ) : ViewModel() {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun onAction(action: TrackingAction) {
         when (action) {
             is TrackingAction.AddOneCorrect -> addOneCorrect(action.id)
@@ -24,6 +23,9 @@ class ProgressTrackingVM @Inject constructor(
             is TrackingAction.SubtractOneWrong -> subtractOneWrong(action.id)
             is TrackingAction.StopAsking -> stopAsking(action.id)
             is TrackingAction.MarkForReview -> markForReview(action.id)
+            is TrackingAction.UpdateCorrectStreak -> updateCorrectStreak(action.id)
+            is TrackingAction.ResetCorrectStreak -> resetCorrectStreak(action.id)
+            is TrackingAction.UpdateLastCorrectTime -> updateLastCorrectTime(action.id)
         }
     }
 
@@ -62,7 +64,7 @@ class ProgressTrackingVM @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun updateLastCorrect(id:Int) {
+    private fun updateLastCorrectTime(id:Int) {
         kanjiQuestionDataSource.updateLastCorrectDate(
             id.toLong(),
             LocalDateTime.now().toString()

@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.talisol.kankenkakitori.quizUtils.QuizAction
+import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 import com.talisol.kankenkakitori.quizUtils.makeTargetRed
 

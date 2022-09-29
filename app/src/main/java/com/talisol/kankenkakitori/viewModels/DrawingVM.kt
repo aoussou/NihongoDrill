@@ -3,7 +3,7 @@ package com.talisol.kankenkakitori.viewModels
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.lifecycle.ViewModel
-import com.talisol.kanjirecognizercompose.drawingUtils.DrawingAction
+import com.talisol.kankenkakitori.actions.DrawingAction
 import com.talisol.kankenkakitori.drawingUtils.DrawingState
 import com.talisol.kankenkakitori.drawingUtils.MotionEvent
 import kotlinx.coroutines.flow.MutableStateFlow

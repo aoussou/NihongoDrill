@@ -3,7 +3,8 @@ package com.talisol.kankenkakitori.viewModels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.talisol.kankenkakitori.data.KanjiQuestionDataSource
-import com.talisol.kankenkakitori.quizUtils.QuizAction
+import com.talisol.kankenkakitori.actions.QuizAction
+import com.talisol.kankenkakitori.actions.QuizSettingAction
 import com.talisol.kankenkakitori.ui.states.QuizSelectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import databases.kanji.KakitoriQuestion
@@ -33,14 +34,14 @@ class QuestionListSelectionVM @Inject constructor(
     private lateinit var _loadedQAs: List<KakitoriQuestion>
 
 
-    fun onAction(action: QuizAction) {
+    fun onAction(action: QuizSettingAction) {
 
         when (action) {
-            is QuizAction.LoadSelectedGroupQuestions -> loadSelectedQuestionGroup()
-            is QuizAction.SelectQuestionLevel -> setQuestionLevel(action.questionGroupID)
-            is QuizAction.ChooseNumberOfQuestions -> setNumberOfQuestions(action.number)
-            is QuizAction.MakeLocalQuizQuestionList -> makeLocalQuestionList()
-            is QuizAction.StartQuiz -> startQuiz()
+            is QuizSettingAction.LoadSelectedGroupQuestions -> loadSelectedQuestionGroup()
+            is QuizSettingAction.SelectQuestionLevel -> setQuestionLevel(action.questionGroupID)
+            is QuizSettingAction.ChooseNumberOfQuestions -> setNumberOfQuestions(action.number)
+            is QuizSettingAction.MakeLocalQuizQuestionList -> makeLocalQuestionList()
+            is QuizSettingAction.StartQuiz -> startQuiz()
             else -> Error("NO ACTION $action")
         }
     }

@@ -26,10 +26,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.applyCanvas
-import com.talisol.kanjirecognizercompose.drawingUtils.DrawingAction
+import com.talisol.kankenkakitori.actions.DrawingAction
 import com.talisol.kanjirecognizercompose.ui.screens.DrawingPropertiesMenu
 import com.talisol.kankenkakitori.drawingUtils.*
-import com.talisol.kankenkakitori.quizUtils.QuizAction
+import com.talisol.kankenkakitori.actions.QuizAction
 import java.io.File
 import kotlin.math.roundToInt
 

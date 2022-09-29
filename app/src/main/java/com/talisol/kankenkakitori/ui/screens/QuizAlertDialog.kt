@@ -4,13 +4,14 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import com.talisol.kankenkakitori.actions.DialogAction
 import com.talisol.kankenkakitori.ui.states.DialogState
-import com.talisol.kankenkakitori.quizUtils.QuizAction
+import com.talisol.kankenkakitori.actions.QuizAction
 
 @Composable
 fun QuizAlertDialog(
     dialogState: DialogState,
-    onAction: (QuizAction) -> Unit,
+    onAction: (DialogAction) -> Unit,
 ) {
     if (dialogState.isAlertDialogShown) {
         AlertDialog(
@@ -31,7 +32,7 @@ fun QuizAlertDialog(
             dismissButton = {
                 Button(
                     onClick = {
-                        onAction(QuizAction.CloseAlertDialog)
+                        onAction(DialogAction.CloseAlertDialog)
                     }) {
                     Text(dialogState.dismissButtonText)
                 }

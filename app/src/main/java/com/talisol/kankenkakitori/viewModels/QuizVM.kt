@@ -1,8 +1,8 @@
 package com.talisol.kankenkakitori.viewModels
 
 import androidx.lifecycle.ViewModel
-import com.talisol.kankenkakitori.quizUtils.QuizAction
-import com.talisol.kankenkakitori.quizUtils.TrackingAction
+import com.talisol.kankenkakitori.actions.QuizAction
+import com.talisol.kankenkakitori.actions.TrackingAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import databases.kanji.KakitoriQuestion
@@ -63,17 +63,21 @@ class QuizVM @Inject constructor() : ViewModel() {
         }
     }
 
-
-
     private fun confirmAnswer(trackingOnAction: (TrackingAction)-> Unit) {
         if (_quizState.value.inputAnswer != null && !quizState.value.isAnswerConfirmed) {
+
+            val id = _quizState.value.questionGlobalId!!
+
             _quizState.update { it.copy(isAnswerConfirmed = true) }
             if (quizState.value.inputAnswer == quizState.value.correctAnswer) {
                 _quizState.update { it.copy(isAnswerCorrect = true) }
-                trackingOnAction(TrackingAction.AddOneCorrect(_quizState.value.questionGlobalId!!))
+                trackingOnAction(TrackingAction.AddOneCorrect(id))
+                trackingOnAction(TrackingAction.UpdateCorrectStreak(id))
+                trackingOnAction(TrackingAction.UpdateLastCorrectTime(id))
             } else {
                 _quizState.update { it.copy(isAnswerCorrect = false) }
-                trackingOnAction(TrackingAction.AddOneWrong(_quizState.value.questionGlobalId!!))
+                trackingOnAction(TrackingAction.AddOneWrong(id))
+                trackingOnAction(TrackingAction.ResetCorrectStreak(id))
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.talisol.kankenkakitori.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,12 +13,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.talisol.kanjirecognizercompose.drawingUtils.DrawingAction
+import com.talisol.kankenkakitori.actions.DrawingAction
 import com.talisol.kanjirecognizercompose.screens.KanjiRecognitionScreen
+import com.talisol.kankenkakitori.actions.DialogAction
 import com.talisol.kankenkakitori.drawingUtils.DrawingState
 import com.talisol.kankenkakitori.ui.states.DialogState
-import com.talisol.kankenkakitori.quizUtils.QuizAction
-import com.talisol.kankenkakitori.quizUtils.TrackingAction
+import com.talisol.kankenkakitori.actions.QuizAction
+import com.talisol.kankenkakitori.actions.TrackingAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 import com.talisol.kankenkakitori.ui.theme.DarkGreen
 
@@ -33,14 +33,15 @@ fun KankenQuizScreen(
     drawingAction: (DrawingAction) -> Unit,
     kanjiRecognizerOnAction: (QuizAction) -> Unit,
     predictedKanji: String?,
-    trackingOnAction: (TrackingAction) -> Unit
+    trackingOnAction: (TrackingAction) -> Unit,
+    onDialogAction: (DialogAction) -> Unit
 ) {
 
     val omitQuestionDialog = DialogState(
         dialogText = "Are you sure you want the quiz to omit this question?",
         onConfirmAction = {
             trackingOnAction(TrackingAction.StopAsking(state.questionGlobalId!!))
-            onAction(QuizAction.CloseAlertDialog)
+            onDialogAction(DialogAction.CloseAlertDialog)
             onAction(QuizAction.NextQuestion)
 
             if (state.isLastQuestion) onAction(QuizAction.EndQuiz)
@@ -51,9 +52,12 @@ fun KankenQuizScreen(
         dialogText = "Are you sure you got this question right?",
         onConfirmAction =
         {
-            onAction(QuizAction.CloseAlertDialog)
-            trackingOnAction(TrackingAction.AddOneCorrect(state.questionGlobalId!!))
-            trackingOnAction(TrackingAction.SubtractOneWrong(state.questionGlobalId))
+            val questionId = state.questionGlobalId!!
+            onDialogAction(DialogAction.CloseAlertDialog)
+            trackingOnAction(TrackingAction.AddOneCorrect(questionId))
+            trackingOnAction(TrackingAction.SubtractOneWrong(questionId))
+            trackingOnAction(TrackingAction.UpdateLastCorrectTime(questionId))
+            trackingOnAction(TrackingAction.UpdateCorrectStreak(questionId))
             onAction(QuizAction.NextQuestion)
         }
     )
@@ -62,12 +66,12 @@ fun KankenQuizScreen(
         dialogText = "Are you sure you want to mark this question for review?",
         onConfirmAction =
         {
-            onAction(QuizAction.CloseAlertDialog)
+            onDialogAction(DialogAction.CloseAlertDialog)
             trackingOnAction(TrackingAction.MarkForReview(state.questionGlobalId!!))
         }
     )
 
-    QuizAlertDialog(dialogState = dialogState, onAction = onAction)
+    QuizAlertDialog(dialogState = dialogState, onAction = onDialogAction)
 
 
     Column(
@@ -82,7 +86,7 @@ fun KankenQuizScreen(
         Button(
             modifier = Modifier.fillMaxWidth(.5f),
             onClick = {
-                onAction(QuizAction.ShowAlertDialog(omitQuestionDialog))
+                onDialogAction(DialogAction.ShowAlertDialog(omitQuestionDialog))
             }
         ) {
             Text("STOP\nASKING")
@@ -192,7 +196,7 @@ fun KankenQuizScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(.5f),
                         onClick = {
-                            onAction(QuizAction.ShowAlertDialog(iWasRightDialog))
+                            onDialogAction(DialogAction.ShowAlertDialog(iWasRightDialog))
                         }
                     ) {
                         Text("I WAS\nRIGHT!")
@@ -201,7 +205,7 @@ fun KankenQuizScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(.5f),
                         onClick = {
-                            onAction(QuizAction.ShowAlertDialog(markForReviewDialog))
+                            onDialogAction(DialogAction.ShowAlertDialog(markForReviewDialog))
                         }
                     ) {
                         Text("MARK")

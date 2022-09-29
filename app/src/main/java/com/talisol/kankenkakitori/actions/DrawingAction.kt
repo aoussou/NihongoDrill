@@ -1,4 +1,4 @@
-package com.talisol.kanjirecognizercompose.drawingUtils
+package com.talisol.kankenkakitori.actions
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path

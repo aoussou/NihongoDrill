@@ -1,8 +1,8 @@
 package com.talisol.kankenkakitori.viewModels
 
 import androidx.lifecycle.ViewModel
+import com.talisol.kankenkakitori.actions.DialogAction
 import com.talisol.kankenkakitori.ui.states.DialogState
-import com.talisol.kankenkakitori.quizUtils.QuizAction
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -12,15 +12,11 @@ class DialogVM: ViewModel() {
     private val _dialogState = MutableStateFlow(DialogState())
     val dialogState = _dialogState.asStateFlow()
 
-    fun onAction(action: QuizAction) {
-
+    fun onAction(action: DialogAction) {
         when (action) {
-
-            is QuizAction.ShowAlertDialog -> showAlertDialog(action.dialogState)
-            is QuizAction.CloseAlertDialog -> closeAlertDialog()
-            else -> {}
+            is DialogAction.ShowAlertDialog -> showAlertDialog(action.dialogState)
+            is DialogAction.CloseAlertDialog -> closeAlertDialog()
         }
-
     }
 
     private fun showAlertDialog(newDialogState: DialogState) {
@@ -31,7 +27,6 @@ class DialogVM: ViewModel() {
                 onConfirmAction = newDialogState.onConfirmAction
             )
         }
-
     }
 
     private fun closeAlertDialog() {
