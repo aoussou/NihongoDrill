@@ -7,10 +7,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.SnackbarDefaults.backgroundColor
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
@@ -27,9 +25,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.graphics.applyCanvas
-import com.talisol.kanjirecognizercompose.drawingUtils.*
+import com.talisol.kanjirecognizercompose.drawingUtils.DrawingAction
 import com.talisol.kanjirecognizercompose.ui.screens.DrawingPropertiesMenu
 import com.talisol.kankenkakitori.drawingUtils.*
 import com.talisol.kankenkakitori.quizUtils.QuizAction
@@ -42,7 +39,6 @@ fun KanjiRecognitionScreen(
     state: DrawingState,
     onAction: (DrawingAction) -> Unit,
     kanjiRecognizerOnAction: (QuizAction) -> Unit,
-    predictedKanji: String?,
     pathProperties: PathProperties = PathProperties(),
     strokeType: Stroke = Stroke(
         width = pathProperties.strokeWidth,
@@ -93,11 +89,6 @@ fun KanjiRecognitionScreen(
     ) {
 
         val view = LocalView.current
-
-
-
-
-
 
         Canvas(modifier = drawModifier) {
             when (state.motionEvent) {

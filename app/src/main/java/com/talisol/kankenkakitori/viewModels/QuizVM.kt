@@ -1,7 +1,6 @@
 package com.talisol.kankenkakitori.viewModels
 
 import androidx.lifecycle.ViewModel
-import com.talisol.kankenkakitori.data.KanjiQuestionDataSource
 import com.talisol.kankenkakitori.quizUtils.QuizAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -76,6 +75,15 @@ class QuizVM @Inject constructor() : ViewModel() {
         }
     }
 
+//    private fun checkAnswer() {
+//
+//        if (_quizState.value.isAnswerConfirmed) {
+//
+//            if (_quizState.value.)
+//
+//        }
+//    }
+
 
     private fun previousQuestion() {
 
@@ -93,7 +101,8 @@ class QuizVM @Inject constructor() : ViewModel() {
                     it.copy(
                         selectedAnswer = null,
                         isAnswerConfirmed = false,
-                        isLastQuestion = false
+                        isLastQuestion = false,
+                        isAnswerCorrect = null
                     )
                 }
 
@@ -105,9 +114,7 @@ class QuizVM @Inject constructor() : ViewModel() {
 
 
     private fun nextQuestion() {
-
         if (quizState.value.localQuestionNumber != null) {
-
             if (quizState.value.localQuestionNumber!! < _qaList.value.size - 1) {
                 _quizState.update {
                     it.copy(
@@ -116,19 +123,17 @@ class QuizVM @Inject constructor() : ViewModel() {
                 }
 
                 selectQAs(quizState.value.localQuestionNumber!!)
-
                 _quizState.update {
                     it.copy(
                         selectedAnswer = null,
                         isAnswerConfirmed = false,
-                        isFirstQuestion = false
+                        isFirstQuestion = false,
+                        isAnswerCorrect = null
                     )
                 }
-
                 if (quizState.value.localQuestionNumber == _qaList.value.size - 1) _quizState.update {
                     it.copy(isLastQuestion = true)
                 }
-
             }
         }
     }
@@ -150,10 +155,6 @@ class QuizVM @Inject constructor() : ViewModel() {
                 isLastQuestion = false
             )
         }
-
     }
-
-
-
 
 }

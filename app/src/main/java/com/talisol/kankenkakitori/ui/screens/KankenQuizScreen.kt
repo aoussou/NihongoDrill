@@ -1,24 +1,17 @@
 package com.talisol.kankenkakitori.ui.screens
 
-import android.graphics.Bitmap
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.talisol.kanjirecognizercompose.drawingUtils.DrawingAction
@@ -26,6 +19,7 @@ import com.talisol.kanjirecognizercompose.screens.KanjiRecognitionScreen
 import com.talisol.kankenkakitori.drawingUtils.DrawingState
 import com.talisol.kankenkakitori.ui.states.DialogState
 import com.talisol.kankenkakitori.quizUtils.QuizAction
+import com.talisol.kankenkakitori.quizUtils.TrackingAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 import com.talisol.kankenkakitori.ui.theme.DarkGreen
 
@@ -38,13 +32,14 @@ fun KankenQuizScreen(
     drawingState: DrawingState,
     drawingAction: (DrawingAction) -> Unit,
     kanjiRecognizerOnAction: (QuizAction) -> Unit,
-    predictedKanji: String?
+    predictedKanji: String?,
+    trackingOnAction: (TrackingAction) -> Unit
 ) {
 
     val omitQuestionDialog = DialogState(
         dialogText = "Are you sure you want the quiz to omit this question?",
         onConfirmAction = {
-            onAction(QuizAction.StopAsking)
+            trackingOnAction(TrackingAction.StopAsking(state.questionGlobalId!!))
             onAction(QuizAction.CloseAlertDialog)
             onAction(QuizAction.NextQuestion)
 
@@ -57,8 +52,8 @@ fun KankenQuizScreen(
         onConfirmAction =
         {
             onAction(QuizAction.CloseAlertDialog)
-            onAction(QuizAction.AddOneCorrect)
-            onAction(QuizAction.SubtractOneWrong)
+            trackingOnAction(TrackingAction.AddOneCorrect(state.questionGlobalId!!))
+            trackingOnAction(TrackingAction.SubtractOneWrong(state.questionGlobalId))
             onAction(QuizAction.NextQuestion)
         }
     )
@@ -68,7 +63,7 @@ fun KankenQuizScreen(
         onConfirmAction =
         {
             onAction(QuizAction.CloseAlertDialog)
-            onAction(QuizAction.MarkForReview)
+            trackingOnAction(TrackingAction.MarkForReview(state.questionGlobalId!!))
         }
     )
 
@@ -126,6 +121,16 @@ fun KankenQuizScreen(
                             onAction(QuizAction.ConfirmAnswer)
                             kanjiRecognizerOnAction(QuizAction.ResetPredictedKanji)
                             drawingAction(DrawingAction.ClearAllPaths)
+
+                            if (state.isAnswerCorrect == true) {
+
+                                trackingOnAction(TrackingAction.AddOneCorrect(state.questionGlobalId!!))
+
+                            } else if (state.isAnswerCorrect == false) {
+                                trackingOnAction(TrackingAction.AddOneWrong(state.questionGlobalId!!))
+                            } else {
+                                Log.i("DEBUG",state.isAnswerCorrect.toString())
+                            }
                         }
 
                     }
@@ -139,8 +144,7 @@ fun KankenQuizScreen(
                 currentPath,
                 drawingState,
                 drawingAction,
-                kanjiRecognizerOnAction,
-                predictedKanji
+                kanjiRecognizerOnAction
             )
 
 
@@ -243,6 +247,7 @@ fun KankenQuizScreen(
 
         }
     }
+
 
 
 }

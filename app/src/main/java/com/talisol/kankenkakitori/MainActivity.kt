@@ -17,15 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.talisol.kankenkakitori.viewModels.KanjiRecognitionVM
 import com.talisol.kankenkakitori.quizUtils.QuizAction
 import com.talisol.kankenkakitori.ui.screens.KankenQuizScreen
 import com.talisol.kankenkakitori.ui.screens.SelectKyuScreen
 import com.talisol.kankenkakitori.ui.theme.KankenKakitoriTheme
-import com.talisol.kankenkakitori.viewModels.DialogVM
-import com.talisol.kankenkakitori.viewModels.DrawingVM
-import com.talisol.kankenkakitori.viewModels.QuestionListSelectionVM
-import com.talisol.kankenkakitori.viewModels.QuizVM
+import com.talisol.kankenkakitori.viewModels.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,8 +49,7 @@ class MainActivity : ComponentActivity() {
                 val quizVM = viewModel<QuizVM>()
                 val quizState by quizVM.quizState.collectAsState()
 
-
-
+                val trackinVM = viewModel<ProgressTrackingVM>()
 
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -97,6 +92,7 @@ class MainActivity : ComponentActivity() {
                                 drawingAction = drawingVM::onAction,
                                 kanjiRecognizerOnAction = recognizerVM::onAction,
                                 predictedKanji = predictedKanji.value,
+                                trackingOnAction = trackinVM::onAction
                             )
 
 
