@@ -2,6 +2,7 @@ package com.talisol.kankenkakitori.viewModels
 
 import androidx.lifecycle.ViewModel
 import com.talisol.kankenkakitori.quizUtils.QuizAction
+import com.talisol.kankenkakitori.quizUtils.TrackingAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import databases.kanji.KakitoriQuestion
@@ -25,7 +26,7 @@ class QuizVM @Inject constructor() : ViewModel() {
             is QuizAction.LoadQuestionList -> loadQuestion(action.qaList)
             is QuizAction.NextQuestion -> nextQuestion()
             is QuizAction.PreviousQuestion -> previousQuestion()
-            is QuizAction.ConfirmAnswer -> confirmAnswer()
+            is QuizAction.ConfirmAnswer -> confirmAnswer(action.trackingOnAction)
             is QuizAction.StartQuiz -> startQuiz()
             is QuizAction.InputAnswer -> inputAnswer(action.answerString)
             is QuizAction.EndQuiz -> endQuiz()
@@ -64,25 +65,19 @@ class QuizVM @Inject constructor() : ViewModel() {
 
 
 
-    private fun confirmAnswer() {
+    private fun confirmAnswer(trackingOnAction: (TrackingAction)-> Unit) {
         if (_quizState.value.inputAnswer != null && !quizState.value.isAnswerConfirmed) {
             _quizState.update { it.copy(isAnswerConfirmed = true) }
             if (quizState.value.inputAnswer == quizState.value.correctAnswer) {
                 _quizState.update { it.copy(isAnswerCorrect = true) }
+                trackingOnAction(TrackingAction.AddOneCorrect(_quizState.value.questionGlobalId!!))
             } else {
                 _quizState.update { it.copy(isAnswerCorrect = false) }
+                trackingOnAction(TrackingAction.AddOneWrong(_quizState.value.questionGlobalId!!))
             }
         }
     }
 
-//    private fun checkAnswer() {
-//
-//        if (_quizState.value.isAnswerConfirmed) {
-//
-//            if (_quizState.value.)
-//
-//        }
-//    }
 
 
     private fun previousQuestion() {

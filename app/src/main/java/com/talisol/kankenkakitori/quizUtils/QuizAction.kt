@@ -12,7 +12,7 @@ sealed class QuizAction{
     data class SelectAnswer(val number: Int): QuizAction()
     object NextQuestion: QuizAction()
     object PreviousQuestion: QuizAction()
-    object ConfirmAnswer: QuizAction()
+    data class ConfirmAnswer(val trackingOnAction: (TrackingAction)-> Unit) : QuizAction()
     object StartQuiz: QuizAction()
     data class InputAnswer(val answerString: String): QuizAction()
     data class SelectQuestionLevel(val questionGroupID: String) : QuizAction()

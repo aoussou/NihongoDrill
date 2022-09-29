@@ -118,19 +118,9 @@ fun KankenQuizScreen(
                     onClick = {
                         if (predictedKanji != null) {
                             onAction(QuizAction.InputAnswer(predictedKanji))
-                            onAction(QuizAction.ConfirmAnswer)
+                            onAction(QuizAction.ConfirmAnswer(trackingOnAction))
                             kanjiRecognizerOnAction(QuizAction.ResetPredictedKanji)
                             drawingAction(DrawingAction.ClearAllPaths)
-
-                            if (state.isAnswerCorrect == true) {
-
-                                trackingOnAction(TrackingAction.AddOneCorrect(state.questionGlobalId!!))
-
-                            } else if (state.isAnswerCorrect == false) {
-                                trackingOnAction(TrackingAction.AddOneWrong(state.questionGlobalId!!))
-                            } else {
-                                Log.i("DEBUG",state.isAnswerCorrect.toString())
-                            }
                         }
 
                     }
