@@ -1,5 +1,8 @@
 package com.talisol.kankenkakitori.quizUtils
 
+import com.talisol.kankenkakitori.ui.states.DialogState
+import databases.kanji.KakitoriQuestion
+
 sealed class QuizAction{
 
 //    object SetQuestion: QuizAction()
@@ -29,8 +32,10 @@ sealed class QuizAction{
     data class ShowAlertDialog(val dialogState: DialogState): QuizAction()
     object CloseAlertDialog: QuizAction()
 
-    data class LoadSelectedGroupQuestions(val groupId: Int): QuizAction()
+    object LoadSelectedGroupQuestions: QuizAction()
     object MakeLocalQuizQuestionList: QuizAction()
+
+    data class LoadQuestionList(val qaList: List<KakitoriQuestion> ) : QuizAction()
 
 
 }

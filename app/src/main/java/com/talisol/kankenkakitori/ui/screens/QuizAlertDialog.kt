@@ -4,7 +4,7 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import com.talisol.kankenkakitori.quizUtils.DialogState
+import com.talisol.kankenkakitori.ui.states.DialogState
 import com.talisol.kankenkakitori.quizUtils.QuizAction
 
 @Composable

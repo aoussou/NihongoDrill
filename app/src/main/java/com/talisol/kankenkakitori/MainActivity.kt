@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,18 +17,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.talisol.kanjirecognizercompose.screens.KanjiRecognitionScreen
 import com.talisol.kanjirecognizercompose.viewModels.KanjiRecognitionVM
-import com.talisol.kankenkakitori.quizUtils.DialogState
 import com.talisol.kankenkakitori.quizUtils.QuizAction
-import com.talisol.kankenkakitori.ui.screens.QuizAlertDialog
+import com.talisol.kankenkakitori.ui.screens.KankenQuizScreen
 import com.talisol.kankenkakitori.ui.screens.SelectKyuScreen
 import com.talisol.kankenkakitori.ui.theme.KankenKakitoriTheme
 import com.talisol.kankenkakitori.viewModels.DialogVM
 import com.talisol.kankenkakitori.viewModels.DrawingVM
 import com.talisol.kankenkakitori.viewModels.QuestionListSelectionVM
+import com.talisol.kankenkakitori.viewModels.QuizVM
 import dagger.hilt.android.AndroidEntryPoint
-import java.security.KeyStore
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -49,6 +48,11 @@ class MainActivity : ComponentActivity() {
                 val dialogVM = viewModel<DialogVM>()
                 val dialogState by dialogVM.dialogState.collectAsState()
 
+                val quizVM = viewModel<QuizVM>()
+                val quizState by quizVM.quizState.collectAsState()
+
+
+
 
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -69,12 +73,42 @@ class MainActivity : ComponentActivity() {
 
                     } else {
 
-                        KanjiRecognitionScreen(
-                            currentPath,
-                            drawingState,
-                            drawingVM::onAction,
-                            recognizerVM::predictKanji
-                        )
+                        if (!quizState.isQuizStarted) {
+                            Button(onClick = {
+                                questionListSelectionVM.onAction(QuizAction.LoadSelectedGroupQuestions)
+                                questionListSelectionVM.onAction(QuizAction.MakeLocalQuizQuestionList)
+                                quizVM.onAction(QuizAction.LoadQuestionList(questionListSelectionVM.localQAlist.value))
+                                quizVM.onAction(QuizAction.StartQuiz)
+
+
+                            }) {
+                                Text(text = "Start quiz, ${localQuizState.chosenNumberOfQuestions} questions of ${localQuizState.groupChosen}")
+                            }
+                        } else {
+
+                            KankenQuizScreen(
+                                state = quizState,
+                                onAction = quizVM::onAction,
+                                dialogState = dialogState,
+                                currentPath = currentPath,
+                                drawingState = drawingState,
+                                drawingAction = drawingVM::onAction,
+                            kanjiRecognizer = recognizerVM::predictKanji
+                            )
+
+
+                        }
+
+
+
+
+
+//                        KanjiRecognitionScreen(
+//                            currentPath,
+//                            drawingState,
+//                            drawingVM::onAction,
+//                            recognizerVM::predictKanji
+//                        )
 
                     }
 

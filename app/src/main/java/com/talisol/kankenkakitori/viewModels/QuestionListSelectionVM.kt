@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.talisol.kankenkakitori.data.KanjiQuestionDataSource
 import com.talisol.kankenkakitori.quizUtils.QuizAction
+import com.talisol.kankenkakitori.ui.states.QuizSelectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import databases.kanji.KakitoriQuestion
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -85,7 +86,7 @@ class QuestionListSelectionVM @Inject constructor(
     }
 
     private fun startQuiz() {
-        _quizSelectionState.update { it.copy(isQuizStarted = true) }
+        _quizSelectionState.update { it.copy(isQuizReady = true) }
     }
 
 

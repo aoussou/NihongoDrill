@@ -44,9 +44,9 @@ fun SelectKyuScreen(
     ) {
         for (i in groupsList) {
             Button(onClick = {
-                onAction(QuizAction.SelectQuestionLevel(i.toString()))
+                onAction(QuizAction.SelectQuestionLevel(i))
             }) {
-                Text(text = i.toString())
+                Text(text = i)
             }
         }
     }

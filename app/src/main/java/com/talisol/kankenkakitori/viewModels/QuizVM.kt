@@ -1,92 +1,48 @@
 package com.talisol.kankenkakitori.viewModels
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import com.talisol.kankenkakitori.data.KanjiQuestionDataSource
-import com.talisol.kankenkakitori.quizUtils.DialogState
 import com.talisol.kankenkakitori.quizUtils.QuizAction
-import com.talisol.kankenkakitori.quizUtils.QuizState
+import com.talisol.kankenkakitori.ui.states.QuizState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import databases.kanji.KakitoriQuestion
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+@HiltViewModel
 class QuizVM @Inject constructor(
     private val kanjiQuestionDataSource: KanjiQuestionDataSource
 ) : ViewModel() {
 
+    private val _quizState = MutableStateFlow(QuizState())
+    val quizState = _quizState.asStateFlow()
 
 
-    private lateinit var localQAlist: List<KakitoriQuestion>
-    private var originalListNumber = 0
-
-    val groupsList: List<String> = kanjiQuestionDataSource.getKankenKyuList()
-
-    private val _state = MutableStateFlow(QuizState())
-    val state = _state.asStateFlow()
-
-    private val _dialogState = MutableStateFlow(DialogState())
-    val dialogState = _dialogState.asStateFlow()
-
-    private lateinit var loadedQAs: List<KakitoriQuestion>
+    private val _qaList = MutableStateFlow(listOf<KakitoriQuestion>())
+    val qaList = _qaList.asStateFlow()
 
     fun onAction(action: QuizAction) {
 
         when (action) {
+            is QuizAction.LoadQuestionList -> loadQuestion(action.qaList)
             is QuizAction.NextQuestion -> nextQuestion()
             is QuizAction.PreviousQuestion -> previousQuestion()
             is QuizAction.ConfirmAnswer -> confirmAnswer()
             is QuizAction.StartQuiz -> startQuiz()
-            is QuizAction.SelectQuestionLevel -> setQuestionGroup(action.questionGroupID)
             is QuizAction.InputAnswer -> inputAnswer(action.answerString)
             is QuizAction.EndQuiz -> endQuiz()
-
-
-            is QuizAction.StopAsking -> stopAsking()
-            is QuizAction.ShowAlertDialog -> showAlertDialog(action.dialogState)
-            is QuizAction.CloseAlertDialog -> closeAlertDialog()
-
-//            is QuizAction.AddOneCorrect -> addOneCorrect()
-//            is QuizAction.AddOneWrong -> addOneWrong()
-//            is QuizAction.SubtractOneCorrect -> subtractOneCorrect()
-//            is QuizAction.SubtractOneWrong -> subtractOneWrong()
-//            is QuizAction.MarkForReview -> markForReview()
-
             else -> {}
         }
     }
 
-    private fun closeAlertDialog() {
-        _dialogState.value = DialogState()
-    }
-
-    private fun showAlertDialog(newDialogState: DialogState) {
-
-        _dialogState.update {
-            it.copy(
-                isAlertDialogShown = true,
-                dialogText = newDialogState.dialogText,
-                onConfirmAction = newDialogState.onConfirmAction
-            )
-        }
-    }
-
-    private fun stopAsking() {
-        kanjiQuestionDataSource.makeUnavailable(state.value.questionGlobalId!!.toLong())
-    }
-
-
-
     private fun inputAnswer(answerString: String) {
-        _state.update { it.copy(inputAnswer = answerString) }
+        _quizState.update { it.copy(inputAnswer = answerString) }
     }
 
     private fun endQuiz() {
-        _state.update {
+        _quizState.update {
             it.copy(
                 isQuizStarted = false,
                 isQuizOver = true,
@@ -98,11 +54,8 @@ class QuizVM @Inject constructor(
 
 
     private fun selectQAs(localQuestionNumber: Int) {
-
-//        timeSinceLastCorrect()
-//        originalListNumber = localQAlist[questionNumber-1]
-        val qas = localQAlist[localQuestionNumber]
-        _state.update {
+        val qas = _qaList.value[localQuestionNumber]
+        _quizState.update {
             it.copy(
                 localQuestionNumber = localQuestionNumber,
                 question = qas.question,
@@ -116,22 +69,12 @@ class QuizVM @Inject constructor(
 
 
     private fun confirmAnswer() {
-        if (_state.value.inputAnswer != null && !state.value.isAnswerConfirmed) {
-            _state.update { it.copy(isAnswerConfirmed = true) }
-
-            if (state.value.inputAnswer == state.value.correctAnswer) {
-                _state.update { it.copy(isAnswerCorrect = true) }
-
-//                addOneCorrect()
-//                updateCorrectStreak()
-//                updateLastCorrect()
-
+        if (_quizState.value.inputAnswer != null && !quizState.value.isAnswerConfirmed) {
+            _quizState.update { it.copy(isAnswerConfirmed = true) }
+            if (quizState.value.inputAnswer == quizState.value.correctAnswer) {
+                _quizState.update { it.copy(isAnswerCorrect = true) }
             } else {
-                _state.update { it.copy(isAnswerCorrect = false) }
-
-//                addOneWrong()
-//                resetCorrectStreak()
-
+                _quizState.update { it.copy(isAnswerCorrect = false) }
             }
         }
     }
@@ -139,17 +82,17 @@ class QuizVM @Inject constructor(
 
     private fun previousQuestion() {
 
-        if (state.value.localQuestionNumber != null) {
+        if (quizState.value.localQuestionNumber != null) {
 
-            if (state.value.localQuestionNumber!! > 0) {
-                _state.update {
+            if (quizState.value.localQuestionNumber!! > 0) {
+                _quizState.update {
                     it.copy(
-                        localQuestionNumber = state.value.localQuestionNumber!! - 1
+                        localQuestionNumber = quizState.value.localQuestionNumber!! - 1
                     )
                 }
 
-                selectQAs(state.value.localQuestionNumber!!)
-                _state.update {
+                selectQAs(quizState.value.localQuestionNumber!!)
+                _quizState.update {
                     it.copy(
                         selectedAnswer = null,
                         isAnswerConfirmed = false,
@@ -157,7 +100,7 @@ class QuizVM @Inject constructor(
                     )
                 }
 
-                if (state.value.localQuestionNumber == 0) _state.update { it.copy(isFirstQuestion = true) }
+                if (quizState.value.localQuestionNumber == 0) _quizState.update { it.copy(isFirstQuestion = true) }
 
             }
         }
@@ -166,18 +109,18 @@ class QuizVM @Inject constructor(
 
     private fun nextQuestion() {
 
-        if (state.value.localQuestionNumber != null) {
+        if (quizState.value.localQuestionNumber != null) {
 
-            if (state.value.localQuestionNumber!! < localQAlist.size - 1) {
-                _state.update {
+            if (quizState.value.localQuestionNumber!! < _qaList.value.size - 1) {
+                _quizState.update {
                     it.copy(
-                        localQuestionNumber = state.value.localQuestionNumber!! + 1
+                        localQuestionNumber = quizState.value.localQuestionNumber!! + 1
                     )
                 }
 
-                selectQAs(state.value.localQuestionNumber!!)
+                selectQAs(quizState.value.localQuestionNumber!!)
 
-                _state.update {
+                _quizState.update {
                     it.copy(
                         selectedAnswer = null,
                         isAnswerConfirmed = false,
@@ -185,10 +128,8 @@ class QuizVM @Inject constructor(
                     )
                 }
 
-                if (state.value.localQuestionNumber == localQAlist.size - 1) _state.update {
-                    it.copy(
-                        isLastQuestion = true
-                    )
+                if (quizState.value.localQuestionNumber == _qaList.value.size - 1) _quizState.update {
+                    it.copy(isLastQuestion = true)
                 }
 
             }
@@ -196,20 +137,15 @@ class QuizVM @Inject constructor(
     }
 
 
-    private fun loadSelectedQuestionGroup() {
-        if (!_state.value.questionGroupId.isNullOrBlank()) {
-            loadedQAs = kanjiQuestionDataSource.getAllKankenEntriesByKyu(
-                _state.value.questionGroupId!!
-            )
-        }
+    private fun loadQuestion(selectedQuestionsList: List<KakitoriQuestion>) {
+        _qaList.value = selectedQuestionsList
     }
 
 
     private fun startQuiz() {
-        loadSelectedQuestionGroup()
 
         selectQAs(0)
-        _state.update {
+        _quizState.update {
             it.copy(
                 isQuizOver = false,
                 isQuizStarted = true,
@@ -220,74 +156,7 @@ class QuizVM @Inject constructor(
 
     }
 
-    private fun setQuestionGroup(questionGroupId: String) {
-        _state.update { it.copy(questionGroupId = questionGroupId) }
-    }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun timeSinceLastCorrect() {
-
-        val lastCorrectDate = localQAlist[originalListNumber].last_correct_date
-
-        if (lastCorrectDate != null) {
-
-            val currentTime = LocalDateTime.now()
-            val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-            val lastCorrectDateFormatted = LocalDateTime.parse(lastCorrectDate, formatter)
-//            val timeDiff = ChronoUnit.MINUTES.between(lastCorrectDateFormatted, currentTime)
-
-        }
-
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
-//    private fun markForReview() {
-//        kanjiQuestionDataSource.markForReview(state.questionGlobalId!!.toLong())
-//    }
-//
-//    private fun addOneCorrect() {
-//        val newNCorrect = localQAlist[originalListNumber].total_correct + 1
-//        kanjiQuestionDataSource.updateTotalCorrectNumber(state.questionGlobalId!!.toLong(), newNCorrect)
-//    }
-//
-//    private fun addOneWrong() {
-//        val newNWrong = localQAlist[originalListNumber].total_wrong + 1
-//        kanjiQuestionDataSource.updateTotalWrongNumber(state.questionGlobalId!!.toLong(), newNWrong)
-//    }
-//
-//    private fun subtractOneCorrect() {
-//        val newNCorrect = localQAlist[originalListNumber].total_correct - 1
-//        kanjiQuestionDataSource.updateTotalCorrectNumber(state.questionGlobalId!!.toLong(), newNCorrect)
-//    }
-//
-//    private fun subtractOneWrong() {
-//        val newNWrong = localQAlist[originalListNumber].total_wrong - 1
-//        kanjiQuestionDataSource.updateTotalWrongNumber(state.questionGlobalId!!.toLong(), newNWrong)
-//    }
-//
-//
-
-//
-//    private fun updateCorrectStreak() {
-//        val newCorrectStreak = localQAlist[originalListNumber].correct_streak + 1
-//        kanjiQuestionDataSource.updateCorrectStreak(
-//            state.questionGlobalId!!.toLong(),
-//            newCorrectStreak
-//        )
-//    }
-//
-//    private fun resetCorrectStreak() {
-//        kanjiQuestionDataSource.updateCorrectStreak(state.questionGlobalId!!.toLong(), 0)
-//    }
-//
-//    private fun updateLastCorrect() {
-//        kanjiQuestionDataSource.updateLastCorrectDate(
-//            state.questionGlobalId!!.toLong(),
-//            LocalDateTime.now().toString()
-//        )
-//    }
 
 
 }

@@ -1,7 +1,7 @@
 package com.talisol.kankenkakitori.viewModels
 
 import androidx.lifecycle.ViewModel
-import com.talisol.kankenkakitori.quizUtils.DialogState
+import com.talisol.kankenkakitori.ui.states.DialogState
 import com.talisol.kankenkakitori.quizUtils.QuizAction
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

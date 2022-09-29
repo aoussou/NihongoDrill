@@ -1,4 +1,4 @@
-package com.talisol.kankenkakitori.quizUtils
+package com.talisol.kankenkakitori.ui.states
 
 
 data class QuizState(
