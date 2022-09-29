@@ -141,25 +141,49 @@ fun KankenQuizScreen(
 
                 }
 
-                Button(
-                    modifier = Modifier.fillMaxWidth(.30f),
-                    onClick = {
-                        if (predictedKanji != null) {
-                            val newAnswer =
-                                if (state.inputAnswer == null) {
-                                    predictedKanji
-                                } else {
-                                    state.inputAnswer + predictedKanji
-                                }
-                            onAction(QuizAction.InputAnswer(newAnswer))
-                            drawingAction(DrawingAction.ClearAllPaths)
-                            kanjiRecognizerOnAction(QuizAction.ResetPredictedKanji)
-                        }
+                Column {
 
+
+                    Button(
+                        modifier = Modifier.fillMaxWidth(.30f),
+                        onClick = {
+                            if (predictedKanji != null) {
+                                val newAnswer =
+                                    if (state.inputAnswer == null) {
+                                        predictedKanji
+                                    } else {
+                                        state.inputAnswer + predictedKanji
+                                    }
+                                onAction(QuizAction.InputAnswer(newAnswer))
+                                drawingAction(DrawingAction.ClearAllPaths)
+                                kanjiRecognizerOnAction(QuizAction.ResetPredictedKanji)
+                            }
+
+                        }
+                    ) {
+                        Text("OK")
                     }
-                ) {
-                    Text("OK")
+
+                    Button(
+                        modifier = Modifier.fillMaxWidth(.30f),
+                        onClick = {
+                            if (state.inputAnswer != null) {
+
+                                var newAnswer = state.inputAnswer
+                                newAnswer = newAnswer.dropLast(1)
+                                onAction(QuizAction.InputAnswer(newAnswer))
+
+                            }
+
+                        }
+                    ) {
+                        Text("DEL")
+                    }
+
+
                 }
+
+
 
 
             }

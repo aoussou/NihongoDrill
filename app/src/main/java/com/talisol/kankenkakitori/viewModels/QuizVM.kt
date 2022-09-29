@@ -117,7 +117,8 @@ class QuizVM @Inject constructor() : ViewModel() {
             if (quizState.value.localQuestionNumber!! < _qaList.value.size - 1) {
                 _quizState.update {
                     it.copy(
-                        localQuestionNumber = quizState.value.localQuestionNumber!! + 1
+                        localQuestionNumber = quizState.value.localQuestionNumber!! + 1,
+                        inputAnswer = null
                     )
                 }
 
