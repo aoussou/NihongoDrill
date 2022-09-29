@@ -32,7 +32,6 @@ class QuestionListSelectionVM @Inject constructor(
 
     private lateinit var _loadedQAs: List<KakitoriQuestion>
 
-//    private lateinit var _localQAlist: List<KakitoriQuestion>
 
     fun onAction(action: QuizAction) {
 

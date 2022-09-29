@@ -19,4 +19,10 @@ interface KanjiQuestionDataSource {
     fun makeUnavailable(id: Long)
 
     fun markForReview(id:Long)
+
+    fun getTotalCorrect(id:Long): Long
+
+    fun getTotalWrong(id:Long): Long
+
+    fun getCorrectStrek(id: Long): Long
 }

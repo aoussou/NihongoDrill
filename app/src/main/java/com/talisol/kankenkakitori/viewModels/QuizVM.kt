@@ -12,16 +12,13 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class QuizVM @Inject constructor(
-    private val kanjiQuestionDataSource: KanjiQuestionDataSource
-) : ViewModel() {
+class QuizVM @Inject constructor() : ViewModel() {
 
     private val _quizState = MutableStateFlow(QuizState())
     val quizState = _quizState.asStateFlow()
 
 
     private val _qaList = MutableStateFlow(listOf<KakitoriQuestion>())
-    val qaList = _qaList.asStateFlow()
 
     fun onAction(action: QuizAction) {
 

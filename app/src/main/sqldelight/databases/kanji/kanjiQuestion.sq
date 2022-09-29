@@ -18,6 +18,21 @@ SELECT DISTINCT kanken_kyu
 FROM kakitoriQuestion
 ORDER BY kanken_kyu;
 
+getTotalCorrect:
+SELECT total_correct
+FROM kakitoriQuestion
+WHERE id = :id;
+
+getTotalWrong:
+SELECT total_wrong
+FROM kakitoriQuestion
+WHERE id = :id;
+
+getCorrectStreak:
+SELECT correct_streak
+FROM kakitoriQuestion
+WHERE id = :id;
+
 selectByKankenKyu:
 SELECT *
 FROM kakitoriQuestion

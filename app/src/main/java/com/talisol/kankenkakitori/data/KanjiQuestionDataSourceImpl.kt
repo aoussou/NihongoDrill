@@ -42,5 +42,17 @@ class KanjiQuestionDataSourceImpl(
         queries.markForReview(id)
     }
 
+    override fun getTotalCorrect(id: Long): Long {
+        return queries.getTotalCorrect(id).executeAsOne()
+    }
+
+    override fun getTotalWrong(id: Long): Long {
+        return queries.getTotalWrong(id).executeAsOne()
+    }
+
+    override fun getCorrectStrek(id: Long): Long {
+        return queries.getCorrectStreak(id).executeAsOne()
+    }
+
 
 }

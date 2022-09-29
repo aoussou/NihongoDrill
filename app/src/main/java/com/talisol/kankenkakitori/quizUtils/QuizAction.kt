@@ -16,19 +16,11 @@ sealed class QuizAction{
     object StartQuiz: QuizAction()
     data class InputAnswer(val answerString: String): QuizAction()
     data class SelectQuestionLevel(val questionGroupID: String) : QuizAction()
-    data class SelectQuizType(val quizType: String) : QuizAction()
     object EndQuiz: QuizAction()
 
     data class ChooseNumberOfQuestions(val number: Int?): QuizAction()
 
-    object AddOneCorrect: QuizAction()
-    object AddOneWrong: QuizAction()
 
-    object SubtractOneCorrect: QuizAction()
-    object SubtractOneWrong: QuizAction()
-
-    object StopAsking: QuizAction()
-    object MarkForReview: QuizAction()
 
     data class ShowAlertDialog(val dialogState: DialogState): QuizAction()
     object CloseAlertDialog: QuizAction()
