@@ -18,6 +18,4 @@ sealed class QuizAction {
 //    data class SelectAnswer(val number: Int): QuizAction()
 
 
-
-
 }
