@@ -1,7 +1,6 @@
 package com.talisol.kankenkakitori.ui.screens
 
 import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,14 +20,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import com.talisol.kankenkakitori.actions.QuizAction
+import com.talisol.kankenkakitori.actions.QuizSettingAction
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SelectKyuScreen(
     groupsList: List<String>,
     modifier: Modifier = Modifier,
-    onAction: (QuizAction) -> Unit
+    onAction: (QuizSettingAction) -> Unit
 ) {
 
 
@@ -44,13 +42,12 @@ fun SelectKyuScreen(
     ) {
         for (i in groupsList) {
             Button(onClick = {
-                onAction(QuizAction.SelectQuestionLevel(i))
+                onAction(QuizSettingAction.SelectQuestionLevel(i))
             }) {
                 Text(text = i)
             }
         }
     }
-
 
 
     val textState = remember { mutableStateOf(TextFieldValue()) }
@@ -69,7 +66,7 @@ fun SelectKyuScreen(
         keyboardActions = KeyboardActions(
             onDone = {
                 onAction(
-                    QuizAction.ChooseNumberOfQuestions(
+                    QuizSettingAction.ChooseNumberOfQuestions(
                         textState.value.text.toInt()
                     )
                 );
@@ -78,7 +75,6 @@ fun SelectKyuScreen(
                 Log.i("DEBUG", "number sent")
             })
     )
-
 
 
 }

@@ -12,6 +12,7 @@ sealed class QuizAction {
     data class LoadQuestionList(val qaList: List<KakitoriQuestion>) : QuizAction()
     data class InputAnswer(val answerString: String) : QuizAction()
 
+    object StartQuiz: QuizAction()
     object EndQuiz : QuizAction()
     data class RecognizeKanji(val bitmap: Bitmap) : QuizAction()
     object ResetPredictedKanji : QuizAction()

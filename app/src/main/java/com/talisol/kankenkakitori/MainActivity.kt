@@ -10,14 +10,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.talisol.kankenkakitori.actions.QuizAction
+import com.talisol.kankenkakitori.actions.QuizSettingAction
 import com.talisol.kankenkakitori.ui.screens.KankenQuizScreen
 import com.talisol.kankenkakitori.ui.screens.SelectKyuScreen
 import com.talisol.kankenkakitori.ui.theme.KankenKakitoriTheme
@@ -60,51 +59,68 @@ class MainActivity : ComponentActivity() {
                     if (
                         !quizState.isQuizStarted
 
-
                     ) {
-                        Text(text = "SELECT LEVEL")
 
-                        SelectKyuScreen(
-                            groupsList = questionListSelectionVM.groupsList,
-                            onAction = questionListSelectionVM::onAction
-                        )
-
-                    } else {
-
-                        if (localQuizState.chosenNumberOfQuestions != null &&
-                            localQuizState.groupChosen != null
+                        if (localQuizState.chosenNumberOfQuestions == null ||
+                            localQuizState.groupChosen == null
                         ) {
-                            Button(onClick = {
-                                questionListSelectionVM.onAction(QuizAction.LoadSelectedGroupQuestions)
-                                questionListSelectionVM.onAction(QuizAction.MakeLocalQuizQuestionList)
-                                quizVM.onAction(QuizAction.LoadQuestionList(questionListSelectionVM.localQAlist.value))
-                                quizVM.onAction(QuizAction.StartQuiz)
-                            }) {
-                                Text(text = "Start quiz, ${localQuizState.chosenNumberOfQuestions} questions of ${localQuizState.groupChosen}")
-                            }
-                        } else {
 
-                            KankenQuizScreen(
-                                state = quizState,
-                                onAction = quizVM::onAction,
-                                dialogState = dialogState,
-                                currentPath = currentPath,
-                                drawingState = drawingState,
-                                drawingAction = drawingVM::onAction,
-                                kanjiRecognizerOnAction = recognizerVM::onAction,
-                                predictedKanji = predictedKanji.value,
-                                trackingOnAction = trackingVM::onAction,
-                                onDialogAction = dialogVM::onAction
+
+                            Text(text = "SELECT LEVEL")
+
+                            SelectKyuScreen(
+                                groupsList = questionListSelectionVM.groupsList,
+                                onAction = questionListSelectionVM::onAction
                             )
 
+
+                        } else {
+                            Column {
+                                Button(onClick = {
+                                    questionListSelectionVM.onAction(QuizSettingAction.LoadSelectedGroupQuestions)
+                                    questionListSelectionVM.onAction(QuizSettingAction.MakeLocalQuizQuestionList)
+                                    quizVM.onAction(
+                                        QuizAction.LoadQuestionList(
+                                            questionListSelectionVM.localQAlist.value
+                                        )
+                                    )
+                                    quizVM.onAction(QuizAction.StartQuiz)
+                                }) {
+                                    Text(text = "Start quiz, ${localQuizState.chosenNumberOfQuestions} questions of ${localQuizState.groupChosen}")
+                                }
+
+                                Button(onClick = {
+                                    questionListSelectionVM.onAction(QuizSettingAction.SelectQuestionLevel(null))
+                                    questionListSelectionVM.onAction(QuizSettingAction.ChooseNumberOfQuestions(null))
+                                }) {
+                                    Text(text = "Go back to selection menu")
+                                }
+                            }
+
                         }
+
+
+                    } else {
+                        KankenQuizScreen(
+                            state = quizState,
+                            onAction = quizVM::onAction,
+                            dialogState = dialogState,
+                            currentPath = currentPath,
+                            drawingState = drawingState,
+                            drawingAction = drawingVM::onAction,
+                            kanjiRecognizerOnAction = recognizerVM::onAction,
+                            predictedKanji = predictedKanji.value,
+                            trackingOnAction = trackingVM::onAction,
+                            onDialogAction = dialogVM::onAction
+                        )
                     }
                 }
-
             }
 
-
         }
+
+
     }
+
 
 }
