@@ -87,7 +87,7 @@ fun KankenQuizScreen(
         Button(
             modifier = Modifier.fillMaxWidth(.5f),
             onClick = {
-                onAction(QuizAction.ShowAlertDialog(omitQuestionDialog));
+                onAction(QuizAction.ShowAlertDialog(omitQuestionDialog))
             }
         ) {
             Text("STOP\nASKING")
@@ -142,26 +142,6 @@ fun KankenQuizScreen(
                 kanjiRecognizerOnAction,
                 predictedKanji
             )
-
-//            // this need to be place inside the if statement otherwise the value get carried
-//            var textState = remember { mutableStateOf(TextFieldValue()) }
-//
-//            TextField(
-//                value = textState.value,
-//                onValueChange = {
-//                    textState.value = it;
-//                    onAction(
-//                        QuizAction.InputAnswer(
-//                            textState.value.text
-//                        )
-//                    )
-//                },
-//                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-//                keyboardActions = KeyboardActions(onDone = {
-//                    onAction(QuizAction.ConfirmAnswer)
-//                }
-//                )
-//            )
 
 
         } else {
@@ -218,7 +198,7 @@ fun KankenQuizScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(.5f),
                         onClick = {
-                            onAction(QuizAction.ShowAlertDialog(iWasRightDialog));
+                            onAction(QuizAction.ShowAlertDialog(iWasRightDialog))
                         }
                     ) {
                         Text("I WAS\nRIGHT!")
@@ -227,7 +207,7 @@ fun KankenQuizScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(.5f),
                         onClick = {
-                            onAction(QuizAction.ShowAlertDialog(markForReviewDialog));
+                            onAction(QuizAction.ShowAlertDialog(markForReviewDialog))
                         }
                     ) {
                         Text("MARK")
@@ -253,7 +233,7 @@ fun KankenQuizScreen(
                 Button(
                     modifier = Modifier.fillMaxWidth(.5f),
                     onClick = {
-                        onAction(QuizAction.NextQuestion);
+                        onAction(QuizAction.NextQuestion)
                     }
                 ) {
                     Text("NEXT")
@@ -267,63 +247,6 @@ fun KankenQuizScreen(
 
 }
 
-//        if (!(quizState.isLastQuestion && quizState.isAnswerConfirmed)) {
-//
-//            Row(
-//                modifier = Modifier.fillMaxWidth(1.0f),
-//                horizontalArrangement = Arrangement.SpaceBetween,
-//            ) {
-//
-//
-//                Box(
-//                    modifier = Modifier.weight(.25f),
-//                    contentAlignment = Alignment.CenterStart
-//                ) {
-//                    if (!quizState.isFirstQuestion) {
-//                        Icon(
-//                            painter = painterResource(id = R.drawable.ic_baseline_keyboard_arrow_left_24),
-//                            contentDescription = "Back",
-//                            modifier = Modifier
-//                                .clickable {
-//                                    onAction(QuizAction.PreviousQuestion)
-//                                }
-//                                .size(64.dp)
-//                        )
-//                    }
-//
-//                }
-//
-//
-//                Box(
-//                    modifier = Modifier.weight(.45f),
-//                    contentAlignment = Alignment.Center
-//                ) {
-//                    Button(
-//                        onClick = { onAction(QuizAction.ConfirmAnswer) }) {
-//                        Text(text = "OK")
-//                    }
-//                }
-//
-//
-//
-//                Box(
-//                    modifier = Modifier.weight(.25f),
-//                    contentAlignment = Alignment.CenterEnd
-//                ) {
-//                    if (!quizState.isLastQuestion) {
-//                        Icon(
-//                            painter = painterResource(id = R.drawable.ic_baseline_keyboard_arrow_right_24),
-//                            contentDescription = "Forwadr",
-//                            modifier = Modifier
-//                                .clickable {
-//                                    onAction(QuizAction.NextQuestion)
-//                                }
-//                                .size(64.dp)
-//                        )
-//                    }
-//                }
-//            }
-//        }
 
 
 
