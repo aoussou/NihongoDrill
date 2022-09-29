@@ -30,6 +30,9 @@ android {
         }
     }
     compileOptions {
+
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -84,6 +87,11 @@ dependencies {
     //Dagger - Hilt
     implementation 'com.google.dagger:hilt-android:2.44'
     kapt "com.google.dagger:hilt-android-compiler:2.44"
+
+    // Desugaring so can use LocalTime with SDK < 26
+    // Do not use higher version even if Android studio suggests it!!! BUG.
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+
 }
 
 sqldelight{

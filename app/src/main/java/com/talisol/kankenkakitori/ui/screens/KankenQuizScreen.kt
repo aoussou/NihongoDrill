@@ -136,7 +136,7 @@ fun KankenQuizScreen(
                         if (predictedKanji != null) {
                             Text(
                                 predictedKanji,
-                                fontSize = 72.sp,
+                                fontSize = 48.sp,
                                 color = Color.Black
                             )
                         }

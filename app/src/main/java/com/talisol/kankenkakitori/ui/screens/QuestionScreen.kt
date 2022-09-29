@@ -20,7 +20,7 @@ fun QuestionScreen(
         Text(
             modifier = modifier,
             text = annotatedString,
-            fontSize = 64.sp,
+            fontSize = 16.sp,
             fontWeight = FontWeight.Bold
         )
 }
