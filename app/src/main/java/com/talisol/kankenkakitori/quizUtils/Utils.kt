@@ -7,8 +7,14 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 
+// THIS NEEDS A LOT OF FIXING
+
+// IT CRASHES IF IT CAN'T FIND THE TARGET
+
+// IT'S BEING CALLED ALL THE TIME WHEN DRAWING CHARACTER
 fun makeTargetRed(string:String,target:String): AnnotatedString{
 
+    Log.i("DEBUG",string)
     val startIndex = string.indexOf(target)
     val beforeTargetString = string.substring(0,startIndex)
     val targetString = string.substring(startIndex,startIndex+target.length)

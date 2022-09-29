@@ -1,4 +1,4 @@
-package com.talisol.kanjirecognizercompose.viewModels
+package com.talisol.kankenkakitori.viewModels
 
 import android.app.Application
 import android.graphics.Bitmap
@@ -7,6 +7,9 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import com.talisol.kankenkakitori.ml.Model
+import com.talisol.kankenkakitori.quizUtils.QuizAction
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import org.tensorflow.lite.DataType
@@ -28,15 +31,26 @@ class KanjiRecognitionVM(application: Application): AndroidViewModel(application
         .add(CastOp(DataType.FLOAT32))
         .build()
 
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun onAction(action: QuizAction) {
+        when (action) {
+            is QuizAction.RecognizeKanji -> predictKanji(action.bitmap)
+            is QuizAction.ResetPredictedKanji -> resetPredictedKanji()
+            else -> {}
+        }
+    }
+
+    private val _predictedKanji: MutableStateFlow<String?> = MutableStateFlow(null)
+    val predictedKanji = _predictedKanji.asStateFlow()
+
     private val jsonString = application.assets.open("preds_dict.json").bufferedReader().use { it.readText() }
     private val map = Json.parseToJsonElement(jsonString).jsonObject.toMutableMap()
-
 
 
     private val model = Model.newInstance(application.baseContext)
 
     @RequiresApi(Build.VERSION_CODES.P)
-    fun predictKanji(imgBitmap: Bitmap): String {
+    private fun predictKanji(imgBitmap: Bitmap){
         val tensorImage = imageProcessor.process(TensorImage.fromBitmap(imgBitmap))
         val buffer = tensorImage.tensorBuffer
 
@@ -47,8 +61,12 @@ class KanjiRecognitionVM(application: Application): AndroidViewModel(application
         val rawString = map[predictedNumber.toString()].toString()
         val processedString = rawString.replace(""""""", "")
         Log.i("TEST",processedString)
-        return processedString
+
+        _predictedKanji.value = processedString
     }
 
+    private fun resetPredictedKanji() {
+        _predictedKanji.value = null
+    }
 
 }

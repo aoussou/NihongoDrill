@@ -32,6 +32,7 @@ import androidx.core.graphics.applyCanvas
 import com.talisol.kanjirecognizercompose.drawingUtils.*
 import com.talisol.kanjirecognizercompose.ui.screens.DrawingPropertiesMenu
 import com.talisol.kankenkakitori.drawingUtils.*
+import com.talisol.kankenkakitori.quizUtils.QuizAction
 import java.io.File
 import kotlin.math.roundToInt
 
@@ -40,7 +41,8 @@ fun KanjiRecognitionScreen(
     currentStroke: Path,
     state: DrawingState,
     onAction: (DrawingAction) -> Unit,
-    kanjiRecognizer: (Bitmap) -> String,
+    kanjiRecognizerOnAction: (QuizAction) -> Unit,
+    predictedKanji: String?,
     pathProperties: PathProperties = PathProperties(),
     strokeType: Stroke = Stroke(
         width = pathProperties.strokeWidth,
@@ -52,7 +54,6 @@ fun KanjiRecognitionScreen(
     val context = LocalContext.current
 
     var composableBounds by remember { mutableStateOf<Rect?>(null) }
-    var recognizedKanji by remember { mutableStateOf("") }
 
     val drawModifier = Modifier
         .aspectRatio(1f)
@@ -94,21 +95,7 @@ fun KanjiRecognitionScreen(
         val view = LocalView.current
 
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(.25F)
-                .aspectRatio(1f)
-                .border(BorderStroke(1.dp, Color.Blue))
-                .background(Color.White),
-            contentAlignment = Center
 
-        ) {
-            Text(
-                recognizedKanji,
-                fontSize = 72.sp,
-                color = Color.Black
-            )
-        }
 
 
 
@@ -178,7 +165,7 @@ fun KanjiRecognitionScreen(
             onUndo = {
                 if (state.allStrokes.isNotEmpty()) {
                     onAction(DrawingAction.UndoLastStroke)
-                    recognizedKanji = ""
+                    kanjiRecognizerOnAction(QuizAction.ResetPredictedKanji)
                 }
             },
 
@@ -191,7 +178,7 @@ fun KanjiRecognitionScreen(
             onEraseAll = {
                 if (state.allStrokes.isNotEmpty()) {
                     onAction(DrawingAction.ClearAllPaths)
-                    recognizedKanji = ""
+                    kanjiRecognizerOnAction(QuizAction.ResetPredictedKanji)
                 }
             },
 
@@ -213,7 +200,7 @@ fun KanjiRecognitionScreen(
                         .writeBitmap(bmp, Bitmap.CompressFormat.PNG, 85)
                 }
 
-                recognizedKanji = kanjiRecognizer(bmp)
+                kanjiRecognizerOnAction(QuizAction.RecognizeKanji(bmp))
 
 
 

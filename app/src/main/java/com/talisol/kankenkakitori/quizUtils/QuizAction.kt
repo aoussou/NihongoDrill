@@ -1,5 +1,6 @@
 package com.talisol.kankenkakitori.quizUtils
 
+import android.graphics.Bitmap
 import com.talisol.kankenkakitori.ui.states.DialogState
 import databases.kanji.KakitoriQuestion
 
@@ -37,5 +38,8 @@ sealed class QuizAction{
 
     data class LoadQuestionList(val qaList: List<KakitoriQuestion> ) : QuizAction()
 
+    data class RecognizeKanji(val bitmap: Bitmap): QuizAction()
+
+    object ResetPredictedKanji: QuizAction()
 
 }

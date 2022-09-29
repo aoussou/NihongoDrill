@@ -1,6 +1,9 @@
 package com.talisol.kankenkakitori.ui.screens
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -34,7 +37,8 @@ fun KankenQuizScreen(
     currentPath: Path,
     drawingState: DrawingState,
     drawingAction: (DrawingAction) -> Unit,
-    kanjiRecognizer: (Bitmap) -> String,
+    kanjiRecognizerOnAction: (QuizAction) -> Unit,
+    predictedKanji: String?
 ) {
 
     val omitQuestionDialog = DialogState(
@@ -74,7 +78,7 @@ fun KankenQuizScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(64.dp),
+            .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -92,14 +96,51 @@ fun KankenQuizScreen(
         QuestionScreen(state = state, onAction = onAction)
 
 
+
         if (!state.isAnswerConfirmed) {
+
+            Row {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(.25F)
+                        .aspectRatio(1f)
+                        .border(BorderStroke(1.dp, Color.Blue))
+                        .background(Color.White),
+                    contentAlignment = Alignment.Center
+
+                ) {
+                    if (predictedKanji != null) {
+                        Text(
+                            predictedKanji,
+                            fontSize = 72.sp,
+                            color = Color.Black
+                        )
+                    }
+                }
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(.5f),
+                    onClick = {
+                        if (predictedKanji != null) {
+                            onAction(QuizAction.InputAnswer(predictedKanji))
+                            onAction(QuizAction.ConfirmAnswer)
+                            kanjiRecognizerOnAction(QuizAction.ResetPredictedKanji)
+                            drawingAction(DrawingAction.ClearAllPaths)
+                        }
+
+                    }
+                ) {
+                    Text("CONFIRM")
+                }
+            }
 
 
             KanjiRecognitionScreen(
                 currentPath,
                 drawingState,
                 drawingAction,
-                kanjiRecognizer
+                kanjiRecognizerOnAction,
+                predictedKanji
             )
 
 //            // this need to be place inside the if statement otherwise the value get carried
@@ -222,6 +263,7 @@ fun KankenQuizScreen(
 
         }
     }
+
 
 }
 

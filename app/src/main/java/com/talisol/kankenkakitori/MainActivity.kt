@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.talisol.kanjirecognizercompose.viewModels.KanjiRecognitionVM
+import com.talisol.kankenkakitori.viewModels.KanjiRecognitionVM
 import com.talisol.kankenkakitori.quizUtils.QuizAction
 import com.talisol.kankenkakitori.ui.screens.KankenQuizScreen
 import com.talisol.kankenkakitori.ui.screens.SelectKyuScreen
@@ -39,8 +39,10 @@ class MainActivity : ComponentActivity() {
 
                 val drawingVM = viewModel<DrawingVM>()
                 val drawingState by drawingVM.drawingState.collectAsState()
+
                 val currentPath by drawingVM.currentPath.collectAsState()
                 val recognizerVM = viewModel<KanjiRecognitionVM>()
+                val predictedKanji = recognizerVM.predictedKanji.collectAsState()
 
                 val questionListSelectionVM = viewModel<QuestionListSelectionVM>()
                 val localQuizState by questionListSelectionVM.quizSelectionState.collectAsState()
@@ -93,7 +95,8 @@ class MainActivity : ComponentActivity() {
                                 currentPath = currentPath,
                                 drawingState = drawingState,
                                 drawingAction = drawingVM::onAction,
-                            kanjiRecognizer = recognizerVM::predictKanji
+                                kanjiRecognizerOnAction = recognizerVM::onAction,
+                                predictedKanji = predictedKanji.value,
                             )
 
 
