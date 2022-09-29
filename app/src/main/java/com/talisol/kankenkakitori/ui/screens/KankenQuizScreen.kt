@@ -83,14 +83,6 @@ fun KankenQuizScreen(
     ) {
 
 
-        Button(
-            modifier = Modifier.fillMaxWidth(.5f),
-            onClick = {
-                onDialogAction(DialogAction.ShowAlertDialog(omitQuestionDialog))
-            }
-        ) {
-            Text("STOP ASKING")
-        }
 
         QuestionScreen(state = state, onAction = onAction)
 
@@ -103,19 +95,32 @@ fun KankenQuizScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
-                Button(
-                    modifier = Modifier.fillMaxWidth(.20f),
-                    onClick = {
-                        if (state.inputAnswer != null) {
-                            onAction(QuizAction.ConfirmAnswer(trackingOnAction))
-                            kanjiRecognizerOnAction(QuizAction.ResetPredictedKanji)
-                            drawingAction(DrawingAction.ClearAllPaths)
-                        }
+                Column{
+                    Button(
+                        modifier = Modifier.fillMaxWidth(.20f),
+                        onClick = {
+                            if (state.inputAnswer != null) {
+                                onAction(QuizAction.ConfirmAnswer(trackingOnAction))
+                                kanjiRecognizerOnAction(QuizAction.ResetPredictedKanji)
+                                drawingAction(DrawingAction.ClearAllPaths)
+                            }
 
+                        }
+                    ) {
+                        Text("CONF.")
                     }
-                ) {
-                    Text("CONF.")
+
+                    Button(
+                        modifier = Modifier.fillMaxWidth(.20f),
+                        onClick = {
+                            onDialogAction(DialogAction.ShowAlertDialog(omitQuestionDialog))
+                        }
+                    ) {
+                        Text("STOP")
+                    }
+
                 }
+
 
                 Column {
                     Box(
