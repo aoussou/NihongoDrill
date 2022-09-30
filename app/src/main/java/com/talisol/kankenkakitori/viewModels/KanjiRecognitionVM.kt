@@ -21,6 +21,7 @@ import org.tensorflow.lite.support.image.ops.TransformToGrayscaleOp
 
 class KanjiRecognitionVM(application: Application) : AndroidViewModel(application) {
 
+    private val context = application.baseContext
     private val numberGuess = 10
 
     private val imageProcessor = ImageProcessor.Builder()
@@ -37,16 +38,16 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
     fun onAction(action: QuizAction) {
         when (action) {
             is QuizAction.RecognizeKanji -> predictKanji(action.bitmap)
-            is QuizAction.ResetPredictedKanji -> resetPredictedKanji()
+            is QuizAction.ResetPredictedKanji -> resetGuessList()
             else -> {}
         }
     }
 
-    private val _predictedKanji: MutableStateFlow<String?> = MutableStateFlow(null)
-    val predictedKanji = _predictedKanji.asStateFlow()
+//    private val _predictedKanji: MutableStateFlow<String?> = MutableStateFlow(null)
+//    val predictedKanji = _predictedKanji.asStateFlow()
 
-    private val _secondaryGuesses = MutableStateFlow(listOf<String>())
-    val secondaryGuesses = _secondaryGuesses.asStateFlow()
+    private val _guessList: MutableStateFlow<List<String>?>  = MutableStateFlow(null)
+    val guessList = _guessList.asStateFlow()
 
     private val jsonString =
         application.assets.open("preds_dict.json").bufferedReader().use { it.readText() }
@@ -58,23 +59,26 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
 
     @RequiresApi(Build.VERSION_CODES.P)
     private fun predictKanji(imgBitmap: Bitmap) {
+        val model = Model.newInstance(context)
         val tensorImage = imageProcessor.process(TensorImage.fromBitmap(imgBitmap))
         val buffer = tensorImage.tensorBuffer
 
         val prediction = model.process(buffer)
+        model.close()
         val outputBuffer = prediction.outputFeature0AsTensorBuffer
         val finalOutput = outputBuffer.floatArray
         val predictedNumber = finalOutput.indexOfFirst { it == finalOutput.max() }
         val rawString = map[predictedNumber.toString()].toString()
         val processedString = rawString.replace(""""""", "")
+
         Log.i("TEST", processedString)
 
-        _predictedKanji.value = processedString
-        _secondaryGuesses.value = getNMostProbableKanji(finalOutput, numberGuess)
+//        _predictedKanji.value = processedString
+        _guessList.value = getNMostProbableKanji(finalOutput, numberGuess)
     }
 
-    private fun resetPredictedKanji() {
-        _predictedKanji.value = null
+    private fun resetGuessList() {
+        _guessList.value = null
     }
 
     private fun getNMostProbableKanji(resultArray: FloatArray, number: Int): List<String> {
@@ -84,12 +88,13 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
         var numberList = resultArray.toMutableList()
 
         for (i in 0..number) {
-            val predictedNumber = resultArray.indexOfFirst { it == resultArray.max() }
+            val predictedNumber = numberList.indexOfFirst { it == numberList.max() }
             val rawString = map[predictedNumber.toString()].toString()
             val processedString = rawString.replace(""""""", "")
             numberList.removeAt(predictedNumber)
             kanjiList.add(processedString)
         }
+
 
         return kanjiList
     }

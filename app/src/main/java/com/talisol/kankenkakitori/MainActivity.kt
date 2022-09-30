@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
 
                 val currentPath by drawingVM.currentPath.collectAsState()
                 val recognizerVM = viewModel<KanjiRecognitionVM>()
-                val predictedKanji = recognizerVM.predictedKanji.collectAsState()
+                val kanjiGuessList = recognizerVM.guessList.collectAsState()
 
                 val questionListSelectionVM = viewModel<QuestionListSelectionVM>()
                 val localQuizState by questionListSelectionVM.quizSelectionState.collectAsState()
@@ -109,7 +109,7 @@ class MainActivity : ComponentActivity() {
                             drawingState = drawingState,
                             drawingAction = drawingVM::onAction,
                             kanjiRecognizerOnAction = recognizerVM::onAction,
-                            predictedKanji = predictedKanji.value,
+                            kanjiGuessList = kanjiGuessList.value,
                             trackingOnAction = trackingVM::onAction,
                             onDialogAction = dialogVM::onAction
                         )

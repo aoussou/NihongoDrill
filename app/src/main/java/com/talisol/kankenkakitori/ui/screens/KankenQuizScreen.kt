@@ -3,14 +3,16 @@ package com.talisol.kankenkakitori.ui.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.talisol.kankenkakitori.actions.DrawingAction
@@ -22,6 +24,7 @@ import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.actions.TrackingAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 import com.talisol.kankenkakitori.ui.theme.DarkGreen
+import com.talisol.kankenkakitori.ui.theme.Spinner
 
 @Composable
 fun KankenQuizScreen(
@@ -32,10 +35,12 @@ fun KankenQuizScreen(
     drawingState: DrawingState,
     drawingAction: (DrawingAction) -> Unit,
     kanjiRecognizerOnAction: (QuizAction) -> Unit,
-    predictedKanji: String?,
+    kanjiGuessList: List<String>?,
     trackingOnAction: (TrackingAction) -> Unit,
     onDialogAction: (DialogAction) -> Unit
 ) {
+
+    var selectOtherKanji by remember { mutableStateOf(false) }
 
     val omitQuestionDialog = DialogState(
         dialogText = "Are you sure you want the quiz to omit this question?",
@@ -83,7 +88,6 @@ fun KankenQuizScreen(
     ) {
 
 
-
         QuestionScreen(state = state, onAction = onAction)
 
 
@@ -95,7 +99,7 @@ fun KankenQuizScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
-                Column{
+                Column {
                     Button(
                         modifier = Modifier.fillMaxWidth(.20f),
                         onClick = {
@@ -123,22 +127,35 @@ fun KankenQuizScreen(
 
 
                 Column {
+
+
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(.25F)
                             .aspectRatio(1f)
                             .border(BorderStroke(1.dp, Color.Blue))
-                            .background(Color.White),
+                            .background(Color.White)
+                            .clickable { selectOtherKanji = true },
                         contentAlignment = Alignment.Center
-
                     ) {
 
-                        if (predictedKanji != null) {
-                            Text(
-                                predictedKanji,
-                                fontSize = 48.sp,
-                                color = Color.Black
-                            )
+
+                        if (kanjiGuessList != null) {
+                            if (selectOtherKanji) {
+
+                                QuantityMenuSpinner(
+                                    availableQuantities = kanjiGuessList,
+                                    selectedItem = kanjiGuessList[0],
+                                    onItemSelected = {}
+                                )
+
+                            } else {
+                                Text(
+                                    kanjiGuessList[0],
+                                    fontSize = 48.sp,
+                                    color = Color.Black
+                                )
+                            }
                         }
                     }
 
@@ -152,12 +169,12 @@ fun KankenQuizScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(.30f),
                         onClick = {
-                            if (predictedKanji != null) {
+                            if (kanjiGuessList != null) {
                                 val newAnswer =
                                     if (state.inputAnswer == null) {
-                                        predictedKanji
+                                        kanjiGuessList[0]
                                     } else {
-                                        state.inputAnswer + predictedKanji
+                                        state.inputAnswer + kanjiGuessList[0]
                                     }
                                 onAction(QuizAction.InputAnswer(newAnswer))
                                 drawingAction(DrawingAction.ClearAllPaths)
@@ -187,8 +204,6 @@ fun KankenQuizScreen(
 
 
                 }
-
-
 
 
             }
