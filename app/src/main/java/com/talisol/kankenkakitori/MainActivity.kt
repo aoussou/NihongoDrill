@@ -34,16 +34,17 @@ class MainActivity : ComponentActivity() {
 
                 val drawingVM = viewModel<DrawingVM>()
                 val drawingState by drawingVM.drawingState.collectAsState()
-
                 val currentPath by drawingVM.currentPath.collectAsState()
+
                 val recognizerVM = viewModel<KanjiRecognitionVM>()
-                val kanjiGuessList = recognizerVM.guessList.collectAsState()
+                val otherGuessesList = recognizerVM.otherGuessesList.collectAsState()
+                val predictedKanji = recognizerVM.predictedKanji.collectAsState()
 
                 val questionListSelectionVM = viewModel<QuestionListSelectionVM>()
                 val localQuizState by questionListSelectionVM.quizSelectionState.collectAsState()
 
-                val dialogVM = viewModel<DialogVM>()
-                val dialogState by dialogVM.dialogState.collectAsState()
+                val popUpVM = viewModel<PopUpVM>()
+                val dialogState by popUpVM.popUpState.collectAsState()
 
                 val quizVM = viewModel<QuizVM>()
                 val quizState by quizVM.quizState.collectAsState()
@@ -104,14 +105,15 @@ class MainActivity : ComponentActivity() {
                         KankenQuizScreen(
                             state = quizState,
                             onAction = quizVM::onAction,
-                            dialogState = dialogState,
+                            popUpState = dialogState,
                             currentPath = currentPath,
                             drawingState = drawingState,
                             drawingAction = drawingVM::onAction,
                             kanjiRecognizerOnAction = recognizerVM::onAction,
-                            kanjiGuessList = kanjiGuessList.value,
+                            predictedKanji = predictedKanji.value,
+                            otherGuessesList = otherGuessesList.value,
                             trackingOnAction = trackingVM::onAction,
-                            onDialogAction = dialogVM::onAction
+                            onPopUpAction = popUpVM::onAction
                         )
                     }
                 }

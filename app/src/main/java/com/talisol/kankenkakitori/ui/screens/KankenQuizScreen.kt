@@ -6,6 +6,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,49 +16,46 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.talisol.kankenkakitori.actions.DrawingAction
-import com.talisol.kanjirecognizercompose.screens.KanjiRecognitionScreen
-import com.talisol.kankenkakitori.actions.DialogAction
+import com.talisol.kankenkakitori.actions.*
 import com.talisol.kankenkakitori.drawingUtils.DrawingState
-import com.talisol.kankenkakitori.ui.states.DialogState
-import com.talisol.kankenkakitori.actions.QuizAction
-import com.talisol.kankenkakitori.actions.TrackingAction
+import com.talisol.kankenkakitori.ui.MySpinner
+import com.talisol.kankenkakitori.ui.states.PopUpState
 import com.talisol.kankenkakitori.ui.states.QuizState
 import com.talisol.kankenkakitori.ui.theme.DarkGreen
 
 @Composable
 fun KankenQuizScreen(
     state: QuizState,
-    dialogState: DialogState,
+    popUpState: PopUpState,
     onAction: (QuizAction) -> Unit,
     currentPath: Path,
     drawingState: DrawingState,
     drawingAction: (DrawingAction) -> Unit,
-    kanjiRecognizerOnAction: (QuizAction) -> Unit,
-    kanjiGuessList: List<String>?,
+    kanjiRecognizerOnAction: (KanjiRecAction) -> Unit,
+    predictedKanji: String?,
+    otherGuessesList: List<String>?,
     trackingOnAction: (TrackingAction) -> Unit,
-    onDialogAction: (DialogAction) -> Unit
+    onPopUpAction: (PopUpAction) -> Unit
 ) {
 
-    var selectOtherKanji by remember { mutableStateOf(false) }
 
-    val omitQuestionDialog = DialogState(
+    val omitQuestionDialog = PopUpState(
         dialogText = "Are you sure you want the quiz to omit this question?",
         onConfirmAction = {
             trackingOnAction(TrackingAction.StopAsking(state.questionGlobalId!!))
-            onDialogAction(DialogAction.CloseAlertDialog)
+            onPopUpAction(PopUpAction.CloseAlertDialog)
             onAction(QuizAction.NextQuestion)
 
             if (state.isLastQuestion) onAction(QuizAction.EndQuiz)
         }
     )
 
-    val iWasRightDialog = DialogState(
+    val iWasRightDialog = PopUpState(
         dialogText = "Are you sure you got this question right?",
         onConfirmAction =
         {
             val questionId = state.questionGlobalId!!
-            onDialogAction(DialogAction.CloseAlertDialog)
+            onPopUpAction(PopUpAction.CloseAlertDialog)
             trackingOnAction(TrackingAction.AddOneCorrect(questionId))
             trackingOnAction(TrackingAction.SubtractOneWrong(questionId))
             trackingOnAction(TrackingAction.UpdateLastCorrectTime(questionId))
@@ -65,16 +64,16 @@ fun KankenQuizScreen(
         }
     )
 
-    val markForReviewDialog = DialogState(
+    val markForReviewDialog = PopUpState(
         dialogText = "Are you sure you want to mark this question for review?",
         onConfirmAction =
         {
-            onDialogAction(DialogAction.CloseAlertDialog)
+            onPopUpAction(PopUpAction.CloseAlertDialog)
             trackingOnAction(TrackingAction.MarkForReview(state.questionGlobalId!!))
         }
     )
 
-    QuizAlertDialog(dialogState = dialogState, onAction = onDialogAction)
+    QuizAlertDialog(popUpState = popUpState, onAction = onPopUpAction)
 
 
     Column(
@@ -103,7 +102,7 @@ fun KankenQuizScreen(
                         onClick = {
                             if (state.inputAnswer != null) {
                                 onAction(QuizAction.ConfirmAnswer(trackingOnAction))
-                                kanjiRecognizerOnAction(QuizAction.ResetPredictedKanji)
+                                kanjiRecognizerOnAction(KanjiRecAction.ResetPredictedKanji)
                                 drawingAction(DrawingAction.ClearAllPaths)
                             }
 
@@ -115,7 +114,7 @@ fun KankenQuizScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(.20f),
                         onClick = {
-                            onDialogAction(DialogAction.ShowAlertDialog(omitQuestionDialog))
+                            onPopUpAction(PopUpAction.ShowAlertDialog(omitQuestionDialog))
                         }
                     ) {
                         Text("STOP")
@@ -133,24 +132,27 @@ fun KankenQuizScreen(
                             .aspectRatio(1f)
                             .border(BorderStroke(1.dp, Color.Blue))
                             .background(Color.White)
-                            .clickable { selectOtherKanji = true },
+                            .clickable {
+                                kanjiRecognizerOnAction(KanjiRecAction.SetOtherGuessesList)
+                                onPopUpAction(PopUpAction.ShowOtherGuesses)
+                            },
                         contentAlignment = Alignment.Center
                     ) {
 
 
-                        if (kanjiGuessList != null) {
-
-                            QuantityMenuSpinner(
-                                availableQuantities = kanjiGuessList,
-                                selectedItem = kanjiGuessList[0],
-                                onItemSelected = {}
-                            )
-
-//
-
-
-
+                        if (popUpState.isShowOtherGuesses) {
+                            if (otherGuessesList != null) {
+                                MySpinner(
+                                    isExpanded = popUpState.isShowOtherGuesses,
+                                    onPopUpAction = onPopUpAction,
+                                    items = otherGuessesList,
+                                    onKanjiRecAction = kanjiRecognizerOnAction
+                                )
+                            }
+                        } else {
+                            if (predictedKanji != null) Text(text = predictedKanji)
                         }
+
                     }
 
                     Text(text = state.inputAnswer ?: "")
@@ -163,16 +165,16 @@ fun KankenQuizScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(.30f),
                         onClick = {
-                            if (kanjiGuessList != null) {
+                            if (predictedKanji != null) {
                                 val newAnswer =
                                     if (state.inputAnswer == null) {
-                                        kanjiGuessList[0]
+                                        predictedKanji
                                     } else {
-                                        state.inputAnswer + kanjiGuessList[0]
+                                        state.inputAnswer + predictedKanji
                                     }
                                 onAction(QuizAction.InputAnswer(newAnswer))
                                 drawingAction(DrawingAction.ClearAllPaths)
-                                kanjiRecognizerOnAction(QuizAction.ResetPredictedKanji)
+                                kanjiRecognizerOnAction(KanjiRecAction.ResetPredictedKanji)
                             }
 
                         }
@@ -184,19 +186,14 @@ fun KankenQuizScreen(
                         modifier = Modifier.fillMaxWidth(.30f),
                         onClick = {
                             if (state.inputAnswer != null) {
-
                                 var newAnswer = state.inputAnswer
                                 newAnswer = newAnswer.dropLast(1)
                                 onAction(QuizAction.InputAnswer(newAnswer))
-
                             }
-
                         }
                     ) {
                         Text("DEL")
                     }
-
-
                 }
 
 
@@ -265,7 +262,7 @@ fun KankenQuizScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(.5f),
                         onClick = {
-                            onDialogAction(DialogAction.ShowAlertDialog(iWasRightDialog))
+                            onPopUpAction(PopUpAction.ShowAlertDialog(iWasRightDialog))
                         }
                     ) {
                         Text("I WAS\nRIGHT!")
@@ -274,7 +271,7 @@ fun KankenQuizScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(.5f),
                         onClick = {
-                            onDialogAction(DialogAction.ShowAlertDialog(markForReviewDialog))
+                            onPopUpAction(PopUpAction.ShowAlertDialog(markForReviewDialog))
                         }
                     ) {
                         Text("MARK")

@@ -1,4 +1,4 @@
-package com.talisol.kanjirecognizercompose.screens
+package com.talisol.kankenkakitori.ui.screens
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke
@@ -26,11 +26,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.applyCanvas
-import com.talisol.kankenkakitori.actions.DrawingAction
 import com.talisol.kanjirecognizercompose.ui.screens.DrawingPropertiesMenu
-import com.talisol.kankenkakitori.drawingUtils.*
-import com.talisol.kankenkakitori.actions.QuizAction
-import java.io.File
+import com.talisol.kankenkakitori.actions.DrawingAction
+import com.talisol.kankenkakitori.actions.KanjiRecAction
+import com.talisol.kankenkakitori.drawingUtils.DrawingState
+import com.talisol.kankenkakitori.drawingUtils.MotionEvent
+import com.talisol.kankenkakitori.drawingUtils.PathProperties
+import com.talisol.kankenkakitori.drawingUtils.dragMotionEvent
 import kotlin.math.roundToInt
 
 @Composable
@@ -38,7 +40,7 @@ fun KanjiRecognitionScreen(
     currentStroke: Path,
     state: DrawingState,
     onAction: (DrawingAction) -> Unit,
-    kanjiRecognizerOnAction: (QuizAction) -> Unit,
+    kanjiRecognizerOnAction: (KanjiRecAction) -> Unit,
     pathProperties: PathProperties = PathProperties(),
     strokeType: Stroke = Stroke(
         width = pathProperties.strokeWidth,
@@ -156,7 +158,7 @@ fun KanjiRecognitionScreen(
             onUndo = {
                 if (state.allStrokes.isNotEmpty()) {
                     onAction(DrawingAction.UndoLastStroke)
-                    kanjiRecognizerOnAction(QuizAction.ResetPredictedKanji)
+                    kanjiRecognizerOnAction(KanjiRecAction.ResetPredictedKanji)
                 }
             },
 
@@ -169,7 +171,7 @@ fun KanjiRecognitionScreen(
             onEraseAll = {
                 if (state.allStrokes.isNotEmpty()) {
                     onAction(DrawingAction.ClearAllPaths)
-                    kanjiRecognizerOnAction(QuizAction.ResetPredictedKanji)
+                    kanjiRecognizerOnAction(KanjiRecAction.ResetPredictedKanji)
                 }
             },
 
@@ -185,11 +187,12 @@ fun KanjiRecognitionScreen(
                         view.draw(this)
                     }
 
-                val randomId = java.util.UUID.randomUUID().toString()
-                bmp.let {
-                    File(context.filesDir, "screenshots/$randomId.png")
-                        .writeBitmap(bmp, Bitmap.CompressFormat.PNG, 85)
-                }
+
+//                val randomId = java.util.UUID.randomUUID().toString()
+//                bmp.let {
+//                    File(context.filesDir, "screenshots/$randomId.png")
+//                        .writeBitmap(bmp, Bitmap.CompressFormat.PNG, 85)
+//                }
 
             },
 
@@ -206,7 +209,7 @@ fun KanjiRecognitionScreen(
                     }
 
 
-                kanjiRecognizerOnAction(QuizAction.RecognizeKanji(bmp))
+                kanjiRecognizerOnAction(KanjiRecAction.RecognizeKanji(bmp))
             }
 
         )

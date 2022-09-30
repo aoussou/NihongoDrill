@@ -29,10 +29,6 @@ fun QuantityMenuSpinner(
             ) {
                 Text(item)
 
-//                Icon(
-//                    painter = painterResource(id = R.drawable.ic_baseline_arrow_drop_down_24),
-//                    contentDescription ="drop down arrow"
-//                )
             }
         },
         dropdownItemFactory = { item, _ ->

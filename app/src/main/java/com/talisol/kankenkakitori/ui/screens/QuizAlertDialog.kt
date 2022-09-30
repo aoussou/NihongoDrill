@@ -4,37 +4,36 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import com.talisol.kankenkakitori.actions.DialogAction
-import com.talisol.kankenkakitori.ui.states.DialogState
-import com.talisol.kankenkakitori.actions.QuizAction
+import com.talisol.kankenkakitori.actions.PopUpAction
+import com.talisol.kankenkakitori.ui.states.PopUpState
 
 @Composable
 fun QuizAlertDialog(
-    dialogState: DialogState,
-    onAction: (DialogAction) -> Unit,
+    popUpState: PopUpState,
+    onAction: (PopUpAction) -> Unit,
 ) {
-    if (dialogState.isAlertDialogShown) {
+    if (popUpState.isAlertDialogShown) {
         AlertDialog(
             onDismissRequest = {},
             title = {
-                Text(text = dialogState.title)
+                Text(text = popUpState.title)
             },
             text = {
-                Text(dialogState.dialogText!!)
+                Text(popUpState.dialogText!!)
             },
             confirmButton = {
                 Button(
-                    onClick = dialogState.onConfirmAction!!
+                    onClick = popUpState.onConfirmAction!!
                 ) {
-                    Text(dialogState.confirmButtonText)
+                    Text(popUpState.confirmButtonText)
                 }
             },
             dismissButton = {
                 Button(
                     onClick = {
-                        onAction(DialogAction.CloseAlertDialog)
+                        onAction(PopUpAction.CloseAlertDialog)
                     }) {
-                    Text(dialogState.dismissButtonText)
+                    Text(popUpState.dismissButtonText)
                 }
             }
         )
