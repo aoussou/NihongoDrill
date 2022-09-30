@@ -173,8 +173,7 @@ fun KanjiRecognitionScreen(
                 }
             },
 
-            onSubmit = {
-
+            onSaveImage = {
                 val bmp = Bitmap
                     .createBitmap(
                         (composableBounds!!.width).roundToInt(),
@@ -186,16 +185,28 @@ fun KanjiRecognitionScreen(
                         view.draw(this)
                     }
 
+                val randomId = java.util.UUID.randomUUID().toString()
                 bmp.let {
-                    File(context.filesDir, "screenshot.png")
+                    File(context.filesDir, "screenshots/$randomId.png")
                         .writeBitmap(bmp, Bitmap.CompressFormat.PNG, 85)
                 }
 
+            },
+
+            onSubmit = {
+                val bmp = Bitmap
+                    .createBitmap(
+                        (composableBounds!!.width).roundToInt(),
+                        (composableBounds!!.height).roundToInt(),
+                        Bitmap.Config.ARGB_8888
+                    )
+                    .applyCanvas {
+                        translate(-composableBounds!!.left, -composableBounds!!.top)
+                        view.draw(this)
+                    }
+
+
                 kanjiRecognizerOnAction(QuizAction.RecognizeKanji(bmp))
-
-
-
-
             }
 
         )

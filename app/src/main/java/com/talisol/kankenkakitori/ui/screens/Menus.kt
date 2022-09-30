@@ -18,7 +18,8 @@ fun DrawingPropertiesMenu(
     onUndo: () -> Unit,
     onRedo: () -> Unit,
     onSubmit: () -> Unit,
-    onEraseAll: () -> Unit
+    onEraseAll: () -> Unit,
+    onSaveImage: () -> Unit
 ) {
 
 
@@ -58,6 +59,15 @@ fun DrawingPropertiesMenu(
                 contentDescription = null,
                 tint = Color.LightGray
             )
+        }
+
+        IconButton(onClick = {
+            onSaveImage()
+        }) {
+            Icon(
+                painter = painterResource(id =  R.drawable.ic_outline_check_24),
+                contentDescription = null,
+                tint = Color.Black)
         }
 
         IconButton(onClick = {
