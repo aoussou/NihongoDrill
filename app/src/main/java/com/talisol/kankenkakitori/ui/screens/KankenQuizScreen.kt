@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.talisol.kankenkakitori.actions.DrawingAction
@@ -24,7 +23,6 @@ import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.actions.TrackingAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 import com.talisol.kankenkakitori.ui.theme.DarkGreen
-import com.talisol.kankenkakitori.ui.theme.Spinner
 
 @Composable
 fun KankenQuizScreen(
@@ -141,21 +139,17 @@ fun KankenQuizScreen(
 
 
                         if (kanjiGuessList != null) {
-                            if (selectOtherKanji) {
 
-                                QuantityMenuSpinner(
-                                    availableQuantities = kanjiGuessList,
-                                    selectedItem = kanjiGuessList[0],
-                                    onItemSelected = {}
-                                )
+                            QuantityMenuSpinner(
+                                availableQuantities = kanjiGuessList,
+                                selectedItem = kanjiGuessList[0],
+                                onItemSelected = {}
+                            )
 
-                            } else {
-                                Text(
-                                    kanjiGuessList[0],
-                                    fontSize = 48.sp,
-                                    color = Color.Black
-                                )
-                            }
+//
+
+
+
                         }
                     }
 

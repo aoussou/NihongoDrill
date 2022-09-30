@@ -6,10 +6,14 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.talisol.kankenkakitori.ml.Model
 import com.talisol.kankenkakitori.actions.QuizAction
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import org.tensorflow.lite.DataType
@@ -46,7 +50,7 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
 //    private val _predictedKanji: MutableStateFlow<String?> = MutableStateFlow(null)
 //    val predictedKanji = _predictedKanji.asStateFlow()
 
-    private val _guessList: MutableStateFlow<List<String>?>  = MutableStateFlow(null)
+    private val _guessList: MutableStateFlow<List<String>?> = MutableStateFlow(null)
     val guessList = _guessList.asStateFlow()
 
     private val jsonString =
@@ -74,7 +78,16 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
         Log.i("TEST", processedString)
 
 //        _predictedKanji.value = processedString
-        _guessList.value = getNMostProbableKanji(finalOutput, numberGuess)
+
+        viewModelScope.launch {
+
+            withContext(Dispatchers.IO) {
+                _guessList.value = getNMostProbableKanji(finalOutput, numberGuess)
+            }
+
+        }
+
+
     }
 
     private fun resetGuessList() {
@@ -85,13 +98,14 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
 
         val kanjiList = mutableListOf<String>()
 
-        var numberList = resultArray.toMutableList()
+
 
         for (i in 0..number) {
-            val predictedNumber = numberList.indexOfFirst { it == numberList.max() }
+            val predictedNumber = resultArray.indexOfFirst { it == resultArray.max() }
+
             val rawString = map[predictedNumber.toString()].toString()
             val processedString = rawString.replace(""""""", "")
-            numberList.removeAt(predictedNumber)
+            resultArray[predictedNumber] = 0F
             kanjiList.add(processedString)
         }
 

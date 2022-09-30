@@ -1,4 +1,4 @@
-package com.talisol.kankenkakitori.ui.theme
+package com.talisol.kankenkakitori.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
