@@ -6,10 +6,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -139,18 +137,15 @@ fun KankenQuizScreen(
                         contentAlignment = Alignment.Center
                     ) {
 
+                        if (predictedKanji != null) Text(text = predictedKanji)
 
-                        if (popUpState.isShowOtherGuesses) {
-                            if (otherGuessesList != null) {
-                                MySpinner(
-                                    isExpanded = popUpState.isShowOtherGuesses,
-                                    onPopUpAction = onPopUpAction,
-                                    items = otherGuessesList,
-                                    onKanjiRecAction = kanjiRecognizerOnAction
-                                )
-                            }
-                        } else {
-                            if (predictedKanji != null) Text(text = predictedKanji)
+                        if (otherGuessesList != null) {
+                            MySpinner(
+                                isExpanded = popUpState.isShowOtherGuesses,
+                                onPopUpAction = onPopUpAction,
+                                items = otherGuessesList,
+                                onKanjiRecAction = kanjiRecognizerOnAction
+                            )
                         }
 
                     }

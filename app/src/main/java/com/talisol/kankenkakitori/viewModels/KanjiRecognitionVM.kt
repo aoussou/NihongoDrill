@@ -45,7 +45,7 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
         when (action) {
             is KanjiRecAction.RecognizeKanji -> predictKanji(action.bitmap)
             is KanjiRecAction.ResetPredictedKanji -> resetPredictedKanji()
-            is KanjiRecAction.SaveImage -> saveImage(action.bitmap, action.kanji)
+            is KanjiRecAction.SaveImage -> saveImage(action.kanji)
             is KanjiRecAction.SetOtherGuessesList -> setOtherGuessesList()
             is KanjiRecAction.SetPredictedKanji -> setPredictedKanji(action.kanji)
         }
@@ -67,11 +67,14 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
 
     private val map = Json.parseToJsonElement(jsonString).jsonObject.toMutableMap()
 
+    private var _bitmap : MutableStateFlow<Bitmap?> = MutableStateFlow(null)
+    private val bitmap = _bitmap.asStateFlow()
 
-    private val model = Model.newInstance(application.baseContext)
+//    private val model = Model.newInstance(application.baseContext)
 
     @RequiresApi(Build.VERSION_CODES.P)
     private fun predictKanji(imgBitmap: Bitmap) {
+        _bitmap.value = imgBitmap
         val model = Model.newInstance(context)
         val tensorImage = imageProcessor.process(TensorImage.fromBitmap(imgBitmap))
         val buffer = tensorImage.tensorBuffer
@@ -96,6 +99,9 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
         val originalInd = _reducedIndicesList!![predictedNumber]
         val rawString = map[originalInd.toString()].toString()
         val processedString = rawString.replace(""""""", "")
+
+        _reducedIndicesList!!.removeAt(predictedNumber)
+        _reducedProbList!!.removeAt(predictedNumber)
 
         Log.i("TEST", processedString)
 
@@ -140,13 +146,16 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
         _predictedKanji.value = kanji
     }
 
-    private fun saveImage(bitmap: Bitmap, kanji: String) {
+    private fun saveImage(kanji: String) {
 
-        val randomId = java.util.UUID.randomUUID().toString()
-        bitmap.let {
-            File(context.filesDir, "screenshots/${kanji}_$randomId.png")
-                .writeBitmap(bitmap, Bitmap.CompressFormat.PNG, 85)
+        if (_bitmap.value != null) {
+            val randomId = java.util.UUID.randomUUID().toString()
+            bitmap.let {
+                File(context.filesDir, "screenshots/${kanji}_$randomId.png")
+                    .writeBitmap(_bitmap.value!!, Bitmap.CompressFormat.PNG, 85)
+            }
         }
+
 
     }
 
