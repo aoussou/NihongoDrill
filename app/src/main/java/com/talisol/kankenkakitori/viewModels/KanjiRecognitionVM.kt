@@ -28,7 +28,7 @@ import java.io.File
 class KanjiRecognitionVM(application: Application) : AndroidViewModel(application) {
 
     private val context = application.baseContext
-    private val numberGuess = 5
+    private val numberGuess = 10
 
     private val imageProcessor = ImageProcessor.Builder()
         .add(
@@ -45,7 +45,7 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
         when (action) {
             is KanjiRecAction.RecognizeKanji -> predictKanji(action.bitmap)
             is KanjiRecAction.ResetPredictedKanji -> resetPredictedKanji()
-            is KanjiRecAction.SaveImage -> saveImage(action.bitmap,action.kanji)
+            is KanjiRecAction.SaveImage -> saveImage(action.bitmap, action.kanji)
             is KanjiRecAction.SetOtherGuessesList -> setOtherGuessesList()
             is KanjiRecAction.SetPredictedKanji -> setPredictedKanji(action.kanji)
         }
@@ -57,7 +57,10 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
     private val _otherGuessesList: MutableStateFlow<List<String>?> = MutableStateFlow(null)
     val otherGuessesList = _otherGuessesList.asStateFlow()
 
-    private val _allProbabilities: MutableStateFlow<FloatArray?> = MutableStateFlow(null)
+    private var _reducedIndicesList : MutableList<Int>? = null
+    private var _reducedProbList : MutableList<Float>? = null
+
+//    private var _allProbabilities: FloatArray? = null
 
     private val jsonString =
         application.assets.open("preds_dict.json").bufferedReader().use { it.readText() }
@@ -77,9 +80,21 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
         model.close()
         val outputBuffer = prediction.outputFeature0AsTensorBuffer
         val finalOutput = outputBuffer.floatArray
-        _allProbabilities.value = finalOutput
-        val predictedNumber = finalOutput.indexOfFirst { it == finalOutput.max() }
-        val rawString = map[predictedNumber.toString()].toString()
+
+        _reducedIndicesList = mutableListOf()
+        _reducedProbList = mutableListOf()
+
+        for (ind in finalOutput.indices) {
+            val prob = finalOutput[ind]
+            if (prob > 1e-4) {
+                _reducedIndicesList!!.add(ind)
+                _reducedProbList!!.add(prob)
+            }
+        }
+
+        val predictedNumber = _reducedProbList!!.indexOfFirst { it == _reducedProbList!!.max() }
+        val originalInd = _reducedIndicesList!![predictedNumber]
+        val rawString = map[originalInd.toString()].toString()
         val processedString = rawString.replace(""""""", "")
 
         Log.i("TEST", processedString)
@@ -91,29 +106,30 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
     private fun resetPredictedKanji() {
         _predictedKanji.value = null
         _otherGuessesList.value = null
-        _allProbabilities.value = null
+        _reducedIndicesList = null
+        _reducedProbList = null
     }
-
 
 
     private fun setOtherGuessesList() {
 
-        if (_allProbabilities.value != null) {
+        if (_reducedIndicesList != null) {
+
 
             val kanjiList = mutableListOf<String>()
-            val resultArray = _allProbabilities.value!!
+
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
                     for (i in 1..numberGuess) {
-                        val predictedNumber = resultArray.indexOfFirst { it == resultArray.max() }
-
-                        val rawString = map[predictedNumber.toString()].toString()
+                        val predictedNumber = _reducedProbList!!.indexOfFirst { it == _reducedProbList!!.max() }
+                        Log.i("TEST", _reducedIndicesList!![predictedNumber].toString())
+                        val originalInd = _reducedIndicesList!![predictedNumber]
+                        val rawString = map[originalInd.toString()].toString()
                         val processedString = rawString.replace(""""""", "")
-                        resultArray[predictedNumber] = 0F
+                        _reducedProbList!![predictedNumber] = 0F
                         kanjiList.add(processedString)
                     }
                 }
-
                 _otherGuessesList.value = kanjiList
             }
         }
@@ -124,7 +140,7 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
         _predictedKanji.value = kanji
     }
 
-    private fun saveImage(bitmap: Bitmap,kanji: String) {
+    private fun saveImage(bitmap: Bitmap, kanji: String) {
 
         val randomId = java.util.UUID.randomUUID().toString()
         bitmap.let {
