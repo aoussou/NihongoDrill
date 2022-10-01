@@ -119,7 +119,7 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
 
     private fun setOtherGuessesList() {
 
-        if (_reducedIndicesList != null) {
+        if (_reducedIndicesList != null && _otherGuessesList.value == null) {
 
 
             val kanjiList = mutableListOf<String>()
@@ -127,13 +127,20 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
                     for (i in 1..numberGuess) {
-                        val predictedNumber = _reducedProbList!!.indexOfFirst { it == _reducedProbList!!.max() }
-                        Log.i("TEST", _reducedIndicesList!![predictedNumber].toString())
-                        val originalInd = _reducedIndicesList!![predictedNumber]
-                        val rawString = map[originalInd.toString()].toString()
-                        val processedString = rawString.replace(""""""", "")
-                        _reducedProbList!![predictedNumber] = 0F
-                        kanjiList.add(processedString)
+
+                        val max =  _reducedProbList!!.max()
+                        if (max > 0) {
+                            val predictedNumber = _reducedProbList!!.indexOfFirst { it == max }
+                            Log.i("TEST", _reducedIndicesList!![predictedNumber].toString())
+                            val originalInd = _reducedIndicesList!![predictedNumber]
+                            val rawString = map[originalInd.toString()].toString()
+                            val processedString = rawString.replace(""""""", "")
+                            _reducedProbList!![predictedNumber] = 0F
+                            kanjiList.add(processedString)
+                        } else {
+                            break
+                        }
+
                     }
                 }
                 _otherGuessesList.value = kanjiList

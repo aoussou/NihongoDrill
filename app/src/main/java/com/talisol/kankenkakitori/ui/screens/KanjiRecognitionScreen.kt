@@ -26,7 +26,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.applyCanvas
-import com.talisol.kanjirecognizercompose.ui.screens.DrawingPropertiesMenu
 import com.talisol.kankenkakitori.actions.DrawingAction
 import com.talisol.kankenkakitori.actions.KanjiRecAction
 import com.talisol.kankenkakitori.drawingUtils.DrawingState
@@ -175,26 +174,6 @@ fun KanjiRecognitionScreen(
                 }
             },
 
-            onSaveImage = {
-                val bmp = Bitmap
-                    .createBitmap(
-                        (composableBounds!!.width).roundToInt(),
-                        (composableBounds!!.height).roundToInt(),
-                        Bitmap.Config.ARGB_8888
-                    )
-                    .applyCanvas {
-                        translate(-composableBounds!!.left, -composableBounds!!.top)
-                        view.draw(this)
-                    }
-
-
-//                val randomId = java.util.UUID.randomUUID().toString()
-//                bmp.let {
-//                    File(context.filesDir, "screenshots/$randomId.png")
-//                        .writeBitmap(bmp, Bitmap.CompressFormat.PNG, 85)
-//                }
-
-            },
 
             onSubmit = {
                 val bmp = Bitmap

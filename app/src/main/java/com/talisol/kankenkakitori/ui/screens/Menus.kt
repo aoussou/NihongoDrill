@@ -1,4 +1,4 @@
-package com.talisol.kanjirecognizercompose.ui.screens
+package com.talisol.kankenkakitori.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -19,7 +19,6 @@ fun DrawingPropertiesMenu(
     onRedo: () -> Unit,
     onSubmit: () -> Unit,
     onEraseAll: () -> Unit,
-    onSaveImage: () -> Unit
 ) {
 
 
@@ -61,14 +60,6 @@ fun DrawingPropertiesMenu(
             )
         }
 
-        IconButton(onClick = {
-            onSaveImage()
-        }) {
-            Icon(
-                painter = painterResource(id =  R.drawable.ic_outline_check_24),
-                contentDescription = null,
-                tint = Color.Black)
-        }
 
         IconButton(onClick = {
             onSubmit()

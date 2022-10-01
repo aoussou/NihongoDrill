@@ -30,11 +30,10 @@ class QuizVM @Inject constructor() : ViewModel() {
             is QuizAction.StartQuiz -> startQuiz()
             is QuizAction.InputAnswer -> inputAnswer(action.answerString)
             is QuizAction.EndQuiz -> endQuiz()
-            else -> {}
         }
     }
 
-    private fun inputAnswer(answerString: String) {
+    private fun inputAnswer(answerString: String?) {
         _quizState.update { it.copy(inputAnswer = answerString) }
     }
 

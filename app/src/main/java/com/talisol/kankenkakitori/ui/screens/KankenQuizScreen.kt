@@ -183,6 +183,9 @@ fun KankenQuizScreen(
                             if (state.inputAnswer != null) {
                                 var newAnswer = state.inputAnswer
                                 newAnswer = newAnswer.dropLast(1)
+
+                                if(newAnswer.isEmpty()) newAnswer = null
+
                                 onAction(QuizAction.InputAnswer(newAnswer))
                             }
                         }
