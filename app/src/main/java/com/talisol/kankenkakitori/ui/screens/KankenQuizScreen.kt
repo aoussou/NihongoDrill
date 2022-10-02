@@ -25,7 +25,7 @@ import com.talisol.kankenkakitori.ui.theme.DarkGreen
 @Composable
 fun KankenQuizScreen(
     quizState: QuizState,
-    popUpState: PopupState,
+    popupState: PopupState,
     onQuizAction: (QuizAction) -> Unit,
     currentPath: Path,
     drawingState: DrawingState,
@@ -61,7 +61,7 @@ fun KankenQuizScreen(
         }
     )
 
-    QuizAlertDialog(popUpState = popUpState, onAction = onPopupAction)
+    QuizAlertDialog(popupState = popupState, onAction = onPopupAction)
 
 
     Column(
@@ -114,8 +114,8 @@ fun KankenQuizScreen(
                     if (predictedKanji != null) Text(text = predictedKanji, fontSize = 36.sp)
                     if (otherGuessesList != null) {
                         MySpinner(
-                            isExpanded = popUpState.isShowOtherGuesses,
-                            onPopUpAction = onPopupAction,
+                            isExpanded = popupState.isShowOtherGuesses,
+                            onPopupAction = onPopupAction,
                             items = otherGuessesList,
                             onKanjiRecAction = onKanjiRecAction
                         )
