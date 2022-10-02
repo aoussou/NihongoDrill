@@ -1,6 +1,5 @@
 package com.talisol.kankenkakitori.ui.screens
 
-import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,14 +14,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.applyCanvas
+import androidx.compose.ui.zIndex
 import com.talisol.kankenkakitori.actions.*
 import com.talisol.kankenkakitori.drawingUtils.DrawingState
 import com.talisol.kankenkakitori.ui.MySpinner
 import com.talisol.kankenkakitori.ui.states.PopupState
 import com.talisol.kankenkakitori.ui.states.QuizState
 import com.talisol.kankenkakitori.ui.theme.DarkGreen
-import kotlin.math.roundToInt
 
 @Composable
 fun KankenQuizScreen(
@@ -82,33 +80,8 @@ fun KankenQuizScreen(
         if (!quizState.isAnswerConfirmed) {
 
             Column {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(.25F)
-                        .aspectRatio(1f)
-                        .border(BorderStroke(1.dp, Color.Blue))
-                        .background(Color.White)
-                        .clickable {
-                            onKanjiRecAction(KanjiRecAction.SetOtherGuessesList)
-                            onPopupAction(PopupAction.ShowOtherGuesses)
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
 
-                    if (predictedKanji != null) Text(text = predictedKanji)
-
-                    if (otherGuessesList != null) {
-                        MySpinner(
-                            isExpanded = popUpState.isShowOtherGuesses,
-                            onPopUpAction = onPopupAction,
-                            items = otherGuessesList,
-                            onKanjiRecAction = onKanjiRecAction
-                        )
-                    }
-
-                }
-
-                Text(text = quizState.inputAnswer ?: "")
+                Text(text = quizState.inputAnswer ?: "", fontSize = 12.sp)
 
             }
 
@@ -118,7 +91,39 @@ fun KankenQuizScreen(
                     .fillMaxWidth()
                     .border(BorderStroke(5.dp, Color.Black))
             ) {
-                KanjiRecognitionScreen(
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(.25F)
+                        .aspectRatio(1f)
+                        .align(Alignment.TopEnd)
+                        .padding(12.dp)
+                        .border(
+                            if (predictedKanji != null) {
+                                BorderStroke(1.dp, Color.Black)
+                            } else BorderStroke(0.dp, Color.White)
+                        )
+                        .background(Color.White)
+                        .zIndex(if (predictedKanji != null) 1f else 0f)
+                        .clickable {
+                            onKanjiRecAction(KanjiRecAction.SetOtherGuessesList)
+                            onPopupAction(PopupAction.ShowOtherGuesses)
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (predictedKanji != null) Text(text = predictedKanji, fontSize = 36.sp)
+                    if (otherGuessesList != null) {
+                        MySpinner(
+                            isExpanded = popUpState.isShowOtherGuesses,
+                            onPopUpAction = onPopupAction,
+                            items = otherGuessesList,
+                            onKanjiRecAction = onKanjiRecAction
+                        )
+                    }
+                }
+
+
+                DrawingScreen(
                     currentPath,
                     drawingState,
                     onDrawingAction,
@@ -155,7 +160,7 @@ fun KankenQuizScreen(
 
                             if (quizState.inputAnswer != null) {
                                 Text(
-                                    text = quizState.inputAnswer!!,
+                                    text = quizState.inputAnswer,
                                     color = Color.Red,
                                     fontSize = 16.sp
                                 )

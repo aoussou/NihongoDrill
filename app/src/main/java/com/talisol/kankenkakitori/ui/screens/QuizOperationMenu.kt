@@ -1,7 +1,12 @@
 package com.talisol.kankenkakitori.ui.screens
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
@@ -9,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.talisol.kankenkakitori.R
 import com.talisol.kankenkakitori.actions.*
 import com.talisol.kankenkakitori.ui.states.PopupState
@@ -23,8 +29,16 @@ fun QuizOperationMenu(
     onTrackingAction: (TrackingAction) -> Unit,
     onKanjiRecAction: (KanjiRecAction) -> Unit,
     onDrawingAction: (DrawingAction) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
+
+    /* investigate why crashes when removing modifier from input, even though it's not being used
+    *  */
+
+    val modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight(.3F)
+        .background(Color.White)
+        .border(BorderStroke(3.dp, Color.Blue))
 
     val omitQuestionDialog = PopupState(
         dialogText = "Do you give up?",
@@ -50,7 +64,7 @@ fun QuizOperationMenu(
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
+        horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
 
         IconButton(
