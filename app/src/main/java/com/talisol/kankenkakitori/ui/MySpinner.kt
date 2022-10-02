@@ -11,14 +11,14 @@ import com.talisol.kankenkakitori.ui.states.PopupState
 @Composable
 fun MySpinner(
     isExpanded: Boolean,
-    onPopUpAction: (PopupAction) -> Unit,
+    onPopupAction: (PopupAction) -> Unit,
     items: List<String>,
     onKanjiRecAction: (KanjiRecAction) -> Unit,
 ) {
 
     DropdownMenu(
         expanded = isExpanded,
-        onDismissRequest = { onPopUpAction(PopupAction.CloseOtherGuesses)},
+        onDismissRequest = { onPopupAction(PopupAction.CloseOtherGuesses)},
     ) {
         items.forEachIndexed { index, element ->
             DropdownMenuItem(onClick = {
@@ -27,13 +27,13 @@ fun MySpinner(
                     dialogText = "Are you sure you actually wrote $element?",
                     onConfirmAction = {
                         onKanjiRecAction(KanjiRecAction.SetPredictedKanji(element))
-                        onPopUpAction(PopupAction.CloseOtherGuesses)
+                        onPopupAction(PopupAction.CloseOtherGuesses)
                         onKanjiRecAction(KanjiRecAction.SaveImage(element,"screenshots"))
-                        onPopUpAction(PopupAction.CloseAlertDialog)
+                        onPopupAction(PopupAction.CloseAlertDialog)
                     }
                 )
 
-                onPopUpAction(PopupAction.ShowAlertDialog(checkChangeKanji))
+                onPopupAction(PopupAction.ShowAlertDialog(checkChangeKanji))
 
 
 

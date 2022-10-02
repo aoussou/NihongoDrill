@@ -105,7 +105,7 @@ class MainActivity : ComponentActivity() {
                         KankenQuizScreen(
                             quizState = quizState,
                             onQuizAction = quizVM::onAction,
-                            popUpState = dialogState,
+                            popupState = dialogState,
                             currentPath = currentPath,
                             drawingState = drawingState,
                             onDrawingAction = drawingVM::onAction,

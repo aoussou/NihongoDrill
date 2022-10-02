@@ -9,23 +9,23 @@ import com.talisol.kankenkakitori.ui.states.PopupState
 
 @Composable
 fun QuizAlertDialog(
-    popUpState: PopupState,
+    popupState: PopupState,
     onAction: (PopupAction) -> Unit,
 ) {
-    if (popUpState.isAlertDialogShown) {
+    if (popupState.isAlertDialogShown) {
         AlertDialog(
             onDismissRequest = {},
             title = {
-                Text(text = popUpState.title)
+                Text(text = popupState.title)
             },
             text = {
-                Text(popUpState.dialogText!!)
+                Text(popupState.dialogText!!)
             },
             confirmButton = {
                 Button(
-                    onClick = popUpState.onConfirmAction!!
+                    onClick = popupState.onConfirmAction!!
                 ) {
-                    Text(popUpState.confirmButtonText)
+                    Text(popupState.confirmButtonText)
                 }
             },
             dismissButton = {
@@ -33,7 +33,7 @@ fun QuizAlertDialog(
                     onClick = {
                         onAction(PopupAction.CloseAlertDialog)
                     }) {
-                    Text(popUpState.dismissButtonText)
+                    Text(popupState.dismissButtonText)
                 }
             }
         )
