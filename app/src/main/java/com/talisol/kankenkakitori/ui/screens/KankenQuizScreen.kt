@@ -126,48 +126,9 @@ fun KankenQuizScreen(
             }
 
             DrawingPropertiesMenu(
-
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(.3F)
-                    .background(Color.White)
-                    .border(BorderStroke(3.dp, Color.Blue)),
-
-                onUndo = {
-                    if (drawingState.allStrokes.isNotEmpty()) {
-                        onDrawingAction(DrawingAction.UndoLastStroke)
-                        onKanjiRecAction(KanjiRecAction.ResetPredictedKanji)
-                    }
-                },
-
-                onRedo = {
-                    if (drawingState.allUndoneStrokes.isNotEmpty()) {
-                        onDrawingAction(DrawingAction.RedoLastUndoneStroke)
-                    }
-                },
-
-                onEraseAll = {
-                    if (drawingState.allStrokes.isNotEmpty()) {
-                        onDrawingAction(DrawingAction.ClearAllPaths)
-                        onKanjiRecAction(KanjiRecAction.ResetPredictedKanji)
-                    }
-                },
-
-
-                onSubmit = {
-                    val bounds = drawingState.composableBounds!!
-                    val bmp = Bitmap
-                        .createBitmap(
-                            (bounds.width).roundToInt(),
-                            (bounds.height).roundToInt(),
-                            Bitmap.Config.ARGB_8888
-                        )
-                        .applyCanvas {
-                            translate(-bounds.left, -bounds.top)
-                            drawingState.drawingScreenView!!.draw(this)
-                        }
-                    onKanjiRecAction(KanjiRecAction.RecognizeKanji(bmp))
-                }
+                drawingState = drawingState,
+                onDrawingAction = onDrawingAction,
+                onKanjiRecAction = onKanjiRecAction
             )
 
 

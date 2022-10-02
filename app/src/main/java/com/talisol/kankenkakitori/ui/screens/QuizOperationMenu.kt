@@ -55,7 +55,7 @@ fun QuizOperationMenu(
 
         IconButton(
             onClick = {
-                    onPopupAction(PopupAction.ShowAlertDialog(giveUp))
+                onPopupAction(PopupAction.ShowAlertDialog(giveUp))
             }
         ) {
             Icon(
