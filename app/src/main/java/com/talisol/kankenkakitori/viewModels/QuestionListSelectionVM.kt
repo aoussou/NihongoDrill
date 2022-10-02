@@ -51,10 +51,10 @@ class QuestionListSelectionVM @Inject constructor(
             _localQAlist.value = _loadedQAs
             _localQAlist.value = _localQAlist.value.filter { it.available.toInt() == 1 }
 
-            if (skipAllCorrect) _localQAlist.value =
-                _localQAlist.value.filter { !(it.total_correct > 0L && it.total_wrong == 0L) }
-            if (onlyNeverAnswered) _localQAlist.value =
-                _localQAlist.value.filter { it.total_correct == 0L && it.total_wrong == 0L }
+//            if (skipAllCorrect) _localQAlist.value =
+//                _localQAlist.value.filter { !(it.total_correct > 0L && it.total_wrong == 0L) }
+//            if (onlyNeverAnswered) _localQAlist.value =
+//                _localQAlist.value.filter { it.total_correct == 0L && it.total_wrong == 0L }
 
         }
 

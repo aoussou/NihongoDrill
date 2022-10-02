@@ -1,0 +1,44 @@
+CREATE TABLE progress (
+    id INTEGER PRIMARY KEY NOT NULL,
+    original_group TEXT NOT NULL,
+    total_correct INTEGER  DEFAULT 0 NOT NULL,
+    total_wrong INTEGER  DEFAULT 0 NOT NULL,
+    correct_streak INTEGER  DEFAULT 0 NOT NULL,
+    last_correct_date TEXT
+);
+
+getTotalCorrect:
+SELECT total_correct
+FROM progress
+WHERE id = :id;
+
+getTotalWrong:
+SELECT total_wrong
+FROM progress
+WHERE id = :id;
+
+getCorrectStreak:
+SELECT correct_streak
+FROM progress
+WHERE id = :id;
+
+
+updateTotalCorrect:
+UPDATE  progress
+SET total_correct = :total_correct
+WHERE id = :id;
+
+updateTotalWrong:
+UPDATE  progress
+SET total_wrong = :total_wrong
+WHERE id = :id;
+
+updateCorrectStreak:
+UPDATE  progress
+SET correct_streak = :correct_streak
+WHERE id = :id;
+
+updateLastCorrectDate:
+UPDATE  progress
+SET last_correct_date = :last_correct_date
+WHERE id = :id;

@@ -1,62 +1,24 @@
 CREATE TABLE  kakitoriQuestion(
     id INTEGER PRIMARY KEY NOT NULL,
+    global_id INTEGER NOT NULL,
     question TEXT NOT NULL ,
     target TEXT NOT NULL,
     answer TEXT NOT NULL,
     kanken_kyu TEXT NOT NULL,
-    total_correct INTEGER  DEFAULT 0 NOT NULL,
-    total_wrong INTEGER  DEFAULT 0 NOT NULL,
-    correct_streak INTEGER  DEFAULT 0 NOT NULL,
-    last_correct_date TEXT,
-    available INTEGER  DEFAULT 1 NOT NULL,
-    marked_for_review INTEGER DEFAULT 0 NOT NULL
+    available INTEGER DEFAULT 1 NOT NULL,
+    marked_for_review INTEGER DEFAULT 0 NOT NULL,
+    FOREIGN KEY (global_id) REFERENCES progress(id)
 );
-
 
 getKankenKyulist:
 SELECT DISTINCT kanken_kyu
 FROM kakitoriQuestion
 ORDER BY kanken_kyu;
 
-getTotalCorrect:
-SELECT total_correct
-FROM kakitoriQuestion
-WHERE id = :id;
-
-getTotalWrong:
-SELECT total_wrong
-FROM kakitoriQuestion
-WHERE id = :id;
-
-getCorrectStreak:
-SELECT correct_streak
-FROM kakitoriQuestion
-WHERE id = :id;
-
 selectByKankenKyu:
 SELECT *
 FROM kakitoriQuestion
 WHERE kanken_kyu = :kanken_kyu;
-
-updateTotalCorrect:
-UPDATE  kakitoriQuestion
-SET total_correct = :total_correct
-WHERE id = :id;
-
-updateTotalWrong:
-UPDATE  kakitoriQuestion
-SET total_wrong = :total_wrong
-WHERE id = :id;
-
-updateCorrectStreak:
-UPDATE  kakitoriQuestion
-SET correct_streak = :correct_streak
-WHERE id = :id;
-
-updateLastCorrectDate:
-UPDATE  kakitoriQuestion
-SET last_correct_date = :last_correct_date
-WHERE id = :id;
 
 makeUnavailable:
 UPDATE kakitoriQuestion
@@ -73,51 +35,46 @@ UPDATE kakitoriQuestion
 SET marked_for_review = 1
 WHERE id = :id;
 
-INSERT INTO kakitoriQuestion(
-question,
-target,
-answer,
-kanken_kyu,
-total_correct,
-total_wrong,
-correct_streak,
-last_correct_date,
-available
-)
 
-VALUES
-(
-"ニ本",
-"ニ",
-"日",
-"10",
-0,
-0,
-0,
-NULL,
-1
-),
-
-(
-"日ホン",
-"ホン",
-"本",
-"10",
-0,
-0,
-0,
-NULL,
-1
-),
-
-(
-"タイ風",
-"タイ",
-"台",
-"10",
-0,
-0,
-0,
-NULL,
-1
-);
+-- CREATE TRIGGER create_new_global_id
+--     BEFORE INSERT ON kakitoriQuestion FOR EACH ROW
+--     BEGIN
+--         INSERT INTO progress (original_group) VALUES ("KAKITORI");
+--     END ;
+--
+-- INSERT INTO kakitoriQuestion(
+-- global_id,
+-- question,
+-- target,
+-- answer,
+-- kanken_kyu,
+-- available
+-- )
+--
+-- VALUES
+-- (
+-- last_insert_rowid(),
+-- "ニ本",
+-- "ニ",
+-- "日",
+-- "10",
+-- 1
+-- ),
+--
+-- (
+-- last_insert_rowid(),
+-- "日ホン",
+-- "ホン",
+-- "本",
+-- "10",
+-- 1
+-- ),
+--
+-- (
+-- last_insert_rowid(),
+-- "タイ風",
+-- "タイ",
+-- "台",
+-- "10",
+-- 1
+-- );

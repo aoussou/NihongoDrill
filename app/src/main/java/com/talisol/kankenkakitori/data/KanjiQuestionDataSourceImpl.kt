@@ -6,28 +6,28 @@ import databases.kanji.KakitoriQuestion
 
 class KanjiQuestionDataSourceImpl(
     db: KanjiDatabase
-): KanjiQuestionDataSource{
+) : KanjiQuestionDataSource {
 
     private val queries = db.kanjiQuestionQueries
 
-    override fun getAllKankenEntriesByKyu(kyu:String): List<KakitoriQuestion> {
+    override fun getAllKankenEntriesByKyu(kyu: String): List<KakitoriQuestion> {
         return queries.selectByKankenKyu(kyu).executeAsList()
     }
 
     override fun updateTotalCorrectNumber(id: Long, nCorrect: Long) {
-        queries.updateTotalCorrect(nCorrect,id)
+//        queries.updateTotalCorrect(nCorrect,id)
     }
 
     override fun updateTotalWrongNumber(id: Long, nWrong: Long) {
-        queries.updateTotalWrong(nWrong,id)
+//        queries.updateTotalWrong(nWrong,id)
     }
 
     override fun updateCorrectStreak(id: Long, nCorrectStreak: Long) {
-        queries.updateCorrectStreak(nCorrectStreak,id)
+//        queries.updateCorrectStreak(nCorrectStreak,id)
     }
 
     override fun updateLastCorrectDate(id: Long, lastCorrectDate: String) {
-        queries.updateLastCorrectDate(lastCorrectDate,id)
+//        queries.updateLastCorrectDate(lastCorrectDate,id)
     }
 
     override fun getKankenKyuList(): List<String> {
@@ -43,15 +43,18 @@ class KanjiQuestionDataSourceImpl(
     }
 
     override fun getTotalCorrect(id: Long): Long {
-        return queries.getTotalCorrect(id).executeAsOne()
+        return 0L
+//        return queries.getTotalCorrect(id).executeAsOne()
     }
 
     override fun getTotalWrong(id: Long): Long {
-        return queries.getTotalWrong(id).executeAsOne()
+        return 0L
+//        return queries.getTotalWrong(id).executeAsOne()
     }
 
     override fun getCorrectStrek(id: Long): Long {
-        return queries.getCorrectStreak(id).executeAsOne()
+        return 0L
+//        return queries.getCorrectStreak(id).executeAsOne()
     }
 
 
