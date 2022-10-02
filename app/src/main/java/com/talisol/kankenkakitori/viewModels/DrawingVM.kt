@@ -1,8 +1,11 @@
 package com.talisol.kankenkakitori.viewModels
 
+import android.view.View
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Path
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.talisol.kankenkakitori.actions.DrawingAction
 import com.talisol.kankenkakitori.drawingUtils.DrawingState
 import com.talisol.kankenkakitori.drawingUtils.MotionEvent
@@ -33,6 +36,9 @@ class DrawingVM : ViewModel() {
             is DrawingAction.ClearAllPaths -> clearAllPaths()
             is DrawingAction.RedoLastUndoneStroke -> redoLastUndonePath()
             is DrawingAction.ClearUndoneStrokes -> clearAllUndonePaths()
+
+            is DrawingAction.SetComposableBounds -> setComposableBounds(action.bounds)
+            is DrawingAction.SetDrawingScreenView -> setDrawingScreenView(action.view)
         }
     }
 
@@ -127,4 +133,11 @@ class DrawingVM : ViewModel() {
         _drawingState.update { it.copy(previousPosition = previousPosition) }
     }
 
+    private fun setComposableBounds(bounds: Rect) {
+        _drawingState.update { it.copy(composableBounds =  bounds) }
+    }
+
+    private fun setDrawingScreenView(view: View) {
+        _drawingState.update { it.copy(drawingScreenView = view) }
+    }
 }

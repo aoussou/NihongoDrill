@@ -1,6 +1,8 @@
 package com.talisol.kankenkakitori.actions
 
+import android.view.View
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Path
 import com.talisol.kankenkakitori.drawingUtils.MotionEvent
 
@@ -18,5 +20,6 @@ sealed class DrawingAction {
     object MakeLine: DrawingAction()
     object ResetCurrentPath: DrawingAction()
     object ClearAllPaths: DrawingAction()
-
+    data class SetComposableBounds(val bounds: Rect): DrawingAction()
+    data class SetDrawingScreenView(val view: View) : DrawingAction()
 }

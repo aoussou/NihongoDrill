@@ -1,7 +1,9 @@
 package com.talisol.kankenkakitori.drawingUtils
 
 
+import android.view.View
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Path
 
 data class DrawingState(
@@ -10,4 +12,6 @@ data class DrawingState(
     val motionEvent: MotionEvent = MotionEvent.Idle,
     val currentPosition: Offset = Offset.Unspecified,
     val previousPosition: Offset = Offset.Unspecified,
+    val composableBounds: Rect? = null,
+    val drawingScreenView: View? = null
 )

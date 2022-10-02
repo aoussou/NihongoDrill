@@ -48,10 +48,9 @@ fun KanjiRecognitionScreen(
     )
 ) {
 
-    val context = LocalContext.current
+//    var composableBounds by remember { mutableStateOf<Rect?>(null) }
 
-    var composableBounds by remember { mutableStateOf<Rect?>(null) }
-
+    val view = LocalView.current
     val drawModifier = Modifier
         .aspectRatio(1f)
         .fillMaxWidth()
@@ -59,7 +58,8 @@ fun KanjiRecognitionScreen(
         .background(Color.White)
         .clipToBounds()
         .onGloballyPositioned { layoutCoordinates: LayoutCoordinates ->
-            composableBounds = layoutCoordinates.boundsInRoot()
+            onAction(DrawingAction.SetComposableBounds(layoutCoordinates.boundsInRoot()))
+            onAction(DrawingAction.SetDrawingScreenView(view))
         }
         .dragMotionEvent(
             onDragStart = { pointerInputChange ->
@@ -79,17 +79,8 @@ fun KanjiRecognitionScreen(
         )
 //        .border(BorderStroke(3.dp, Color.Blue))
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundColor)
-        ,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceAround,
 
-    ) {
 
-        val view = LocalView.current
 
         Canvas(modifier = drawModifier) {
             when (state.motionEvent) {
@@ -145,55 +136,9 @@ fun KanjiRecognitionScreen(
         }
 
 
-        DrawingPropertiesMenu(
-
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(.3F)
-                .background(Color.White)
-                .border(BorderStroke(3.dp, Color.Blue))
-            ,
-
-            onUndo = {
-                if (state.allStrokes.isNotEmpty()) {
-                    onAction(DrawingAction.UndoLastStroke)
-                    kanjiRecognizerOnAction(KanjiRecAction.ResetPredictedKanji)
-                }
-            },
-
-            onRedo = {
-                if (state.allUndoneStrokes.isNotEmpty()) {
-                    onAction(DrawingAction.RedoLastUndoneStroke)
-                }
-            },
-
-            onEraseAll = {
-                if (state.allStrokes.isNotEmpty()) {
-                    onAction(DrawingAction.ClearAllPaths)
-                    kanjiRecognizerOnAction(KanjiRecAction.ResetPredictedKanji)
-                }
-            },
 
 
-            onSubmit = {
-                val bmp = Bitmap
-                    .createBitmap(
-                        (composableBounds!!.width).roundToInt(),
-                        (composableBounds!!.height).roundToInt(),
-                        Bitmap.Config.ARGB_8888
-                    )
-                    .applyCanvas {
-                        translate(-composableBounds!!.left, -composableBounds!!.top)
-                        view.draw(this)
-                    }
 
-
-                kanjiRecognizerOnAction(KanjiRecAction.RecognizeKanji(bmp))
-            }
-
-        )
-
-    }
 }
 
 

@@ -1,25 +1,30 @@
 package com.talisol.kankenkakitori.ui.screens
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.SnackbarDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.applyCanvas
 import com.talisol.kankenkakitori.actions.*
 import com.talisol.kankenkakitori.drawingUtils.DrawingState
 import com.talisol.kankenkakitori.ui.MySpinner
 import com.talisol.kankenkakitori.ui.states.PopUpState
 import com.talisol.kankenkakitori.ui.states.QuizState
 import com.talisol.kankenkakitori.ui.theme.DarkGreen
+import kotlin.math.roundToInt
 
 @Composable
 fun KankenQuizScreen(
@@ -184,7 +189,7 @@ fun KankenQuizScreen(
                                 var newAnswer = state.inputAnswer
                                 newAnswer = newAnswer.dropLast(1)
 
-                                if(newAnswer.isEmpty()) newAnswer = null
+                                if (newAnswer.isEmpty()) newAnswer = null
 
                                 onAction(QuizAction.InputAnswer(newAnswer))
                             }
@@ -197,13 +202,59 @@ fun KankenQuizScreen(
 
             }
 
-
             KanjiRecognitionScreen(
                 currentPath,
                 drawingState,
                 drawingAction,
                 kanjiRecognizerOnAction
             )
+
+
+            DrawingPropertiesMenu(
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(.3F)
+                    .background(Color.White)
+                    .border(BorderStroke(3.dp, Color.Blue)),
+
+                onUndo = {
+                    if (drawingState.allStrokes.isNotEmpty()) {
+                        drawingAction(DrawingAction.UndoLastStroke)
+                        kanjiRecognizerOnAction(KanjiRecAction.ResetPredictedKanji)
+                    }
+                },
+
+                onRedo = {
+                    if (drawingState.allUndoneStrokes.isNotEmpty()) {
+                        drawingAction(DrawingAction.RedoLastUndoneStroke)
+                    }
+                },
+
+                onEraseAll = {
+                    if (drawingState.allStrokes.isNotEmpty()) {
+                        drawingAction(DrawingAction.ClearAllPaths)
+                        kanjiRecognizerOnAction(KanjiRecAction.ResetPredictedKanji)
+                    }
+                },
+
+
+                onSubmit = {
+                    val bounds = drawingState.composableBounds!!
+                    val bmp = Bitmap
+                        .createBitmap(
+                            (bounds.width).roundToInt(),
+                            (bounds.height).roundToInt(),
+                            Bitmap.Config.ARGB_8888
+                        )
+                        .applyCanvas {
+                            translate(-bounds.left, -bounds.top)
+                            drawingState.drawingScreenView!!.draw(this)
+                        }
+                    kanjiRecognizerOnAction(KanjiRecAction.RecognizeKanji(bmp))
+                }
+            )
+
 
 
         } else {
