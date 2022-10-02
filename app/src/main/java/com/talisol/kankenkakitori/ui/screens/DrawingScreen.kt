@@ -79,11 +79,7 @@ fun KanjiRecognitionScreen(
         )
 
 
-    Box(modifier = Modifier
-        .aspectRatio(1f)
-        .fillMaxWidth()
-        .border(BorderStroke(3.dp, Color.Red))
-    ){
+
 
         Canvas(modifier = drawModifier) {
             when (state.motionEvent) {
@@ -148,6 +144,6 @@ fun KanjiRecognitionScreen(
 
 
 
-}
+
 
 

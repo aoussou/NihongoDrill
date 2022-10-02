@@ -40,8 +40,6 @@ fun KankenQuizScreen(
 ) {
 
 
-
-
     val iWasRightDialog = PopUpState(
         dialogText = "Are you sure you got this question right?",
         onConfirmAction =
@@ -116,15 +114,20 @@ fun KankenQuizScreen(
 
             }
 
+            Box(
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .fillMaxWidth()
+                    .border(BorderStroke(5.dp, Color.Black))
+            ) {
 
-
-            KanjiRecognitionScreen(
-                currentPath,
-                drawingState,
-                onDrawingAction,
-                onKanjiRecAction
-            )
-
+                KanjiRecognitionScreen(
+                    currentPath,
+                    drawingState,
+                    onDrawingAction,
+                    onKanjiRecAction
+                )
+            }
 
             DrawingPropertiesMenu(
 
