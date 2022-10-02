@@ -7,14 +7,12 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
-import androidx.compose.material.SnackbarDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.applyCanvas
@@ -28,42 +26,33 @@ import kotlin.math.roundToInt
 
 @Composable
 fun KankenQuizScreen(
-    state: QuizState,
+    quizState: QuizState,
     popUpState: PopUpState,
-    onAction: (QuizAction) -> Unit,
+    onQuizAction: (QuizAction) -> Unit,
     currentPath: Path,
     drawingState: DrawingState,
-    drawingAction: (DrawingAction) -> Unit,
-    kanjiRecognizerOnAction: (KanjiRecAction) -> Unit,
+    onDrawingAction: (DrawingAction) -> Unit,
+    onKanjiRecAction: (KanjiRecAction) -> Unit,
     predictedKanji: String?,
     otherGuessesList: List<String>?,
-    trackingOnAction: (TrackingAction) -> Unit,
-    onPopUpAction: (PopUpAction) -> Unit
+    onTrackingAction: (TrackingAction) -> Unit,
+    onPopupAction: (PopupAction) -> Unit
 ) {
 
 
-    val omitQuestionDialog = PopUpState(
-        dialogText = "Are you sure you want the quiz to omit this question?",
-        onConfirmAction = {
-            trackingOnAction(TrackingAction.StopAsking(state.questionGlobalId!!))
-            onPopUpAction(PopUpAction.CloseAlertDialog)
-            onAction(QuizAction.NextQuestion)
 
-            if (state.isLastQuestion) onAction(QuizAction.EndQuiz)
-        }
-    )
 
     val iWasRightDialog = PopUpState(
         dialogText = "Are you sure you got this question right?",
         onConfirmAction =
         {
-            val questionId = state.questionGlobalId!!
-            onPopUpAction(PopUpAction.CloseAlertDialog)
-            trackingOnAction(TrackingAction.AddOneCorrect(questionId))
-            trackingOnAction(TrackingAction.SubtractOneWrong(questionId))
-            trackingOnAction(TrackingAction.UpdateLastCorrectTime(questionId))
-            trackingOnAction(TrackingAction.UpdateCorrectStreak(questionId))
-            onAction(QuizAction.NextQuestion)
+            val questionId = quizState.questionGlobalId!!
+            onPopupAction(PopupAction.CloseAlertDialog)
+            onTrackingAction(TrackingAction.AddOneCorrect(questionId))
+            onTrackingAction(TrackingAction.SubtractOneWrong(questionId))
+            onTrackingAction(TrackingAction.UpdateLastCorrectTime(questionId))
+            onTrackingAction(TrackingAction.UpdateCorrectStreak(questionId))
+            onQuizAction(QuizAction.NextQuestion)
         }
     )
 
@@ -71,12 +60,12 @@ fun KankenQuizScreen(
         dialogText = "Are you sure you want to mark this question for review?",
         onConfirmAction =
         {
-            onPopUpAction(PopUpAction.CloseAlertDialog)
-            trackingOnAction(TrackingAction.MarkForReview(state.questionGlobalId!!))
+            onPopupAction(PopupAction.CloseAlertDialog)
+            onTrackingAction(TrackingAction.MarkForReview(quizState.questionGlobalId!!))
         }
     )
 
-    QuizAlertDialog(popUpState = popUpState, onAction = onPopUpAction)
+    QuizAlertDialog(popUpState = popUpState, onAction = onPopupAction)
 
 
     Column(
@@ -88,125 +77,52 @@ fun KankenQuizScreen(
     ) {
 
 
-        QuestionScreen(state = state, onAction = onAction)
+        QuestionScreen(state = quizState, onAction = onQuizAction)
 
 
 
-        if (!state.isAnswerConfirmed) {
+        if (!quizState.isAnswerConfirmed) {
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+            Column {
 
-                Column {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(.20f),
-                        onClick = {
-                            if (state.inputAnswer != null) {
-                                onAction(QuizAction.ConfirmAnswer(trackingOnAction))
-                                kanjiRecognizerOnAction(KanjiRecAction.ResetPredictedKanji)
-                                drawingAction(DrawingAction.ClearAllPaths)
-                            }
 
-                        }
-                    ) {
-                        Text("CONF.")
-                    }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(.25F)
+                        .aspectRatio(1f)
+                        .border(BorderStroke(1.dp, Color.Blue))
+                        .background(Color.White)
+                        .clickable {
+                            onKanjiRecAction(KanjiRecAction.SetOtherGuessesList)
+                            onPopupAction(PopupAction.ShowOtherGuesses)
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
 
-                    Button(
-                        modifier = Modifier.fillMaxWidth(.20f),
-                        onClick = {
-                            onPopUpAction(PopUpAction.ShowAlertDialog(omitQuestionDialog))
-                        }
-                    ) {
-                        Text("STOP")
+                    if (predictedKanji != null) Text(text = predictedKanji)
+
+                    if (otherGuessesList != null) {
+                        MySpinner(
+                            isExpanded = popUpState.isShowOtherGuesses,
+                            onPopUpAction = onPopupAction,
+                            items = otherGuessesList,
+                            onKanjiRecAction = onKanjiRecAction
+                        )
                     }
 
                 }
 
-
-                Column {
-
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(.25F)
-                            .aspectRatio(1f)
-                            .border(BorderStroke(1.dp, Color.Blue))
-                            .background(Color.White)
-                            .clickable {
-                                kanjiRecognizerOnAction(KanjiRecAction.SetOtherGuessesList)
-                                onPopUpAction(PopUpAction.ShowOtherGuesses)
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-
-                        if (predictedKanji != null) Text(text = predictedKanji)
-
-                        if (otherGuessesList != null) {
-                            MySpinner(
-                                isExpanded = popUpState.isShowOtherGuesses,
-                                onPopUpAction = onPopUpAction,
-                                items = otherGuessesList,
-                                onKanjiRecAction = kanjiRecognizerOnAction
-                            )
-                        }
-
-                    }
-
-                    Text(text = state.inputAnswer ?: "")
-
-                }
-
-                Column {
-
-
-                    Button(
-                        modifier = Modifier.fillMaxWidth(.30f),
-                        onClick = {
-                            if (predictedKanji != null) {
-                                val newAnswer =
-                                    if (state.inputAnswer == null) {
-                                        predictedKanji
-                                    } else {
-                                        state.inputAnswer + predictedKanji
-                                    }
-                                onAction(QuizAction.InputAnswer(newAnswer))
-                                drawingAction(DrawingAction.ClearAllPaths)
-                                kanjiRecognizerOnAction(KanjiRecAction.ResetPredictedKanji)
-                            }
-
-                        }
-                    ) {
-                        Text("OK")
-                    }
-
-                    Button(
-                        modifier = Modifier.fillMaxWidth(.30f),
-                        onClick = {
-                            if (state.inputAnswer != null) {
-                                var newAnswer = state.inputAnswer
-                                newAnswer = newAnswer.dropLast(1)
-
-                                if (newAnswer.isEmpty()) newAnswer = null
-
-                                onAction(QuizAction.InputAnswer(newAnswer))
-                            }
-                        }
-                    ) {
-                        Text("DEL")
-                    }
-                }
-
+                Text(text = quizState.inputAnswer ?: "")
 
             }
+
+
 
             KanjiRecognitionScreen(
                 currentPath,
                 drawingState,
-                drawingAction,
-                kanjiRecognizerOnAction
+                onDrawingAction,
+                onKanjiRecAction
             )
 
 
@@ -220,21 +136,21 @@ fun KankenQuizScreen(
 
                 onUndo = {
                     if (drawingState.allStrokes.isNotEmpty()) {
-                        drawingAction(DrawingAction.UndoLastStroke)
-                        kanjiRecognizerOnAction(KanjiRecAction.ResetPredictedKanji)
+                        onDrawingAction(DrawingAction.UndoLastStroke)
+                        onKanjiRecAction(KanjiRecAction.ResetPredictedKanji)
                     }
                 },
 
                 onRedo = {
                     if (drawingState.allUndoneStrokes.isNotEmpty()) {
-                        drawingAction(DrawingAction.RedoLastUndoneStroke)
+                        onDrawingAction(DrawingAction.RedoLastUndoneStroke)
                     }
                 },
 
                 onEraseAll = {
                     if (drawingState.allStrokes.isNotEmpty()) {
-                        drawingAction(DrawingAction.ClearAllPaths)
-                        kanjiRecognizerOnAction(KanjiRecAction.ResetPredictedKanji)
+                        onDrawingAction(DrawingAction.ClearAllPaths)
+                        onKanjiRecAction(KanjiRecAction.ResetPredictedKanji)
                     }
                 },
 
@@ -251,14 +167,13 @@ fun KankenQuizScreen(
                             translate(-bounds.left, -bounds.top)
                             drawingState.drawingScreenView!!.draw(this)
                         }
-                    kanjiRecognizerOnAction(KanjiRecAction.RecognizeKanji(bmp))
+                    onKanjiRecAction(KanjiRecAction.RecognizeKanji(bmp))
                 }
             )
 
 
-
         } else {
-            if (!state.isAnswerCorrect!!) {
+            if (!quizState.isAnswerCorrect!!) {
 
                 Column(
                     verticalArrangement = Arrangement.Top,
@@ -278,7 +193,7 @@ fun KankenQuizScreen(
                             contentAlignment = Alignment.CenterEnd
                         ) {
                             Text(
-                                text = state.inputAnswer!!,
+                                text = quizState.inputAnswer!!,
                                 color = Color.Red,
                                 fontSize = 16.sp
                             )
@@ -298,7 +213,7 @@ fun KankenQuizScreen(
                             contentAlignment = Alignment.CenterEnd
                         ) {
                             Text(
-                                text = state.correctAnswer!!,
+                                text = quizState.correctAnswer!!,
                                 color = DarkGreen,
                                 fontSize = 16.sp
                             )
@@ -311,7 +226,7 @@ fun KankenQuizScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(.5f),
                         onClick = {
-                            onPopUpAction(PopUpAction.ShowAlertDialog(iWasRightDialog))
+                            onPopupAction(PopupAction.ShowAlertDialog(iWasRightDialog))
                         }
                     ) {
                         Text("I WAS\nRIGHT!")
@@ -320,7 +235,7 @@ fun KankenQuizScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(.5f),
                         onClick = {
-                            onPopUpAction(PopUpAction.ShowAlertDialog(markForReviewDialog))
+                            onPopupAction(PopupAction.ShowAlertDialog(markForReviewDialog))
                         }
                     ) {
                         Text("MARK")
@@ -329,15 +244,15 @@ fun KankenQuizScreen(
 
 
             } else {
-                Text(text = state.correctAnswer!!)
+                Text(text = quizState.correctAnswer!!)
             }
 
 
-            if (state.isLastQuestion) {
+            if (quizState.isLastQuestion) {
                 Button(
                     modifier = Modifier.fillMaxWidth(.5f),
                     onClick = {
-                        onAction(QuizAction.EndQuiz)
+                        onQuizAction(QuizAction.EndQuiz)
                     }
                 ) {
                     Text("END")
@@ -346,7 +261,7 @@ fun KankenQuizScreen(
                 Button(
                     modifier = Modifier.fillMaxWidth(.5f),
                     onClick = {
-                        onAction(QuizAction.NextQuestion)
+                        onQuizAction(QuizAction.NextQuestion)
                     }
                 ) {
                     Text("NEXT")
@@ -355,7 +270,21 @@ fun KankenQuizScreen(
 
 
         }
+
+
+
+        QuizOperationMenu(
+            quizState,
+            predictedKanji,
+            onQuizAction,
+            onPopupAction,
+            onTrackingAction,
+            onKanjiRecAction,
+            onDrawingAction
+        )
+
     }
+
 
 
 }

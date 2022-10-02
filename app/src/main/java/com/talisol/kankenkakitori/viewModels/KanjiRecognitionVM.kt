@@ -45,7 +45,7 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
         when (action) {
             is KanjiRecAction.RecognizeKanji -> predictKanji(action.bitmap)
             is KanjiRecAction.ResetPredictedKanji -> resetPredictedKanji()
-            is KanjiRecAction.SaveImage -> saveImage(action.kanji)
+            is KanjiRecAction.SaveImage -> saveImage(action.kanji,action.directory)
             is KanjiRecAction.SetOtherGuessesList -> setOtherGuessesList()
             is KanjiRecAction.SetPredictedKanji -> setPredictedKanji(action.kanji)
         }
@@ -153,12 +153,12 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
         _predictedKanji.value = kanji
     }
 
-    private fun saveImage(kanji: String) {
+    private fun saveImage(kanji: String,directory: String) {
 
         if (_bitmap.value != null) {
             val randomId = java.util.UUID.randomUUID().toString()
             bitmap.let {
-                File(context.filesDir, "screenshots/${kanji}_$randomId.png")
+                File(context.filesDir, "$directory/${kanji}_$randomId.png")
                     .writeBitmap(_bitmap.value!!, Bitmap.CompressFormat.PNG, 85)
             }
         }

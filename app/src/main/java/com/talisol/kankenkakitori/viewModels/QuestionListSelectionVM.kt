@@ -20,7 +20,7 @@ class QuestionListSelectionVM @Inject constructor(
 
 
     private val skipAllCorrect = true
-    private val onlyNeverAnswered = true
+    private val onlyNeverAnswered = false
 
     val groupsList: List<String> = kanjiQuestionDataSource.getKankenKyuList()
 

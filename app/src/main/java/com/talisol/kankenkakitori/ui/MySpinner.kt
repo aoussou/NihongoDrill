@@ -5,22 +5,20 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.talisol.kankenkakitori.actions.KanjiRecAction
-import com.talisol.kankenkakitori.actions.PopUpAction
-import com.talisol.kankenkakitori.actions.QuizAction
-import com.talisol.kankenkakitori.actions.TrackingAction
+import com.talisol.kankenkakitori.actions.PopupAction
 import com.talisol.kankenkakitori.ui.states.PopUpState
 
 @Composable
 fun MySpinner(
     isExpanded: Boolean,
-    onPopUpAction: (PopUpAction) -> Unit,
+    onPopUpAction: (PopupAction) -> Unit,
     items: List<String>,
     onKanjiRecAction: (KanjiRecAction) -> Unit,
 ) {
 
     DropdownMenu(
         expanded = isExpanded,
-        onDismissRequest = { onPopUpAction(PopUpAction.CloseOtherGuesses)},
+        onDismissRequest = { onPopUpAction(PopupAction.CloseOtherGuesses)},
     ) {
         items.forEachIndexed { index, element ->
             DropdownMenuItem(onClick = {
@@ -29,13 +27,13 @@ fun MySpinner(
                     dialogText = "Are you sure you actually wrote $element?",
                     onConfirmAction = {
                         onKanjiRecAction(KanjiRecAction.SetPredictedKanji(element))
-                        onPopUpAction(PopUpAction.CloseOtherGuesses)
-                        onKanjiRecAction(KanjiRecAction.SaveImage(element))
-                        onPopUpAction(PopUpAction.CloseAlertDialog)
+                        onPopUpAction(PopupAction.CloseOtherGuesses)
+                        onKanjiRecAction(KanjiRecAction.SaveImage(element,"screenshots"))
+                        onPopUpAction(PopupAction.CloseAlertDialog)
                     }
                 )
 
-                onPopUpAction(PopUpAction.ShowAlertDialog(checkChangeKanji))
+                onPopUpAction(PopupAction.ShowAlertDialog(checkChangeKanji))
 
 
 

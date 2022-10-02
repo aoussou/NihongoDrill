@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
                 val questionListSelectionVM = viewModel<QuestionListSelectionVM>()
                 val localQuizState by questionListSelectionVM.quizSelectionState.collectAsState()
 
-                val popUpVM = viewModel<PopUpVM>()
+                val popUpVM = viewModel<PopupVM>()
                 val dialogState by popUpVM.popUpState.collectAsState()
 
                 val quizVM = viewModel<QuizVM>()
@@ -103,17 +103,17 @@ class MainActivity : ComponentActivity() {
 
                     } else {
                         KankenQuizScreen(
-                            state = quizState,
-                            onAction = quizVM::onAction,
+                            quizState = quizState,
+                            onQuizAction = quizVM::onAction,
                             popUpState = dialogState,
                             currentPath = currentPath,
                             drawingState = drawingState,
-                            drawingAction = drawingVM::onAction,
-                            kanjiRecognizerOnAction = recognizerVM::onAction,
+                            onDrawingAction = drawingVM::onAction,
+                            onKanjiRecAction = recognizerVM::onAction,
                             predictedKanji = predictedKanji.value,
                             otherGuessesList = otherGuessesList.value,
-                            trackingOnAction = trackingVM::onAction,
-                            onPopUpAction = popUpVM::onAction
+                            onTrackingAction = trackingVM::onAction,
+                            onPopupAction = popUpVM::onAction
                         )
                     }
                 }
