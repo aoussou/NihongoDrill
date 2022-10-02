@@ -20,7 +20,6 @@ import com.talisol.kankenkakitori.drawingUtils.DrawingState
 import com.talisol.kankenkakitori.ui.MySpinner
 import com.talisol.kankenkakitori.ui.states.PopupState
 import com.talisol.kankenkakitori.ui.states.QuizState
-import com.talisol.kankenkakitori.ui.theme.DarkGreen
 
 @Composable
 fun KankenQuizScreen(
@@ -38,29 +37,6 @@ fun KankenQuizScreen(
 ) {
 
 
-    val iWasRightDialog = PopupState(
-        dialogText = "Are you sure you got this question right?",
-        onConfirmAction =
-        {
-            val questionId = quizState.questionGlobalId!!
-            onPopupAction(PopupAction.CloseAlertDialog)
-            onTrackingAction(TrackingAction.AddOneCorrect(questionId))
-            onTrackingAction(TrackingAction.SubtractOneWrong(questionId))
-            onTrackingAction(TrackingAction.UpdateLastCorrectTime(questionId))
-            onTrackingAction(TrackingAction.UpdateCorrectStreak(questionId))
-            onQuizAction(QuizAction.NextQuestion)
-        }
-    )
-
-    val markForReviewDialog = PopupState(
-        dialogText = "Are you sure you want to mark this question for review?",
-        onConfirmAction =
-        {
-            onPopupAction(PopupAction.CloseAlertDialog)
-            onTrackingAction(TrackingAction.MarkForReview(quizState.questionGlobalId!!))
-        }
-    )
-
     QuizAlertDialog(popupState = popupState, onAction = onPopupAction)
 
 
@@ -75,16 +51,9 @@ fun KankenQuizScreen(
 
         QuestionScreen(state = quizState, onAction = onQuizAction)
 
-
-
         if (!quizState.isAnswerConfirmed) {
 
-            Column {
-
-                Text(text = quizState.inputAnswer ?: "", fontSize = 12.sp)
-
-            }
-
+            Text(text = quizState.inputAnswer ?: "", fontSize = 12.sp)
             Box(
                 modifier = Modifier
                     .aspectRatio(1f)
@@ -122,12 +91,12 @@ fun KankenQuizScreen(
                     }
                 }
 
-
                 DrawingScreen(
                     currentPath,
                     drawingState,
                     onDrawingAction,
                 )
+
             }
 
             DrawingPropertiesMenu(
@@ -136,82 +105,16 @@ fun KankenQuizScreen(
                 onKanjiRecAction = onKanjiRecAction
             )
 
-
         } else {
+
             if (!quizState.isAnswerCorrect!!) {
 
-                Column(
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.Start
-                ) {
-
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Box {
-                            Text(text = "Your answer:")
-                        }
-                        Box(
-                            modifier = Modifier.padding(16.dp),
-                            contentAlignment = Alignment.CenterEnd
-                        ) {
-
-                            if (quizState.inputAnswer != null) {
-                                Text(
-                                    text = quizState.inputAnswer,
-                                    color = Color.Red,
-                                    fontSize = 16.sp
-                                )
-                            }
-
-
-                        }
-                    }
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Box {
-                            Text(text = "Correct answer:")
-                        }
-
-                        Box(
-                            modifier = Modifier.padding(16.dp),
-                            contentAlignment = Alignment.CenterEnd
-                        ) {
-                            Text(
-                                text = quizState.correctAnswer!!,
-                                color = DarkGreen,
-                                fontSize = 16.sp
-                            )
-                        }
-                    }
-
-                }
-
-                Row(horizontalArrangement = Arrangement.SpaceBetween) {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(.5f),
-                        onClick = {
-                            onPopupAction(PopupAction.ShowAlertDialog(iWasRightDialog))
-                        }
-                    ) {
-                        Text("I WAS\nRIGHT!")
-                    }
-
-                    Button(
-                        modifier = Modifier.fillMaxWidth(.5f),
-                        onClick = {
-                            onPopupAction(PopupAction.ShowAlertDialog(markForReviewDialog))
-                        }
-                    ) {
-                        Text("MARK")
-                    }
-                }
-
+                WrongAnswer(
+                    quizState,
+                    onPopupAction,
+                    onTrackingAction,
+                    onQuizAction
+                )
 
             } else {
                 Text(text = quizState.correctAnswer!!)
@@ -219,14 +122,7 @@ fun KankenQuizScreen(
 
 
             if (quizState.isLastQuestion) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(.5f),
-                    onClick = {
-                        onQuizAction(QuizAction.EndQuiz)
-                    }
-                ) {
-                    Text("END")
-                }
+                QuizOver(onQuizAction)
             } else {
                 Button(
                     modifier = Modifier.fillMaxWidth(.5f),
@@ -254,7 +150,6 @@ fun KankenQuizScreen(
         )
 
     }
-
 
 
 }
