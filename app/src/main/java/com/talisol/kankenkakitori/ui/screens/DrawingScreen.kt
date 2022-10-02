@@ -25,6 +25,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.core.graphics.applyCanvas
 import com.talisol.kankenkakitori.actions.DrawingAction
 import com.talisol.kankenkakitori.actions.KanjiRecAction
@@ -35,7 +36,7 @@ import com.talisol.kankenkakitori.drawingUtils.dragMotionEvent
 import kotlin.math.roundToInt
 
 @Composable
-fun KanjiRecognitionScreen(
+fun DrawingScreen(
     currentStroke: Path,
     state: DrawingState,
     onAction: (DrawingAction) -> Unit,
@@ -46,8 +47,6 @@ fun KanjiRecognitionScreen(
         join = pathProperties.strokeJoin
     )
 ) {
-
-//    var composableBounds by remember { mutableStateOf<Rect?>(null) }
 
     val view = LocalView.current
     val drawModifier = Modifier
