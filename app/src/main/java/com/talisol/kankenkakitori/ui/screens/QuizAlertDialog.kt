@@ -5,11 +5,11 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.talisol.kankenkakitori.actions.PopupAction
-import com.talisol.kankenkakitori.ui.states.PopUpState
+import com.talisol.kankenkakitori.ui.states.PopupState
 
 @Composable
 fun QuizAlertDialog(
-    popUpState: PopUpState,
+    popUpState: PopupState,
     onAction: (PopupAction) -> Unit,
 ) {
     if (popUpState.isAlertDialogShown) {

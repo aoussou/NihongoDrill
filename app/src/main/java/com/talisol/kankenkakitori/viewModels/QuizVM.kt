@@ -63,7 +63,7 @@ class QuizVM @Inject constructor() : ViewModel() {
     }
 
     private fun confirmAnswer(trackingOnAction: (TrackingAction)-> Unit) {
-        if (_quizState.value.inputAnswer != null && !quizState.value.isAnswerConfirmed) {
+        if (!quizState.value.isAnswerConfirmed) {
 
             val id = _quizState.value.questionGlobalId!!
 

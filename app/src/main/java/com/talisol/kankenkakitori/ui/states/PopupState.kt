@@ -1,6 +1,6 @@
 package com.talisol.kankenkakitori.ui.states
 
-data class PopUpState(
+data class PopupState(
 
     val isAlertDialogShown: Boolean = false,
     val title: String = "Really",

@@ -6,7 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.talisol.kankenkakitori.actions.KanjiRecAction
 import com.talisol.kankenkakitori.actions.PopupAction
-import com.talisol.kankenkakitori.ui.states.PopUpState
+import com.talisol.kankenkakitori.ui.states.PopupState
 
 @Composable
 fun MySpinner(
@@ -23,7 +23,7 @@ fun MySpinner(
         items.forEachIndexed { index, element ->
             DropdownMenuItem(onClick = {
 
-                val checkChangeKanji = PopUpState(
+                val checkChangeKanji = PopupState(
                     dialogText = "Are you sure you actually wrote $element?",
                     onConfirmAction = {
                         onKanjiRecAction(KanjiRecAction.SetPredictedKanji(element))

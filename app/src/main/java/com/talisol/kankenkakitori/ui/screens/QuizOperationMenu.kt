@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.talisol.kankenkakitori.R
 import com.talisol.kankenkakitori.actions.*
-import com.talisol.kankenkakitori.ui.states.PopUpState
+import com.talisol.kankenkakitori.ui.states.PopupState
 import com.talisol.kankenkakitori.ui.states.QuizState
 
 @Composable
@@ -26,14 +26,24 @@ fun QuizOperationMenu(
     modifier: Modifier = Modifier,
 ) {
 
-    val omitQuestionDialog = PopUpState(
-        dialogText = "Are you sure you want the quiz to omit this question?",
+    val omitQuestionDialog = PopupState(
+        dialogText = "Do you give up?",
         onConfirmAction = {
             onTrackingAction(TrackingAction.StopAsking(quizState.questionGlobalId!!))
             onPopupAction(PopupAction.CloseAlertDialog)
             onQuizAction(QuizAction.NextQuestion)
 
             if (quizState.isLastQuestion) onQuizAction(QuizAction.EndQuiz)
+        }
+    )
+
+    val giveUp = PopupState(
+        dialogText = "Are you sure you want the quiz to omit this question?",
+        onConfirmAction = {
+            onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
+            onPopupAction(PopupAction.CloseAlertDialog)
+
+//            if (quizState.isLastQuestion) onQuizAction(QuizAction.EndQuiz)
         }
     )
 
@@ -45,16 +55,13 @@ fun QuizOperationMenu(
 
         IconButton(
             onClick = {
-
-                if (predictedKanji != null) {
-                    onKanjiRecAction(KanjiRecAction.SaveImage(predictedKanji,"debug"))
-                }
-
+                    onPopupAction(PopupAction.ShowAlertDialog(giveUp))
             }
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_baseline_save_alt_24),
+                painter = painterResource(id = R.drawable.ic_baseline_skip_next_24),
                 contentDescription = null,
+                tint = Color.Red
             )
         }
 

@@ -19,7 +19,7 @@ import androidx.core.graphics.applyCanvas
 import com.talisol.kankenkakitori.actions.*
 import com.talisol.kankenkakitori.drawingUtils.DrawingState
 import com.talisol.kankenkakitori.ui.MySpinner
-import com.talisol.kankenkakitori.ui.states.PopUpState
+import com.talisol.kankenkakitori.ui.states.PopupState
 import com.talisol.kankenkakitori.ui.states.QuizState
 import com.talisol.kankenkakitori.ui.theme.DarkGreen
 import kotlin.math.roundToInt
@@ -27,7 +27,7 @@ import kotlin.math.roundToInt
 @Composable
 fun KankenQuizScreen(
     quizState: QuizState,
-    popUpState: PopUpState,
+    popUpState: PopupState,
     onQuizAction: (QuizAction) -> Unit,
     currentPath: Path,
     drawingState: DrawingState,
@@ -40,7 +40,7 @@ fun KankenQuizScreen(
 ) {
 
 
-    val iWasRightDialog = PopUpState(
+    val iWasRightDialog = PopupState(
         dialogText = "Are you sure you got this question right?",
         onConfirmAction =
         {
@@ -54,7 +54,7 @@ fun KankenQuizScreen(
         }
     )
 
-    val markForReviewDialog = PopUpState(
+    val markForReviewDialog = PopupState(
         dialogText = "Are you sure you want to mark this question for review?",
         onConfirmAction =
         {
@@ -82,8 +82,6 @@ fun KankenQuizScreen(
         if (!quizState.isAnswerConfirmed) {
 
             Column {
-
-
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(.25F)
@@ -120,12 +118,10 @@ fun KankenQuizScreen(
                     .fillMaxWidth()
                     .border(BorderStroke(5.dp, Color.Black))
             ) {
-
                 KanjiRecognitionScreen(
                     currentPath,
                     drawingState,
                     onDrawingAction,
-                    onKanjiRecAction
                 )
             }
 
@@ -195,11 +191,16 @@ fun KankenQuizScreen(
                             modifier = Modifier.padding(16.dp),
                             contentAlignment = Alignment.CenterEnd
                         ) {
-                            Text(
-                                text = quizState.inputAnswer!!,
-                                color = Color.Red,
-                                fontSize = 16.sp
-                            )
+
+                            if (quizState.inputAnswer != null) {
+                                Text(
+                                    text = quizState.inputAnswer!!,
+                                    color = Color.Red,
+                                    fontSize = 16.sp
+                                )
+                            }
+
+
                         }
                     }
 

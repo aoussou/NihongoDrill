@@ -39,7 +39,6 @@ fun KanjiRecognitionScreen(
     currentStroke: Path,
     state: DrawingState,
     onAction: (DrawingAction) -> Unit,
-    kanjiRecognizerOnAction: (KanjiRecAction) -> Unit,
     pathProperties: PathProperties = PathProperties(),
     strokeType: Stroke = Stroke(
         width = pathProperties.strokeWidth,
