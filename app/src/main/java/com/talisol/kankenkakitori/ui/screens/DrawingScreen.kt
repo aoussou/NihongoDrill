@@ -77,7 +77,7 @@ fun KanjiRecognitionScreen(
                 pointerInputChange.consumeDownChange()
             }
         )
-        .border(BorderStroke(3.dp, Color.Black))
+        .border(BorderStroke(3.dp, Color.Red))
 
 
 
