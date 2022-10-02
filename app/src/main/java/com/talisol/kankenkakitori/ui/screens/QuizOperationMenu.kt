@@ -31,9 +31,6 @@ fun QuizOperationMenu(
     onDrawingAction: (DrawingAction) -> Unit,
 ) {
 
-    /* investigate why crashes when removing modifier from input, even though it's not being used
-    *  */
-
     val modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(.3F)
