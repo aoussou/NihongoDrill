@@ -6,6 +6,8 @@ import com.squareup.sqldelight.db.SqlDriver
 import com.talisol.kankenkakitori.KanjiDatabase
 import com.talisol.kankenkakitori.data.KanjiQuestionDataSource
 import com.talisol.kankenkakitori.data.KanjiQuestionDataSourceImpl
+import com.talisol.kankenkakitori.data.ProgressDataSource
+import com.talisol.kankenkakitori.data.ProgressDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,6 +32,12 @@ object AppModule {
     @Singleton
     fun provideKanjiDataSource(driver: SqlDriver): KanjiQuestionDataSource {
         return KanjiQuestionDataSourceImpl(KanjiDatabase(driver))
+    }
+
+    @Provides
+    @Singleton
+    fun provideProgressDataSource(driver: SqlDriver): ProgressDataSource {
+        return ProgressDataSourceImpl(KanjiDatabase(driver))
     }
 
 
