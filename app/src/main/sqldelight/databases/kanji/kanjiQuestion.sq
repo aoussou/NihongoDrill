@@ -16,10 +16,11 @@ ORDER BY kanken_kyu;
 
 selectByKankenKyu:
 SELECT *
-FROM kakitoriQuestion
+FROM
+kakitoriQuestion
+INNER JOIN progress
+ON kakitoriQuestion.global_id = progress.id
 WHERE kanken_kyu = :kanken_kyu;
-
-
 
 -- CREATE TRIGGER create_new_global_id
 --     BEFORE INSERT ON kakitoriQuestion FOR EACH ROW

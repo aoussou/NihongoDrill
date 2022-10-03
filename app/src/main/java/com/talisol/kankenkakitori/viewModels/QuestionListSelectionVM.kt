@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import com.talisol.kankenkakitori.data.KanjiQuestionDataSource
 import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.actions.QuizSettingAction
+import com.talisol.kankenkakitori.data.ProgressDataSource
 import com.talisol.kankenkakitori.ui.states.QuizSelectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import databases.kanji.KakitoriQuestion
+import databases.kanji.SelectByKankenKyu
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -15,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuestionListSelectionVM @Inject constructor(
-    private val kanjiQuestionDataSource: KanjiQuestionDataSource
+    private val kanjiQuestionDataSource: KanjiQuestionDataSource,
 ) : ViewModel() {
 
 
@@ -27,11 +29,9 @@ class QuestionListSelectionVM @Inject constructor(
     private val _quizSelectionState = MutableStateFlow(QuizSelectionState())
     val quizSelectionState = _quizSelectionState.asStateFlow()
 
-    private val _localQAlist = MutableStateFlow(listOf<KakitoriQuestion>())
+    private val _localQAlist = MutableStateFlow(listOf<SelectByKankenKyu>())
 
     val localQAlist = _localQAlist.asStateFlow()
-
-    private lateinit var _loadedQAs: List<KakitoriQuestion>
 
 
     fun onAction(action: QuizSettingAction) {
@@ -46,15 +46,14 @@ class QuestionListSelectionVM @Inject constructor(
 
     private fun makeLocalQuestionList() {
 
-        if (_loadedQAs.isNotEmpty()) {
+        if (_localQAlist.value != null) {
 
-            _localQAlist.value = _loadedQAs
-            _localQAlist.value = _localQAlist.value.filter { it.available.toInt() == 1 }
+            _localQAlist.value = _localQAlist.value.filter {it.available.toInt() == 1 }
 
-//            if (skipAllCorrect) _localQAlist.value =
-//                _localQAlist.value.filter { !(it.total_correct > 0L && it.total_wrong == 0L) }
-//            if (onlyNeverAnswered) _localQAlist.value =
-//                _localQAlist.value.filter { it.total_correct == 0L && it.total_wrong == 0L }
+            if (skipAllCorrect) _localQAlist.value =
+                _localQAlist.value.filter { !(it.total_correct > 0L && it.total_wrong == 0L) }
+            if (onlyNeverAnswered) _localQAlist.value =
+                _localQAlist.value.filter { it.total_correct == 0L && it.total_wrong == 0L }
 
         }
 
@@ -69,7 +68,7 @@ class QuestionListSelectionVM @Inject constructor(
 
     private fun loadSelectedQuestionGroup() {
         if (quizSelectionState.value.groupChosen!=null) {
-            _loadedQAs = kanjiQuestionDataSource.getAllKankenEntriesByKyu(_quizSelectionState.value.groupChosen!!)
+            _localQAlist.value = kanjiQuestionDataSource.getAllKankenEntriesByKyu(_quizSelectionState.value.groupChosen!!)
         }
     }
 

@@ -1,6 +1,6 @@
 package com.talisol.kankenkakitori.data
 
-import databases.kanji.KakitoriQuestion
+import databases.tracking.Progress
 
 interface ProgressDataSource {
 
@@ -21,4 +21,6 @@ interface ProgressDataSource {
     fun makeUnavailable(id: Long)
 
     fun markForReview(id:Long)
+
+    fun getProgressInfoById(id:Long): Progress
 }

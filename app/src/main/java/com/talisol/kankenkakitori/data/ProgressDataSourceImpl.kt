@@ -1,6 +1,7 @@
 package com.talisol.kankenkakitori.data
 
 import com.talisol.kankenkakitori.KanjiDatabase
+import databases.tracking.Progress
 
 
 class ProgressDataSourceImpl(
@@ -45,5 +46,10 @@ class ProgressDataSourceImpl(
     override fun markForReview(id: Long) {
         queries.markForReview(id)
     }
+
+    override fun getProgressInfoById(id: Long): Progress {
+        return queries.getProgressInfoById(id).executeAsOne()
+    }
+
 
 }

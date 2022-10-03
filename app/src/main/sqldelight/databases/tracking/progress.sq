@@ -8,6 +8,12 @@ CREATE TABLE progress (
     marked_for_review INTEGER DEFAULT 0 NOT NULL
 );
 
+getProgressInfoById:
+SELECT *
+FROM progress
+WHERE id = :id;
+
+
 getTotalCorrect:
 SELECT total_correct
 FROM progress

@@ -6,6 +6,7 @@ import com.talisol.kankenkakitori.actions.TrackingAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import databases.kanji.KakitoriQuestion
+import databases.kanji.SelectByKankenKyu
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -18,7 +19,7 @@ class QuizVM @Inject constructor() : ViewModel() {
     val quizState = _quizState.asStateFlow()
 
 
-    private val _qaList = MutableStateFlow(listOf<KakitoriQuestion>())
+    private val _qaList = MutableStateFlow(listOf<SelectByKankenKyu>())
 
     fun onAction(action: QuizAction) {
 
@@ -138,7 +139,7 @@ class QuizVM @Inject constructor() : ViewModel() {
     }
 
 
-    private fun loadQuestion(selectedQuestionsList: List<KakitoriQuestion>) {
+    private fun loadQuestion(selectedQuestionsList: List<SelectByKankenKyu>) {
         _qaList.value = selectedQuestionsList
     }
 
