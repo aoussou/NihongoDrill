@@ -49,7 +49,7 @@ fun KankenQuizScreen(
     ) {
 
 
-        QuestionScreen(state = quizState)
+        QuestionScreen(state = quizState,onQuizAction = onQuizAction)
 
         if (!quizState.isAnswerConfirmed) {
 
@@ -133,8 +133,6 @@ fun KankenQuizScreen(
                     Text("NEXT")
                 }
             }
-
-
         }
 
 

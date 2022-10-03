@@ -65,13 +65,27 @@ fun WrongAnswer(
                 contentAlignment = Alignment.CenterEnd
             ) {
 
-                if (quizState.inputAnswer != null) {
-                    Text(
-                        text = quizState.inputAnswer,
-                        color = Color.Red,
-                        fontSize = 16.sp
-                    )
+
+                    if (quizState.questionType == "goji") {
+
+                        if (quizState.selectedWrongKanji != null) {
+                            Text(
+                                text = "${quizState.selectedWrongKanji} ➔",
+                                color = Color.Red,
+                                fontSize = 16.sp
+                            )
+                        }
+                    }
+
+                    if (quizState.inputAnswer != null) {
+                        Text(
+                            text = quizState.inputAnswer,
+                            color = Color.Red,
+                            fontSize = 16.sp
+                        )
+
                 }
+
 
 
             }
@@ -89,6 +103,16 @@ fun WrongAnswer(
                 modifier = Modifier.padding(16.dp),
                 contentAlignment = Alignment.CenterEnd
             ) {
+
+                if (quizState.questionType == "goji") {
+
+                    Text(
+                        text = "${quizState.target} ➔",
+                        color = DarkGreen,
+                        fontSize = 16.sp
+                    )
+                }
+
                 Text(
                     text = quizState.correctAnswer!!,
                     color = DarkGreen,

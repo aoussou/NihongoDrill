@@ -3,6 +3,7 @@ package com.talisol.kankenkakitori.ui.screens
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -25,29 +26,56 @@ import com.talisol.kankenkakitori.actions.QuizSettingAction
 @Composable
 fun SelectKyuScreen(
     groupsList: List<String>,
+    quizType: List<String>,
     modifier: Modifier = Modifier,
     onAction: (QuizSettingAction) -> Unit
 ) {
 
+    Row(horizontalArrangement = Arrangement.SpaceBetween){
 
-    val scrollState = rememberScrollState()
+        val scrollState1 = rememberScrollState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize(0.5F)
-            .verticalScroll(scrollState)
-            .then(modifier),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        for (i in groupsList) {
-            Button(onClick = {
-                onAction(QuizSettingAction.SelectQuestionLevel(i))
-            }) {
-                Text(text = i)
+        Column(
+            modifier = Modifier
+                .fillMaxSize(0.5F)
+                .verticalScroll(scrollState1)
+                .then(modifier),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "SELECT TYPE")
+            for (i in quizType) {
+                Button(onClick = {
+                    onAction(QuizSettingAction.ChooseQuestionType(i))
+                }) {
+                    Text(text = i)
+                }
             }
         }
+
+        val scrollState2 = rememberScrollState()
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize(0.5F)
+                .verticalScroll(scrollState2)
+                .then(modifier),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "SELECT LEVEL")
+            for (i in groupsList) {
+                Button(onClick = {
+                    onAction(QuizSettingAction.SelectQuestionLevel(i))
+                }) {
+                    Text(text = i)
+                }
+            }
+        }
+
     }
+
+
 
 
     val textState = remember { mutableStateOf(TextFieldValue()) }

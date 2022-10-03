@@ -5,7 +5,7 @@ import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.actions.TrackingAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import databases.kanji.SelectKakitoriQuestionByKankenKyu
+import databases.kanji.SelectKakitoriQuestions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -18,7 +18,7 @@ class QuizVM @Inject constructor() : ViewModel() {
     val quizState = _quizState.asStateFlow()
 
 
-    private val _qaList = MutableStateFlow(listOf<SelectKakitoriQuestionByKankenKyu>())
+    private val _qaList = MutableStateFlow(listOf<SelectKakitoriQuestions>())
 
     fun onAction(action: QuizAction) {
 
@@ -30,7 +30,8 @@ class QuizVM @Inject constructor() : ViewModel() {
             is QuizAction.StartQuiz -> startQuiz()
             is QuizAction.InputAnswer -> inputAnswer(action.answerString)
             is QuizAction.EndQuiz -> endQuiz()
-            is QuizAction.SelectWrongKanji -> selectWrongKanji(action.kanji)
+            is QuizAction.SelectWrongKanji -> selectWrongKanji(action.kanji,action.kanjiInd)
+            is QuizAction.SetQuizType -> setQuizType(action.questionType)
         }
     }
 
@@ -69,12 +70,12 @@ class QuizVM @Inject constructor() : ViewModel() {
             _quizState.update { it.copy(isAnswerConfirmed = true) }
             val id = _quizState.value.questionGlobalId!!
 
-            if (_quizState.value.quizType == "goji") {
+            if (_quizState.value.questionType == "goji") {
                 if (_quizState.value.selectedWrongKanji == _quizState.value.target) {
                     _quizState.update {it.copy(isAnswerCorrect = false)
-                        trackingOnAction(TrackingAction.AddOneWrong(id))
-                        return
                     }
+                    trackingOnAction(TrackingAction.AddOneWrong(id))
+                    return
                 }
             }
 
@@ -108,7 +109,8 @@ class QuizVM @Inject constructor() : ViewModel() {
                         selectedAnswer = null,
                         isAnswerConfirmed = false,
                         isLastQuestion = false,
-                        isAnswerCorrect = null
+                        isAnswerCorrect = null,
+                        selectedWrongKanji = null
                     )
                 }
 
@@ -146,7 +148,7 @@ class QuizVM @Inject constructor() : ViewModel() {
     }
 
 
-    private fun loadQuestion(selectedQuestionsList: List<SelectKakitoriQuestionByKankenKyu>) {
+    private fun loadQuestion(selectedQuestionsList: List<SelectKakitoriQuestions>) {
         _qaList.value = selectedQuestionsList
     }
 
@@ -164,8 +166,12 @@ class QuizVM @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun selectWrongKanji(kanji: String?) {
-        _quizState.update { it.copy(selectedWrongKanji = kanji) }
+    private fun selectWrongKanji(kanji: String?,kanjiInd: Int?) {
+        _quizState.update { it.copy(selectedWrongKanji = kanji, selectedWrongKanjInd = kanjiInd) }
+    }
+
+    private fun setQuizType(type: String?) {
+        _quizState.update { it.copy(questionType = type) }
     }
 
 }

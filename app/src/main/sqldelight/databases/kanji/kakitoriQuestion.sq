@@ -14,13 +14,13 @@ SELECT DISTINCT kanken_kyu
 FROM kakitoriQuestion
 ORDER BY kanken_kyu;
 
-selectKakitoriQuestionByKankenKyu:
+selectKakitoriQuestions:
 SELECT *
 FROM
 kakitoriQuestion
 INNER JOIN progress
 ON kakitoriQuestion.global_id = progress.id
-WHERE kanken_kyu = :kanken_kyu;
+WHERE kanken_kyu = :kanken_kyu AND question_type = :question_type;
 
 -- CREATE TRIGGER create_new_global_id
 --     BEFORE INSERT ON kakitoriQuestion FOR EACH ROW

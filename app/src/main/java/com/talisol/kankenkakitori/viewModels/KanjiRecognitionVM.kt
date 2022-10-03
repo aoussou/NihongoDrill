@@ -28,7 +28,7 @@ import java.io.File
 class KanjiRecognitionVM(application: Application) : AndroidViewModel(application) {
 
     private val context = application.baseContext
-    private val numberGuess = 10
+    private val numberGuess = 15
 
     private val imageProcessor = ImageProcessor.Builder()
         .add(

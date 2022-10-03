@@ -43,8 +43,8 @@ class MainActivity : ComponentActivity() {
                 val questionListSelectionVM = viewModel<QuestionListSelectionVM>()
                 val localQuizState by questionListSelectionVM.quizSelectionState.collectAsState()
 
-                val popUpVM = viewModel<PopupVM>()
-                val dialogState by popUpVM.popUpState.collectAsState()
+                val popupVM = viewModel<PopupVM>()
+                val popupState by popupVM.popupState.collectAsState()
 
                 val quizVM = viewModel<QuizVM>()
                 val quizState by quizVM.quizState.collectAsState()
@@ -57,23 +57,20 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.SpaceEvenly
                 ) {
 
-                    if (
-                        !quizState.isQuizStarted
-
-                    ) {
+                    if (!quizState.isQuizStarted) {
 
                         if (localQuizState.chosenNumberOfQuestions == null ||
-                            localQuizState.groupChosen == null
+                            localQuizState.groupChosen == null ||
+                            localQuizState.typeChosen == null
                         ) {
 
 
-                            Text(text = "SELECT LEVEL")
 
                             SelectKyuScreen(
                                 groupsList = questionListSelectionVM.groupsList,
+                                quizType = questionListSelectionVM.quizTypesList,
                                 onAction = questionListSelectionVM::onAction
                             )
-
 
                         } else {
                             Column {
@@ -85,9 +82,14 @@ class MainActivity : ComponentActivity() {
                                             questionListSelectionVM.localQAlist.value
                                         )
                                     )
+                                    quizVM.onAction(
+                                        QuizAction.SetQuizType(
+                                            localQuizState.typeChosen!!
+                                        )
+                                    )
                                     quizVM.onAction(QuizAction.StartQuiz)
                                 }) {
-                                    Text(text = "Start quiz, ${localQuizState.chosenNumberOfQuestions} questions of ${localQuizState.groupChosen}")
+                                    Text(text = "Start quiz,  ${localQuizState.chosenNumberOfQuestions} ${localQuizState.typeChosen} questions of ${localQuizState.groupChosen}")
                                 }
 
                                 Button(onClick = {
@@ -97,7 +99,6 @@ class MainActivity : ComponentActivity() {
                                     Text(text = "Go back to selection menu")
                                 }
                             }
-
                         }
 
 
@@ -105,7 +106,7 @@ class MainActivity : ComponentActivity() {
                         KankenQuizScreen(
                             quizState = quizState,
                             onQuizAction = quizVM::onAction,
-                            popupState = dialogState,
+                            popupState = popupState,
                             currentPath = currentPath,
                             drawingState = drawingState,
                             onDrawingAction = drawingVM::onAction,
@@ -113,7 +114,7 @@ class MainActivity : ComponentActivity() {
                             predictedKanji = predictedKanji.value,
                             otherGuessesList = otherGuessesList.value,
                             onTrackingAction = trackingVM::onAction,
-                            onPopupAction = popUpVM::onAction
+                            onPopupAction = popupVM::onAction
                         )
                     }
                 }
