@@ -1,7 +1,6 @@
 package com.talisol.kankenkakitori.data
 
 import com.talisol.kankenkakitori.KanjiDatabase
-import databases.kanji.KakitoriQuestion
 
 
 class ProgressDataSourceImpl(
@@ -39,5 +38,12 @@ class ProgressDataSourceImpl(
         return queries.getCorrectStreak(id).executeAsOne()
     }
 
+    override fun makeUnavailable(id: Long) {
+        queries.makeUnavailable(id)
+    }
+
+    override fun markForReview(id: Long) {
+        queries.markForReview(id)
+    }
 
 }

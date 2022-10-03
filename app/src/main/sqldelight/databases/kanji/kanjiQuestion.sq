@@ -5,8 +5,7 @@ CREATE TABLE  kakitoriQuestion(
     target TEXT NOT NULL,
     answer TEXT NOT NULL,
     kanken_kyu TEXT NOT NULL,
-    available INTEGER DEFAULT 1 NOT NULL,
-    marked_for_review INTEGER DEFAULT 0 NOT NULL,
+
     FOREIGN KEY (global_id) REFERENCES progress(id)
 );
 
@@ -20,20 +19,6 @@ SELECT *
 FROM kakitoriQuestion
 WHERE kanken_kyu = :kanken_kyu;
 
-makeUnavailable:
-UPDATE kakitoriQuestion
-SET available = 0
-WHERE id = :id;
-
-makeAvailable:
-UPDATE kakitoriQuestion
-SET available = 1
-WHERE id = :id;
-
-markForReview:
-UPDATE kakitoriQuestion
-SET marked_for_review = 1
-WHERE id = :id;
 
 
 -- CREATE TRIGGER create_new_global_id

@@ -17,4 +17,8 @@ interface ProgressDataSource {
     fun getTotalWrong(id:Long): Long
 
     fun getCorrectStrek(id: Long): Long
+
+    fun makeUnavailable(id: Long)
+
+    fun markForReview(id:Long)
 }

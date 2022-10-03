@@ -10,5 +10,4 @@ sealed class TrackingAction {
     data class UpdateLastCorrectTime(val id: Int) : TrackingAction()
     data class StopAsking(val id: Int) : TrackingAction()
     data class MarkForReview(val id: Int) : TrackingAction()
-
 }

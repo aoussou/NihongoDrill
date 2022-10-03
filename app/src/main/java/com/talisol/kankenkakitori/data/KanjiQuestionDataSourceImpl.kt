@@ -18,13 +18,7 @@ class KanjiQuestionDataSourceImpl(
         return queries.getKankenKyulist().executeAsList()
     }
 
-    override fun makeUnavailable(id: Long) {
-        queries.makeUnavailable(id)
-    }
 
-    override fun markForReview(id: Long) {
-        queries.markForReview(id)
-    }
 
 
 }

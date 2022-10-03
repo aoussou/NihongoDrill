@@ -57,7 +57,7 @@ class QuizVM @Inject constructor() : ViewModel() {
                 question = qas.question,
                 correctAnswer = qas.answer,
                 target = qas.target,
-                questionGlobalId = qas.id.toInt()
+                questionGlobalId = qas.global_id.toInt()
             )
         }
     }

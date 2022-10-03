@@ -8,8 +8,6 @@ interface KanjiQuestionDataSource {
 
     fun getKankenKyuList(): List<String>
 
-    fun makeUnavailable(id: Long)
 
-    fun markForReview(id:Long)
 
 }
