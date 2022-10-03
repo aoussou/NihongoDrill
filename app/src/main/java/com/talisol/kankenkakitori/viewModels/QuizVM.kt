@@ -68,11 +68,6 @@ class QuizVM @Inject constructor() : ViewModel() {
     private fun confirmAnswer(trackingOnAction: (TrackingAction)-> Unit) {
         if (!_quizState.value.isAnswerConfirmed) {
 
-            Log.i("DEBUG",_quizState.value.selectedWrongKanji!!)
-            Log.i("DEBUG",_quizState.value.target!!)
-            Log.i("DEBUG",_quizState.value.correctAnswer!!)
-            Log.i("DEBUG",_quizState.value.inputAnswer!!)
-
             _quizState.update { it.copy(isAnswerConfirmed = true) }
             val id = _quizState.value.questionGlobalId!!
 
@@ -84,8 +79,6 @@ class QuizVM @Inject constructor() : ViewModel() {
                     return
                 }
             }
-
-
 
             if (_quizState.value.inputAnswer == _quizState.value.correctAnswer) {
                 _quizState.update { it.copy(isAnswerCorrect = true) }
@@ -169,7 +162,7 @@ class QuizVM @Inject constructor() : ViewModel() {
                 isQuizOver = false,
                 isQuizStarted = true,
                 isFirstQuestion = true,
-                isLastQuestion = false
+                isLastQuestion = _qaList.value.size == 1
             )
         }
     }

@@ -1,6 +1,7 @@
 package com.talisol.kankenkakitori.ui.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.GridCells
@@ -34,6 +35,7 @@ fun QuestionScreen(
 
         LazyVerticalGrid(
             cells = GridCells.Adaptive(32.dp),
+            verticalArrangement = Arrangement.Center,
             content = {
                 items(charList.size) {
                     index ->
@@ -61,13 +63,6 @@ fun QuestionScreen(
             }
         )
 
-        Row(modifier = Modifier.wrapContentSize(),
-            verticalAlignment = Alignment.CenterVertically) {
-            for (i in state.question.indices) {
-
-
-            }
-        }
 
     } else {
 
