@@ -1,11 +1,10 @@
 package com.talisol.kankenkakitori.data
 
-import databases.kanji.KakitoriQuestion
-import databases.kanji.SelectByKankenKyu
+import databases.kanji.SelectKakitoriQuestionByKankenKyu
 
 interface KanjiQuestionDataSource {
 
-    fun getAllKankenEntriesByKyu(kyu:String): List<SelectByKankenKyu>
+    fun getAllKankenEntriesByKyu(kyu:String): List<SelectKakitoriQuestionByKankenKyu>
 
     fun getKankenKyuList(): List<String>
 

@@ -14,7 +14,7 @@ SELECT DISTINCT kanken_kyu
 FROM kakitoriQuestion
 ORDER BY kanken_kyu;
 
-selectByKankenKyu:
+selectKakitoriQuestionByKankenKyu:
 SELECT *
 FROM
 kakitoriQuestion

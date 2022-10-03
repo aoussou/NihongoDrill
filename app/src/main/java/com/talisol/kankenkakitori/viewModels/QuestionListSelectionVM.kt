@@ -2,14 +2,11 @@ package com.talisol.kankenkakitori.viewModels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.talisol.kankenkakitori.data.KanjiQuestionDataSource
-import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.actions.QuizSettingAction
-import com.talisol.kankenkakitori.data.ProgressDataSource
+import com.talisol.kankenkakitori.data.KanjiQuestionDataSource
 import com.talisol.kankenkakitori.ui.states.QuizSelectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import databases.kanji.KakitoriQuestion
-import databases.kanji.SelectByKankenKyu
+import databases.kanji.SelectKakitoriQuestionByKankenKyu
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -29,7 +26,7 @@ class QuestionListSelectionVM @Inject constructor(
     private val _quizSelectionState = MutableStateFlow(QuizSelectionState())
     val quizSelectionState = _quizSelectionState.asStateFlow()
 
-    private val _localQAlist = MutableStateFlow(listOf<SelectByKankenKyu>())
+    private val _localQAlist = MutableStateFlow(listOf<SelectKakitoriQuestionByKankenKyu>())
 
     val localQAlist = _localQAlist.asStateFlow()
 
