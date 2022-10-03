@@ -33,8 +33,6 @@ fun WrongAnswer(
             onPopupAction(PopupAction.CloseAlertDialog)
             onTrackingAction(TrackingAction.AddOneCorrect(questionId))
             onTrackingAction(TrackingAction.SubtractOneWrong(questionId))
-            onTrackingAction(TrackingAction.UpdateLastCorrectTime(questionId))
-            onTrackingAction(TrackingAction.UpdateCorrectStreak(questionId))
             onQuizAction(QuizAction.NextQuestion)
         }
     )

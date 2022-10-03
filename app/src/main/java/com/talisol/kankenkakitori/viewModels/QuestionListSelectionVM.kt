@@ -37,6 +37,7 @@ class QuestionListSelectionVM @Inject constructor(
             is QuizSettingAction.LoadSelectedGroupQuestions -> loadSelectedQuestionGroup()
             is QuizSettingAction.SelectQuestionLevel -> setQuestionLevel(action.questionGroupID)
             is QuizSettingAction.ChooseNumberOfQuestions -> setNumberOfQuestions(action.number)
+            is QuizSettingAction.ChooseQuestionType -> setQuestionType(action.type)
             is QuizSettingAction.MakeLocalQuizQuestionList -> makeLocalQuestionList()
         }
     }
@@ -76,6 +77,11 @@ class QuestionListSelectionVM @Inject constructor(
 
     private fun setQuestionLevel(group: String?) {
         _quizSelectionState.update { it.copy(groupChosen = group) }
+        Log.i("DEBUG","Selected level $group")
+    }
+
+    private fun setQuestionType(group: String?) {
+        _quizSelectionState.update { it.copy(typeChosen = group) }
         Log.i("DEBUG","Selected level $group")
     }
 

@@ -30,6 +30,7 @@ class QuizVM @Inject constructor() : ViewModel() {
             is QuizAction.StartQuiz -> startQuiz()
             is QuizAction.InputAnswer -> inputAnswer(action.answerString)
             is QuizAction.EndQuiz -> endQuiz()
+            is QuizAction.SelectWrongKanji -> selectWrongKanji(action.kanji)
         }
     }
 
@@ -63,21 +64,28 @@ class QuizVM @Inject constructor() : ViewModel() {
     }
 
     private fun confirmAnswer(trackingOnAction: (TrackingAction)-> Unit) {
-        if (!quizState.value.isAnswerConfirmed) {
-
-            val id = _quizState.value.questionGlobalId!!
+        if (!_quizState.value.isAnswerConfirmed) {
 
             _quizState.update { it.copy(isAnswerConfirmed = true) }
-            if (quizState.value.inputAnswer == quizState.value.correctAnswer) {
+            val id = _quizState.value.questionGlobalId!!
+
+            if (_quizState.value.quizType == "goji") {
+                if (_quizState.value.selectedWrongKanji == _quizState.value.target) {
+                    _quizState.update {it.copy(isAnswerCorrect = false)
+                        trackingOnAction(TrackingAction.AddOneWrong(id))
+                        return
+                    }
+                }
+            }
+
+            if (_quizState.value.inputAnswer == _quizState.value.correctAnswer) {
                 _quizState.update { it.copy(isAnswerCorrect = true) }
                 trackingOnAction(TrackingAction.AddOneCorrect(id))
-                trackingOnAction(TrackingAction.UpdateCorrectStreak(id))
-                trackingOnAction(TrackingAction.UpdateLastCorrectTime(id))
             } else {
                 _quizState.update { it.copy(isAnswerCorrect = false) }
                 trackingOnAction(TrackingAction.AddOneWrong(id))
-                trackingOnAction(TrackingAction.ResetCorrectStreak(id))
             }
+
         }
     }
 
@@ -154,6 +162,10 @@ class QuizVM @Inject constructor() : ViewModel() {
                 isLastQuestion = false
             )
         }
+    }
+
+    private fun selectWrongKanji(kanji: String?) {
+        _quizState.update { it.copy(selectedWrongKanji = kanji) }
     }
 
 }

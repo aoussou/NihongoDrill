@@ -31,14 +31,18 @@ class ProgressTrackingVM @Inject constructor(
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun addOneCorrect(id:Int) {
         val newTotalCorrect = progressDataSource.getTotalCorrect(id.toLong()) + 1
         progressDataSource.updateTotalCorrectNumber(id.toLong(), newTotalCorrect)
+        updateCorrectStreak(id)
+        updateLastCorrectTime(id)
     }
 
     private fun addOneWrong(id:Int) {
         val newTotalWrong = progressDataSource.getTotalWrong(id.toLong()) + 1
         progressDataSource.updateTotalWrongNumber(id.toLong(), newTotalWrong)
+        resetCorrectStreak(id)
     }
 
     private fun subtractOneCorrect(id:Int) {

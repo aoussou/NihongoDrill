@@ -5,7 +5,7 @@ CREATE TABLE  kakitoriQuestion(
     target TEXT NOT NULL,
     answer TEXT NOT NULL,
     kanken_kyu TEXT NOT NULL,
-
+    question_type TEXT,
     FOREIGN KEY (global_id) REFERENCES progress(id)
 );
 

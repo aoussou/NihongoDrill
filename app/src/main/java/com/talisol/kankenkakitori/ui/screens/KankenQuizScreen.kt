@@ -49,7 +49,7 @@ fun KankenQuizScreen(
     ) {
 
 
-        QuestionScreen(state = quizState, onAction = onQuizAction)
+        QuestionScreen(state = quizState)
 
         if (!quizState.isAnswerConfirmed) {
 

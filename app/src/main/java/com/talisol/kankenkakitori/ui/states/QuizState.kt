@@ -1,5 +1,7 @@
 package com.talisol.kankenkakitori.ui.states
 
+import com.talisol.kankenkakitori.actions.QuizAction
+
 
 data class QuizState(
 
@@ -20,5 +22,5 @@ data class QuizState(
     val quizType: String? = null,
     val isLastQuestion: Boolean = false,
     val isFirstQuestion: Boolean = true,
-
+    val selectedWrongKanji: String? = null
     )
