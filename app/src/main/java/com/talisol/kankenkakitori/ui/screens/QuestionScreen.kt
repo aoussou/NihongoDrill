@@ -1,9 +1,10 @@
 package com.talisol.kankenkakitori.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.text.ClickableText
@@ -34,35 +35,44 @@ fun QuestionScreen(
         val charList = state.question.toList()
 
         LazyVerticalGrid(
-            cells = GridCells.Adaptive(32.dp),
+            cells = GridCells.Adaptive(28.dp),
             verticalArrangement = Arrangement.Center,
             content = {
-                items(charList.size) {
-                    index ->
+                items(charList.size) { index ->
+                    Box(
+                        modifier = Modifier
+//                            .border(BorderStroke(1.dp,Color.Black))
+                            .aspectRatio(1f)
+                            .clickable {
+                                onQuizAction(
+                                    QuizAction.SelectWrongKanji(
+                                        state.question[index].toString(), index
+                                    )
+                                )
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (index == state.selectedWrongKanjInd) {
+                            Text(
+                                state.question[index].toString(),
+                                color = Color.Blue,
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        } else {
 
-                    val textStyle = if (index == state.selectedWrongKanjInd) {
-                        TextStyle(
-                            color = Color.Blue,
-                            fontSize = 26.sp,
-                        )
-                    } else {
-                        TextStyle()
+                                Text(state.question[index].toString())
+
+
+                        }
+
                     }
 
-                    ClickableText(
-                        text = AnnotatedString(state.question[index].toString()),
-                        onClick = {
-                            onQuizAction(QuizAction.SelectWrongKanji(
-                                state.question[index].toString(),index)
-                            )
-                        },
-                        style = textStyle
-                    )
                 }
+
 
             }
         )
-
 
     } else {
 
@@ -74,7 +84,8 @@ fun QuestionScreen(
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold
         )
+
     }
 
-}
 
+}
