@@ -42,7 +42,7 @@ fun QuizOperationMenu(
         onConfirmAction = {
             onTrackingAction(TrackingAction.StopAsking(quizState.questionGlobalId!!))
             onPopupAction(PopupAction.CloseAlertDialog)
-            onQuizAction(QuizAction.NextQuestion)
+            onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
 
             if (quizState.isLastQuestion) onQuizAction(QuizAction.EndQuiz)
         }
@@ -54,7 +54,7 @@ fun QuizOperationMenu(
             onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
             onPopupAction(PopupAction.CloseAlertDialog)
 
-//            if (quizState.isLastQuestion) onQuizAction(QuizAction.EndQuiz)
+            if (quizState.isLastQuestion) onQuizAction(QuizAction.EndQuiz)
         }
     )
 
@@ -66,11 +66,13 @@ fun QuizOperationMenu(
 
         IconButton(
             onClick = {
-                onPopupAction(PopupAction.ShowAlertDialog(giveUp))
+                onPopupAction(PopupAction.ShowAlertDialog(omitQuestionDialog))
             }
+
+
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_baseline_skip_next_24),
+                painter = painterResource(id = R.drawable.ic_outline_stop_circle_24),
                 contentDescription = null,
                 tint = Color.Red
             )
@@ -78,11 +80,11 @@ fun QuizOperationMenu(
 
         IconButton(
             onClick = {
-                onPopupAction(PopupAction.ShowAlertDialog(omitQuestionDialog))
+                onPopupAction(PopupAction.ShowAlertDialog(giveUp))
             }
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_outline_stop_circle_24),
+                painter = painterResource(id = R.drawable.ic_baseline_skip_next_24),
                 contentDescription = null,
             )
         }

@@ -13,13 +13,14 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestionListSelectionVM @Inject constructor(
+class QuizSettingVM @Inject constructor(
     private val kanjiQuestionDataSource: KanjiQuestionDataSource,
 ) : ViewModel() {
 
 
-    private val skipAllCorrect = true
+    private val skipAllCorrect = false
     private val onlyNeverAnswered = false
+    private val onlyMarked = true
 
     val quizTypesList = listOf("kaki","goji")
 
@@ -52,6 +53,8 @@ class QuestionListSelectionVM @Inject constructor(
             _localQAlist.value.filter { !(it.total_correct > 0L && it.total_wrong == 0L) }
         if (onlyNeverAnswered) _localQAlist.value =
             _localQAlist.value.filter { it.total_correct == 0L && it.total_wrong == 0L }
+        if (onlyMarked) _localQAlist.value =
+            _localQAlist.value.filter { it.marked_for_review == 1L}
 
         if (_quizSelectionState.value.chosenNumberOfQuestions!! <= _localQAlist.value.size) {
             _quizSelectionState.update { it.copy(actualNumberOfQuestions = _quizSelectionState.value.chosenNumberOfQuestions) }

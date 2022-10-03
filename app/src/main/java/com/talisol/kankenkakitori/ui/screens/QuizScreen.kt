@@ -1,5 +1,6 @@
 package com.talisol.kankenkakitori.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -22,7 +24,7 @@ import com.talisol.kankenkakitori.ui.states.PopupState
 import com.talisol.kankenkakitori.ui.states.QuizState
 
 @Composable
-fun KankenQuizScreen(
+fun QuizScreen(
     quizState: QuizState,
     popupState: PopupState,
     onQuizAction: (QuizAction) -> Unit,
@@ -48,6 +50,7 @@ fun KankenQuizScreen(
         verticalArrangement = Arrangement.Top
     ) {
 
+        val localContext = LocalContext.current
 
         QuestionScreen(state = quizState,onQuizAction = onQuizAction)
 
@@ -59,6 +62,11 @@ fun KankenQuizScreen(
                     .aspectRatio(1f)
                     .fillMaxWidth()
                     .border(BorderStroke(5.dp, Color.Black))
+                    .clickable{
+                        if (quizState.questionType == "goji" && quizState.selectedWrongKanji == null) {
+                            Toast.makeText(localContext,"Choose a kanji first.",Toast.LENGTH_SHORT).show()
+                        }
+                    }
             ) {
 
                 Box(
@@ -91,11 +99,16 @@ fun KankenQuizScreen(
                     }
                 }
 
-                DrawingScreen(
-                    currentPath,
-                    drawingState,
-                    onDrawingAction,
-                )
+                if (quizState.questionType != "goji" || quizState.selectedWrongKanji != null) {
+
+                    DrawingScreen(
+                        currentPath,
+                        drawingState,
+                        onDrawingAction,
+                    )
+
+                }
+
 
             }
 

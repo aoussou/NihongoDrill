@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.actions.QuizSettingAction
-import com.talisol.kankenkakitori.ui.screens.KankenQuizScreen
+import com.talisol.kankenkakitori.ui.screens.QuizScreen
 import com.talisol.kankenkakitori.ui.screens.SelectKyuScreen
 import com.talisol.kankenkakitori.ui.theme.KankenKakitoriTheme
 import com.talisol.kankenkakitori.viewModels.*
@@ -40,8 +40,8 @@ class MainActivity : ComponentActivity() {
                 val otherGuessesList = recognizerVM.otherGuessesList.collectAsState()
                 val predictedKanji = recognizerVM.predictedKanji.collectAsState()
 
-                val questionListSelectionVM = viewModel<QuestionListSelectionVM>()
-                val localQuizState by questionListSelectionVM.quizSelectionState.collectAsState()
+                val quizSettingVM = viewModel<QuizSettingVM>()
+                val localQuizState by quizSettingVM.quizSelectionState.collectAsState()
 
                 val popupVM = viewModel<PopupVM>()
                 val popupState by popupVM.popupState.collectAsState()
@@ -67,19 +67,19 @@ class MainActivity : ComponentActivity() {
 
 
                             SelectKyuScreen(
-                                groupsList = questionListSelectionVM.groupsList,
-                                quizType = questionListSelectionVM.quizTypesList,
-                                onAction = questionListSelectionVM::onAction
+                                groupsList = quizSettingVM.groupsList,
+                                quizType = quizSettingVM.quizTypesList,
+                                onAction = quizSettingVM::onAction
                             )
 
                         } else {
                             Column {
                                 Button(onClick = {
-                                    questionListSelectionVM.onAction(QuizSettingAction.LoadSelectedGroupQuestions)
-                                    questionListSelectionVM.onAction(QuizSettingAction.MakeLocalQuizQuestionList)
+                                    quizSettingVM.onAction(QuizSettingAction.LoadSelectedGroupQuestions)
+                                    quizSettingVM.onAction(QuizSettingAction.MakeLocalQuizQuestionList)
                                     quizVM.onAction(
                                         QuizAction.LoadQuestionList(
-                                            questionListSelectionVM.localQAlist.value
+                                            quizSettingVM.localQAlist.value
                                         )
                                     )
                                     quizVM.onAction(
@@ -93,8 +93,8 @@ class MainActivity : ComponentActivity() {
                                 }
 
                                 Button(onClick = {
-                                    questionListSelectionVM.onAction(QuizSettingAction.SelectQuestionLevel(null))
-                                    questionListSelectionVM.onAction(QuizSettingAction.ChooseNumberOfQuestions(null))
+                                    quizSettingVM.onAction(QuizSettingAction.SelectQuestionLevel(null))
+                                    quizSettingVM.onAction(QuizSettingAction.ChooseNumberOfQuestions(null))
                                 }) {
                                     Text(text = "Go back to selection menu")
                                 }
@@ -103,7 +103,7 @@ class MainActivity : ComponentActivity() {
 
 
                     } else {
-                        KankenQuizScreen(
+                        QuizScreen(
                             quizState = quizState,
                             onQuizAction = quizVM::onAction,
                             popupState = popupState,

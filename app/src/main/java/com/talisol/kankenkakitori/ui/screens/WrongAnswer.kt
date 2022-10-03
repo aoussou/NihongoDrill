@@ -65,7 +65,7 @@ fun WrongAnswer(
                 contentAlignment = Alignment.CenterEnd
             ) {
 
-
+                Row {
                     if (quizState.questionType == "goji") {
 
                         if (quizState.selectedWrongKanji != null) {
@@ -84,9 +84,8 @@ fun WrongAnswer(
                             fontSize = 16.sp
                         )
 
+                    }
                 }
-
-
 
             }
         }
@@ -104,20 +103,25 @@ fun WrongAnswer(
                 contentAlignment = Alignment.CenterEnd
             ) {
 
-                if (quizState.questionType == "goji") {
+                Row {
+
+                    if (quizState.questionType == "goji") {
+
+                        Text(
+                            text = "${quizState.target} ➔",
+                            color = DarkGreen,
+                            fontSize = 16.sp
+                        )
+                    }
 
                     Text(
-                        text = "${quizState.target} ➔",
+                        text = quizState.correctAnswer!!,
                         color = DarkGreen,
                         fontSize = 16.sp
                     )
+
                 }
 
-                Text(
-                    text = quizState.correctAnswer!!,
-                    color = DarkGreen,
-                    fontSize = 16.sp
-                )
             }
         }
 

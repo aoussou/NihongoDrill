@@ -1,5 +1,6 @@
 package com.talisol.kankenkakitori.viewModels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.actions.TrackingAction
@@ -67,17 +68,24 @@ class QuizVM @Inject constructor() : ViewModel() {
     private fun confirmAnswer(trackingOnAction: (TrackingAction)-> Unit) {
         if (!_quizState.value.isAnswerConfirmed) {
 
+            Log.i("DEBUG",_quizState.value.selectedWrongKanji!!)
+            Log.i("DEBUG",_quizState.value.target!!)
+            Log.i("DEBUG",_quizState.value.correctAnswer!!)
+            Log.i("DEBUG",_quizState.value.inputAnswer!!)
+
             _quizState.update { it.copy(isAnswerConfirmed = true) }
             val id = _quizState.value.questionGlobalId!!
 
             if (_quizState.value.questionType == "goji") {
-                if (_quizState.value.selectedWrongKanji == _quizState.value.target) {
+                if (_quizState.value.selectedWrongKanji != _quizState.value.target) {
                     _quizState.update {it.copy(isAnswerCorrect = false)
                     }
                     trackingOnAction(TrackingAction.AddOneWrong(id))
                     return
                 }
             }
+
+
 
             if (_quizState.value.inputAnswer == _quizState.value.correctAnswer) {
                 _quizState.update { it.copy(isAnswerCorrect = true) }
