@@ -3,7 +3,7 @@ package com.talisol.kankenkakitori.data
 import databases.kanji.SelectKakitoriQuestions
 
 
-interface KanjiQuestionDataSource {
+interface KankenQuestionDataSource {
 
     fun selectKakitoriQuestions(kyu:String,type: String): List<SelectKakitoriQuestions>
 

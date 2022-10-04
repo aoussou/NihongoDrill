@@ -4,9 +4,9 @@ import com.talisol.kankenkakitori.KanjiDatabase
 import databases.kanji.SelectKakitoriQuestions
 
 
-class KanjiQuestionDataSourceImpl(
+class KankenQuestionDataSourceImpl(
     db: KanjiDatabase
-) : KanjiQuestionDataSource {
+) : KankenQuestionDataSource {
 
     private val queries = db.kakitoriQuestionQueries
 

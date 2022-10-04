@@ -1,4 +1,4 @@
-CREATE TABLE  kakitoriQuestion(
+CREATE TABLE  kankenQuestion(
     id INTEGER PRIMARY KEY NOT NULL,
     global_id INTEGER NOT NULL,
     question TEXT NOT NULL ,
@@ -11,15 +11,15 @@ CREATE TABLE  kakitoriQuestion(
 
 getKankenKyulist:
 SELECT DISTINCT kanken_kyu
-FROM kakitoriQuestion
+FROM kankenQuestion
 ORDER BY kanken_kyu;
 
 selectKakitoriQuestions:
 SELECT *
 FROM
-kakitoriQuestion
+kankenQuestion
 INNER JOIN progress
-ON kakitoriQuestion.global_id = progress.id
+ON kankenQuestion.global_id = progress.id
 WHERE kanken_kyu = :kanken_kyu AND question_type = :question_type;
 
 -- CREATE TRIGGER create_new_global_id

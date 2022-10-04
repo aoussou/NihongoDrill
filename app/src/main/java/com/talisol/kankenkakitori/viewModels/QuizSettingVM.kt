@@ -3,7 +3,7 @@ package com.talisol.kankenkakitori.viewModels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.talisol.kankenkakitori.actions.QuizSettingAction
-import com.talisol.kankenkakitori.data.KanjiQuestionDataSource
+import com.talisol.kankenkakitori.data.KankenQuestionDataSource
 import com.talisol.kankenkakitori.ui.states.QuizSelectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import databases.kanji.SelectKakitoriQuestions
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuizSettingVM @Inject constructor(
-    private val kanjiQuestionDataSource: KanjiQuestionDataSource,
+    private val kankenQuestionDataSource: KankenQuestionDataSource,
 ) : ViewModel() {
 
 
@@ -24,7 +24,7 @@ class QuizSettingVM @Inject constructor(
 
     val quizTypesList = listOf("kaki","goji")
 
-    val groupsList: List<String> = kanjiQuestionDataSource.getKankenKyuList()
+    val groupsList: List<String> = kankenQuestionDataSource.getKankenKyuList()
 
     private val _quizSelectionState = MutableStateFlow(QuizSelectionState())
     val quizSelectionState = _quizSelectionState.asStateFlow()
@@ -67,7 +67,7 @@ class QuizSettingVM @Inject constructor(
 
     private fun loadSelectedQuestionGroup() {
         if (quizSelectionState.value.groupChosen!=null) {
-            _localQAlist.value = kanjiQuestionDataSource.selectKakitoriQuestions(
+            _localQAlist.value = kankenQuestionDataSource.selectKakitoriQuestions(
                 _quizSelectionState.value.groupChosen!!,
                 _quizSelectionState.value.typeChosen!!
             )
