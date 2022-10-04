@@ -9,7 +9,6 @@ data class QuizState(
     val selectedAnswer: Int? = null,
     val isAnswerConfirmed: Boolean = false,
     val isAnswerCorrect: Boolean? = null,
-    val answerList: List<String> = listOf(""),
     val localQuestionNumber: Int? = null,
     val isQuizStarted: Boolean = false,
     val isQuizOver: Boolean = false,
@@ -21,5 +20,7 @@ data class QuizState(
     val isLastQuestion: Boolean = false,
     val isFirstQuestion: Boolean = true,
     val selectedWrongKanji: String? = null,
-    val selectedWrongKanjInd: Int? = null
+    val selectedWrongKanjInd: Int? = null,
+    val correctAnswersList: List<String>? = null,
+    val selectedAnswersList: List<String?>? = null
     )

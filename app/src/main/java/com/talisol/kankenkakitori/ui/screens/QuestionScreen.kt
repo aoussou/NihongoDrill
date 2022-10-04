@@ -4,7 +4,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
@@ -12,22 +11,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
-import com.talisol.kankenkakitori.actions.KanjiRecAction
-import com.talisol.kankenkakitori.actions.PopupAction
 import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 import com.talisol.kankenkakitori.quizUtils.makeTargetRed
-import com.talisol.kankenkakitori.ui.MySpinner
-import com.talisol.kankenkakitori.ui.states.PopupState
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -122,7 +113,7 @@ fun QuestionScreen(
             )
 
             val questionsLists = Json.parseToJsonElement(state.question).jsonArray
-
+            val answersArray by remember { mutableStateOf(arrayOfNulls<String>(questionsLists.size))}
             Column(
                 modifier = Modifier
                     .fillMaxHeight(.75F)
@@ -130,7 +121,8 @@ fun QuestionScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                for (ql in questionsLists) {
+                for (ql_ind in questionsLists.indices) {
+                    val ql = questionsLists[ql_ind]
                     val questionGroup = Json.parseToJsonElement(ql.toString()).jsonArray
 
                     Row(
@@ -173,6 +165,8 @@ fun QuestionScreen(
                                     listKata.forEachIndexed { index, element ->
                                         DropdownMenuItem(onClick = {
                                             selectedAnswer = element
+                                            answersArray[ql_ind] = element
+                                            onQuizAction(QuizAction.SetAnswersList(answersArray.toList()))
                                             isExpanded = false
                                         }) {
                                             Text(text = element)

@@ -1,6 +1,5 @@
 package com.talisol.kankenkakitori.viewModels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.actions.TrackingAction
@@ -22,22 +21,27 @@ class QuizVM @Inject constructor() : ViewModel() {
     private val _qaList = MutableStateFlow(listOf<SelectKakitoriQuestions>())
 
     fun onAction(action: QuizAction) {
-
         when (action) {
             is QuizAction.LoadQuestionList -> loadQuestion(action.qaList)
             is QuizAction.NextQuestion -> nextQuestion()
             is QuizAction.PreviousQuestion -> previousQuestion()
             is QuizAction.ConfirmAnswer -> confirmAnswer(action.trackingOnAction)
+            is QuizAction.ConfirmAnswersList -> confirmAnswersList(action.trackingOnAction)
             is QuizAction.StartQuiz -> startQuiz()
             is QuizAction.InputAnswer -> inputAnswer(action.answerString)
             is QuizAction.EndQuiz -> endQuiz()
             is QuizAction.SelectWrongKanji -> selectWrongKanji(action.kanji,action.kanjiInd)
             is QuizAction.SetQuizType -> setQuizType(action.questionType)
+            is QuizAction.SetAnswersList -> setAnswersList(action.answersList)
         }
     }
 
     private fun inputAnswer(answerString: String?) {
         _quizState.update { it.copy(inputAnswer = answerString) }
+    }
+
+    private fun setAnswersList(answersList: List<String?>) {
+        _quizState.update { it.copy(selectedAnswersList = answersList) }
     }
 
     private fun endQuiz() {
@@ -89,6 +93,26 @@ class QuizVM @Inject constructor() : ViewModel() {
             }
 
         }
+    }
+
+    private fun confirmAnswersList(trackingOnAction: (TrackingAction)-> Unit) {
+
+        if (!_quizState.value.isAnswerConfirmed) {
+
+            _quizState.update { it.copy(isAnswerConfirmed = true) }
+            val id = _quizState.value.questionGlobalId!!
+
+
+            if (_quizState.value.selectedAnswersList == _quizState.value.correctAnswersList) {
+                _quizState.update { it.copy(isAnswerCorrect = true) }
+                trackingOnAction(TrackingAction.AddOneCorrect(id))
+            } else {
+                _quizState.update { it.copy(isAnswerCorrect = false) }
+                trackingOnAction(TrackingAction.AddOneWrong(id))
+            }
+
+        }
+
     }
 
 

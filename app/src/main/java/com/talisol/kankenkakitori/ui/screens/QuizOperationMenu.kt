@@ -109,9 +109,13 @@ fun QuizOperationMenu(
 
         IconButton(onClick = {
             if (quizState.inputAnswer != null) {
-                onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
-                onKanjiRecAction(KanjiRecAction.ResetPredictedKanji)
-                onDrawingAction(DrawingAction.ClearAllPaths)
+                if (quizState.questionType == "kaki" && quizState.questionType == "goki") {
+                    onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
+                    onKanjiRecAction(KanjiRecAction.ResetPredictedKanji)
+                    onDrawingAction(DrawingAction.ClearAllPaths)
+                }
+            }else if (quizState.questionType == "shikibetsu" ) {
+                onQuizAction(QuizAction.ConfirmAnswersList(onTrackingAction))
             }
         }) {
             Icon(
