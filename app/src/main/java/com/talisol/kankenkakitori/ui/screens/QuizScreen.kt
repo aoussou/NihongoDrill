@@ -131,18 +131,23 @@ fun QuizScreen(
 
         } else {
 
-            if (!quizState.isAnswerCorrect!!) {
+            if (quizState.questionType != "shikibetsu") {
 
-                WrongAnswer(
-                    quizState,
-                    onPopupAction,
-                    onTrackingAction,
-                    onQuizAction
-                )
+                if (!quizState.isAnswerCorrect!!) {
 
-            } else {
-                Text(text = quizState.correctAnswer!!)
+                    WrongAnswer(
+                        quizState,
+                        onPopupAction,
+                        onTrackingAction,
+                        onQuizAction
+                    )
+
+                } else {
+                    Text(text = quizState.correctAnswer!!)
+                }
+
             }
+
 
 
             if (quizState.isLastQuestion) {

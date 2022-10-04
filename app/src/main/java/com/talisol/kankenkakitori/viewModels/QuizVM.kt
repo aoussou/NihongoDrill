@@ -9,6 +9,8 @@ import databases.kanji.SelectKakitoriQuestions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonArray
 import javax.inject.Inject
 
 @HiltViewModel
@@ -57,14 +59,26 @@ class QuizVM @Inject constructor() : ViewModel() {
 
 
     private fun selectQAs(localQuestionNumber: Int) {
+
         val qas = _qaList.value[localQuestionNumber]
+
+        val answersList = if (_quizState.value.questionType == "shikibetsu") {
+            val stringList = mutableListOf<String>()
+            for (a in Json.parseToJsonElement(qas.answer).jsonArray.toList()) {
+                stringList.add(a.toString().replace(""""""", ""))
+            }
+            stringList
+        }else{
+            null
+        }
         _quizState.update {
             it.copy(
                 localQuestionNumber = localQuestionNumber,
                 question = qas.question,
                 correctAnswer = qas.answer,
                 target = qas.target,
-                questionGlobalId = qas.global_id.toInt()
+                questionGlobalId = qas.global_id.toInt(),
+                correctAnswersList = answersList
             )
         }
     }
@@ -135,7 +149,8 @@ class QuizVM @Inject constructor() : ViewModel() {
                         isAnswerConfirmed = false,
                         isLastQuestion = false,
                         isAnswerCorrect = null,
-                        selectedWrongKanji = null
+                        selectedWrongKanji = null,
+                        selectedAnswersList = null
                     )
                 }
 
@@ -162,7 +177,9 @@ class QuizVM @Inject constructor() : ViewModel() {
                         selectedAnswer = null,
                         isAnswerConfirmed = false,
                         isFirstQuestion = false,
-                        isAnswerCorrect = null
+                        isAnswerCorrect = null,
+                        selectedWrongKanji = null,
+                        selectedAnswersList = null
                     )
                 }
                 if (quizState.value.localQuestionNumber == _qaList.value.size - 1) _quizState.update {

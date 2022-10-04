@@ -178,6 +178,20 @@ fun QuestionScreen(
 
                         }
 
+                        val correctAnswer = state.correctAnswersList!![ql_ind]
+                        if (
+                            state.isAnswerConfirmed
+                            && (answersArray[ql_ind] != correctAnswer)
+                        ) {
+                            Text(
+                                text = correctAnswer,
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Red
+                            )
+                        }
+
+
 
 
                     }
