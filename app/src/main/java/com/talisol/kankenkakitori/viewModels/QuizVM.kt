@@ -34,7 +34,7 @@ class QuizVM @Inject constructor() : ViewModel() {
             is QuizAction.EndQuiz -> endQuiz()
             is QuizAction.SelectWrongKanji -> selectWrongKanji(action.kanji,action.kanjiInd)
             is QuizAction.SetQuizType -> setQuizType(action.questionType)
-            is QuizAction.SetAnswersList -> setAnswersList(action.answersList)
+            is QuizAction.UpdateAnswersList -> updateAnswersList(action.answer,action.index)
         }
     }
 
@@ -42,8 +42,11 @@ class QuizVM @Inject constructor() : ViewModel() {
         _quizState.update { it.copy(inputAnswer = answerString) }
     }
 
-    private fun setAnswersList(answersList: List<String?>) {
-        _quizState.update { it.copy(selectedAnswersList = answersList) }
+    private fun updateAnswersList(answer: String,index:Int) {
+
+        val selectedAnswersList = _quizState.value.selectedAnswersList!!
+        selectedAnswersList[index] = answer
+        _quizState.update { it.copy(selectedAnswersList = selectedAnswersList) }
     }
 
     private fun endQuiz() {
@@ -62,7 +65,7 @@ class QuizVM @Inject constructor() : ViewModel() {
 
         val qas = _qaList.value[localQuestionNumber]
 
-        val answersList = if (_quizState.value.questionType == "shikibetsu") {
+        val correctAnswersList = if (_quizState.value.questionType == "shikibetsu") {
             val stringList = mutableListOf<String>()
             for (a in Json.parseToJsonElement(qas.answer).jsonArray.toList()) {
                 stringList.add(a.toString().replace(""""""", ""))
@@ -71,6 +74,15 @@ class QuizVM @Inject constructor() : ViewModel() {
         }else{
             null
         }
+
+        val selectedAnswersList =
+            if (_quizState.value.questionType == "shikibetsu") {
+                MutableList<String?>(correctAnswersList!!.size){null}
+            }else{
+            null
+        }
+
+
         _quizState.update {
             it.copy(
                 localQuestionNumber = localQuestionNumber,
@@ -78,7 +90,8 @@ class QuizVM @Inject constructor() : ViewModel() {
                 correctAnswer = qas.answer,
                 target = qas.target,
                 questionGlobalId = qas.global_id.toInt(),
-                correctAnswersList = answersList
+                correctAnswersList = correctAnswersList,
+                selectedAnswersList = selectedAnswersList
             )
         }
     }
@@ -150,7 +163,6 @@ class QuizVM @Inject constructor() : ViewModel() {
                         isLastQuestion = false,
                         isAnswerCorrect = null,
                         selectedWrongKanji = null,
-                        selectedAnswersList = null
                     )
                 }
 
@@ -179,7 +191,6 @@ class QuizVM @Inject constructor() : ViewModel() {
                         isFirstQuestion = false,
                         isAnswerCorrect = null,
                         selectedWrongKanji = null,
-                        selectedAnswersList = null
                     )
                 }
                 if (quizState.value.localQuestionNumber == _qaList.value.size - 1) _quizState.update {

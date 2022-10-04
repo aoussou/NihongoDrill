@@ -113,7 +113,7 @@ fun QuestionScreen(
             )
 
             val questionsLists = Json.parseToJsonElement(state.question).jsonArray
-            val answersArray by remember { mutableStateOf(arrayOfNulls<String>(questionsLists.size))}
+//            val answersArray by remember { mutableStateOf(arrayOfNulls<String>(questionsLists.size))}
             Column(
                 modifier = Modifier
                     .fillMaxHeight(.75F)
@@ -142,7 +142,7 @@ fun QuestionScreen(
 
                         var isExpanded by remember { mutableStateOf(false) }
 
-                        var selectedAnswer by remember { mutableStateOf("") }
+//                        var selectedAnswer by remember { mutableStateOf("") }
                         
                         Box(
                             modifier = Modifier
@@ -155,7 +155,13 @@ fun QuestionScreen(
                             contentAlignment = Alignment.Center
                         ) {
 
-                            Text(text = selectedAnswer)
+                            if (state.selectedAnswersList != null) {
+                                if (state.selectedAnswersList[ql_ind] != null) {
+                                    Text(text = state.selectedAnswersList[ql_ind]!!)
+                                }
+
+                            }
+
                             
                             if (isExpanded) {
                                 DropdownMenu(
@@ -164,9 +170,7 @@ fun QuestionScreen(
                                 ) {
                                     listKata.forEachIndexed { index, element ->
                                         DropdownMenuItem(onClick = {
-                                            selectedAnswer = element
-                                            answersArray[ql_ind] = element
-                                            onQuizAction(QuizAction.SetAnswersList(answersArray.toList()))
+                                            onQuizAction(QuizAction.UpdateAnswersList(element,ql_ind))
                                             isExpanded = false
                                         }) {
                                             Text(text = element)
@@ -181,7 +185,7 @@ fun QuestionScreen(
                         val correctAnswer = state.correctAnswersList!![ql_ind]
                         if (
                             state.isAnswerConfirmed
-                            && (answersArray[ql_ind] != correctAnswer)
+                            && (state.selectedAnswersList!![ql_ind]  != correctAnswer)
                         ) {
                             Text(
                                 text = correctAnswer,
