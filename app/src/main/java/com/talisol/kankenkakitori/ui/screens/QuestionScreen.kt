@@ -1,13 +1,12 @@
 package com.talisol.kankenkakitori.ui.screens
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,9 +17,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import com.talisol.kankenkakitori.actions.KanjiRecAction
+import com.talisol.kankenkakitori.actions.PopupAction
 import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 import com.talisol.kankenkakitori.quizUtils.makeTargetRed
+import com.talisol.kankenkakitori.ui.MySpinner
+import com.talisol.kankenkakitori.ui.states.PopupState
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -61,7 +68,7 @@ fun QuestionScreen(
                             )
                         } else {
 
-                                Text(state.question[index].toString())
+                            Text(state.question[index].toString())
 
 
                         }
@@ -74,7 +81,7 @@ fun QuestionScreen(
             }
         )
 
-    } else {
+    } else if (state.questionType == "kaki") {
 
         val annotatedString = makeTargetRed(state.question, state.target)
 
@@ -84,6 +91,109 @@ fun QuestionScreen(
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold
         )
+
+    } else if (state.questionType == "shikibetsu") {
+
+        val suggestionsJsonString = Json.parseToJsonElement(state.target).jsonArray.toList()
+        val listKata = listOf("ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ")
+
+        Column {
+            LazyVerticalGrid(
+                cells = GridCells.Adaptive(72.dp),
+                verticalArrangement = Arrangement.Center,
+                content = {
+                    items(suggestionsJsonString.size) { index ->
+                        Box(
+                            modifier = Modifier
+                                .border(BorderStroke(1.dp, Color.Black))
+                                .aspectRatio(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column {
+                                Text(listKata[index], fontSize = 24.sp)
+                                Text(
+                                    suggestionsJsonString[index].toString().replace(""""""", ""),
+                                    fontSize = 24.sp,
+                                )
+                            }
+                        }
+                    }
+                }
+            )
+
+            val questionsLists = Json.parseToJsonElement(state.question).jsonArray
+
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight(.75F)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                for (ql in questionsLists) {
+                    val questionGroup = Json.parseToJsonElement(ql.toString()).jsonArray
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+//                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        for (question in questionGroup) {
+                            Text(
+                                text = question.toString().replace(""""""", ""),
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+
+                        var isExpanded by remember { mutableStateOf(false) }
+
+                        var selectedAnswer by remember { mutableStateOf("") }
+                        
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(.25F)
+                                .aspectRatio(1f)
+                                .padding(12.dp)
+                                .border(BorderStroke(1.dp, Color.Black))
+                                .background(Color.White)
+                                .clickable { isExpanded = true },
+                            contentAlignment = Alignment.Center
+                        ) {
+
+                            Text(text = selectedAnswer)
+                            
+                            if (isExpanded) {
+                                DropdownMenu(
+                                    expanded = isExpanded,
+                                    onDismissRequest = { isExpanded = false},
+                                ) {
+                                    listKata.forEachIndexed { index, element ->
+                                        DropdownMenuItem(onClick = {
+                                            selectedAnswer = element
+                                            isExpanded = false
+                                        }) {
+                                            Text(text = element)
+                                        }
+                                    }
+                                }                                
+                            }
+
+
+                        }
+
+
+
+                    }
+
+                }
+
+            }
+
+        }
+
 
     }
 

@@ -52,19 +52,28 @@ fun QuizScreen(
 
         val localContext = LocalContext.current
 
-        QuestionScreen(state = quizState,onQuizAction = onQuizAction)
+        QuestionScreen(state = quizState, onQuizAction = onQuizAction)
 
         if (!quizState.isAnswerConfirmed) {
 
             Text(text = quizState.inputAnswer ?: "", fontSize = 12.sp)
+
+
+            if (quizState.questionType == "kaki" && quizState.questionType == "goji"){
             Box(
                 modifier = Modifier
                     .aspectRatio(1f)
                     .fillMaxWidth()
                     .border(BorderStroke(5.dp, Color.Black))
-                    .clickable{
+                    .clickable {
                         if (quizState.questionType == "goji" && quizState.selectedWrongKanji == null) {
-                            Toast.makeText(localContext,"Choose a kanji first.",Toast.LENGTH_SHORT).show()
+                            Toast
+                                .makeText(
+                                    localContext,
+                                    "Choose a kanji first.",
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
                         }
                     }
             ) {
@@ -99,7 +108,7 @@ fun QuizScreen(
                     }
                 }
 
-                if (quizState.questionType != "goji" || quizState.selectedWrongKanji != null) {
+                if (quizState.questionType == "goji" || quizState.selectedWrongKanji != null) {
 
                     DrawingScreen(
                         currentPath,
@@ -117,6 +126,8 @@ fun QuizScreen(
                 onDrawingAction = onDrawingAction,
                 onKanjiRecAction = onKanjiRecAction
             )
+
+        }
 
         } else {
 

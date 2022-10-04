@@ -8,7 +8,7 @@ class KankenQuestionDataSourceImpl(
     db: KanjiDatabase
 ) : KankenQuestionDataSource {
 
-    private val queries = db.kakitoriQuestionQueries
+    private val queries = db.kankenQuestionQueries
 
     override fun selectKakitoriQuestions(kyu: String,type: String): List<SelectKakitoriQuestions> {
         return queries.selectKakitoriQuestions(kyu,type).executeAsList()

@@ -24,7 +24,7 @@ object AppModule {
         return AndroidSqliteDriver(
             schema = KanjiDatabase.Schema,
             context = app,
-            name = "kanji.db"
+            name = "kanken.db"
         )
     }
 

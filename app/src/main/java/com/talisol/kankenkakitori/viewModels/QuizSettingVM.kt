@@ -20,9 +20,9 @@ class QuizSettingVM @Inject constructor(
 
     private val skipAllCorrect = false
     private val onlyNeverAnswered = false
-    private val onlyMarked = true
+    private val onlyMarked = false
 
-    val quizTypesList = listOf("kaki","goji")
+    val quizTypesList = listOf("kaki","goji","shikibetsu")
 
     val groupsList: List<String> = kankenQuestionDataSource.getKankenKyuList()
 
@@ -84,9 +84,9 @@ class QuizSettingVM @Inject constructor(
         Log.i("DEBUG","Selected level $group")
     }
 
-    private fun setQuestionType(group: String?) {
-        _quizSelectionState.update { it.copy(typeChosen = group) }
-        Log.i("DEBUG","Selected level $group")
+    private fun setQuestionType(type: String?) {
+        _quizSelectionState.update { it.copy(typeChosen = type) }
+        Log.i("DEBUG","Selected level $type")
     }
 
 
