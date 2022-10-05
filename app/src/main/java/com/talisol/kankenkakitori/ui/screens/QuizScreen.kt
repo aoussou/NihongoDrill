@@ -59,7 +59,11 @@ fun QuizScreen(
 
         val localContext = LocalContext.current
 
-        QuestionScreen(quizState = quizState, onQuizAction = onQuizAction)
+        QuestionScreen(
+            quizState = quizState,
+            onQuizAction = onQuizAction,
+            onTrackingAction = onTrackingAction
+        )
 
         if (!quizState.isAnswerConfirmed) {
 
@@ -159,6 +163,7 @@ fun QuizScreen(
             if (
                 quizState.questionType == "kaki"
                 || quizState.questionType == "yomi"
+                || quizState.questionType == "kousei"
             ) {
 
                 if (!quizState.isAnswerCorrect!!) {

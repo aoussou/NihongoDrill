@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.talisol.kankenkakitori.actions.QuizAction
+import com.talisol.kankenkakitori.actions.TrackingAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 import com.talisol.kankenkakitori.quizUtils.makeTargetRed
 
@@ -21,12 +22,14 @@ import com.talisol.kankenkakitori.quizUtils.makeTargetRed
 fun QuestionScreen(
     quizState: QuizState,
     onQuizAction: (QuizAction) -> Unit,
+    onTrackingAction: (TrackingAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
     when (quizState.questionType){
         "yomi" -> KakiScreen(quizState)
         "kaki" -> KakiScreen(quizState)
+        "kousei" -> KouseiScreen(quizState,onQuizAction,onTrackingAction)
         "goji" -> GojiScreen(quizState,onQuizAction)
         "shikibetsu" -> ShikibetsuScreen(quizState,onQuizAction)
         "douon" -> DouonScreen(quizState,onQuizAction)
