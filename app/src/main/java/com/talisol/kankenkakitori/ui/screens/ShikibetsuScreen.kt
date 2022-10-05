@@ -1,5 +1,6 @@
 package com.talisol.kankenkakitori.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
@@ -15,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.talisol.kankenkakitori.actions.QuizAction
+import com.talisol.kankenkakitori.quizUtils.extractStringFromJson
 import com.talisol.kankenkakitori.ui.states.QuizState
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
@@ -26,8 +28,9 @@ fun ShikibetsuScreen(
     onQuizAction: (QuizAction) -> Unit
 ) {
 
+    val suggestionStrings = extractStringFromJson(quizState.target)
 
-    val suggestionsJsonString = Json.parseToJsonElement(quizState.target).jsonArray.toList()
+
     val listKata = listOf("ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ")
 
     Column {
@@ -35,7 +38,7 @@ fun ShikibetsuScreen(
             cells = GridCells.Adaptive(72.dp),
             verticalArrangement = Arrangement.Center,
             content = {
-                items(suggestionsJsonString.size) { index ->
+                items(suggestionStrings.size) { index ->
                     Box(
                         modifier = Modifier
                             .border(BorderStroke(1.dp, Color.Black))
@@ -45,7 +48,7 @@ fun ShikibetsuScreen(
                         Column {
                             Text(listKata[index], fontSize = 24.sp)
                             Text(
-                                suggestionsJsonString[index].toString().replace(""""""", ""),
+                                suggestionStrings[index].replace(""""""", ""),
                                 fontSize = 24.sp,
                             )
                         }
@@ -55,7 +58,9 @@ fun ShikibetsuScreen(
         )
 
         val questionsLists = Json.parseToJsonElement(quizState.question).jsonArray
-//            val answersArray by remember { mutableStateOf(arrayOfNulls<String>(questionsLists.size))}
+
+
+
         Column(
             modifier = Modifier
                 .fillMaxHeight(.75F)
@@ -82,59 +87,29 @@ fun ShikibetsuScreen(
                         )
                     }
 
-                    var isExpanded by remember { mutableStateOf(false) }
+                    SelectionBox(
+                        quizState,
+                        onQuizAction,
+                        suggestionStrings,
+                        listKata,
+                        ql_ind
+                    )
 
-//                        var selectedAnswer by remember { mutableStateOf("") }
+                    if (quizState.correctAnswersList != null) {
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(.25F)
-                            .aspectRatio(1f)
-                            .padding(12.dp)
-                            .border(BorderStroke(1.dp, Color.Black))
-                            .background(Color.White)
-                            .clickable { isExpanded = true },
-                        contentAlignment = Alignment.Center
-                    ) {
-
-                        if (quizState.selectedAnswersList != null) {
-                            if (quizState.selectedAnswersList[ql_ind] != null) {
-                                Text(text = quizState.selectedAnswersList[ql_ind]!!)
-                            }
-
+                        val correctAnswer = quizState.correctAnswersList[ql_ind]
+                        if (
+                            quizState.isAnswerConfirmed
+                            && (quizState.selectedAnswersList!![ql_ind] != correctAnswer)
+                        ) {
+                            Text(
+                                text = correctAnswer,
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Red
+                            )
                         }
 
-
-                        if (isExpanded) {
-                            DropdownMenu(
-                                expanded = isExpanded,
-                                onDismissRequest = { isExpanded = false },
-                            ) {
-                                listKata.forEachIndexed { index, element ->
-                                    DropdownMenuItem(onClick = {
-                                        onQuizAction(QuizAction.UpdateAnswersList(element, ql_ind))
-                                        isExpanded = false
-                                    }) {
-                                        Text(text = element)
-                                    }
-                                }
-                            }
-                        }
-
-
-                    }
-
-                    val correctAnswer = quizState.correctAnswersList!![ql_ind]
-                    if (
-                        quizState.isAnswerConfirmed
-                        && (quizState.selectedAnswersList!![ql_ind] != correctAnswer)
-                    ) {
-                        Text(
-                            text = correctAnswer,
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Red
-                        )
                     }
 
 

@@ -44,7 +44,7 @@ fun GojiScreen(
                         },
                     contentAlignment = Alignment.Center
                 ) {
-                    if (index == quizState.selectedWrongKanjInd) {
+                    if (index == quizState.selectedWrongKanjiInd) {
                         Text(
                             quizState.question[index].toString(),
                             color = Color.Blue,

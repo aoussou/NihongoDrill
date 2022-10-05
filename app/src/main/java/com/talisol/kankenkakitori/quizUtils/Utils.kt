@@ -6,6 +6,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonArray
 
 // THIS NEEDS A LOT OF FIXING
 
@@ -30,4 +32,15 @@ fun makeTargetRed(string:String,target:String): AnnotatedString{
     }
 
     return annotatedString
+}
+
+fun extractStringFromJson(jsonString: String): List<String> {
+    val jsonArray = Json.parseToJsonElement(jsonString).jsonArray
+    val stringList = mutableListOf<String>()
+    for (s in jsonArray.toList()) {
+        val suggestionString = s.toString().replace(""""""", "")
+        stringList.add(suggestionString)
+    }
+
+    return stringList
 }

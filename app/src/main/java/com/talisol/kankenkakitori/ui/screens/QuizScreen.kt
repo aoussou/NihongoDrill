@@ -131,7 +131,10 @@ fun QuizScreen(
 
         } else {
 
-            if (quizState.questionType != "shikibetsu") {
+            if (
+                quizState.questionType == "kaki"
+                || quizState.questionType == "yomi"
+            ) {
 
                 if (!quizState.isAnswerCorrect!!) {
 

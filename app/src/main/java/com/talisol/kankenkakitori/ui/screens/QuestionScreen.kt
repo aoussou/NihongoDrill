@@ -28,6 +28,7 @@ fun QuestionScreen(
         "kaki" -> KakiScreen(quizState)
         "goji" -> GojiScreen(quizState,onQuizAction)
         "shikibetsu" -> ShikibetsuScreen(quizState,onQuizAction)
+        "douon" -> DouonScreen(quizState,onQuizAction)
     }
 
 

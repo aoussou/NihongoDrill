@@ -1,5 +1,6 @@
 package com.talisol.kankenkakitori.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -109,12 +110,17 @@ fun QuizOperationMenu(
 
         IconButton(onClick = {
             if (quizState.inputAnswer != null) {
-                if (quizState.questionType == "kaki" && quizState.questionType == "goki") {
+                if (quizState.questionType == "kaki"
+                    || quizState.questionType == "goki"
+                ) {
                     onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
                     onKanjiRecAction(KanjiRecAction.ResetPredictedKanji)
                     onDrawingAction(DrawingAction.ClearAllPaths)
                 }
-            }else if (quizState.questionType == "shikibetsu" ) {
+            } else if (
+                quizState.questionType == "shikibetsu"
+                || quizState.questionType == "douon"
+            ) {
                 onQuizAction(QuizAction.ConfirmAnswersList(onTrackingAction))
             }
         }) {
@@ -147,7 +153,6 @@ fun QuizOperationMenu(
 
 
     }
-
 
 
 }

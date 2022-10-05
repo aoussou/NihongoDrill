@@ -3,6 +3,7 @@ package com.talisol.kankenkakitori.viewModels
 import androidx.lifecycle.ViewModel
 import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.actions.TrackingAction
+import com.talisol.kankenkakitori.quizUtils.extractStringFromJson
 import com.talisol.kankenkakitori.ui.states.QuizState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import databases.kanji.SelectKakitoriQuestions
@@ -44,7 +45,7 @@ class QuizVM @Inject constructor() : ViewModel() {
 
     private fun updateAnswersList(answer: String,index:Int) {
 
-        val selectedAnswersList = _quizState.value.selectedAnswersList!!
+        val selectedAnswersList:  MutableList<String?> = _quizState.value.selectedAnswersList!!
         selectedAnswersList[index] = answer
         _quizState.update { it.copy(selectedAnswersList = selectedAnswersList) }
     }
@@ -65,23 +66,26 @@ class QuizVM @Inject constructor() : ViewModel() {
 
         val qas = _qaList.value[localQuestionNumber]
 
-        val correctAnswersList = if (_quizState.value.questionType == "shikibetsu") {
-            val stringList = mutableListOf<String>()
-            for (a in Json.parseToJsonElement(qas.answer).jsonArray.toList()) {
-                stringList.add(a.toString().replace(""""""", ""))
-            }
-            stringList
+        val correctAnswersList = if (
+            _quizState.value.questionType == "shikibetsu"
+            || _quizState.value.questionType == "douon"
+        ) {
+            extractStringFromJson(qas.answer).toMutableList()
         }else{
             null
         }
 
+
         val selectedAnswersList =
-            if (_quizState.value.questionType == "shikibetsu") {
+            if (
+                _quizState.value.questionType == "shikibetsu"
+                || _quizState.value.questionType == "douon"
+            ) {
                 MutableList<String?>(correctAnswersList!!.size){null}
+
             }else{
             null
         }
-
 
         _quizState.update {
             it.copy(
@@ -220,7 +224,7 @@ class QuizVM @Inject constructor() : ViewModel() {
     }
 
     private fun selectWrongKanji(kanji: String?,kanjiInd: Int?) {
-        _quizState.update { it.copy(selectedWrongKanji = kanji, selectedWrongKanjInd = kanjiInd) }
+        _quizState.update { it.copy(selectedWrongKanji = kanji, selectedWrongKanjiInd = kanjiInd) }
     }
 
     private fun setQuizType(type: String?) {
