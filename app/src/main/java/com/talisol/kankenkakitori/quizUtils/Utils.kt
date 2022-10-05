@@ -35,6 +35,7 @@ fun makeTargetRed(string:String,target:String): AnnotatedString{
 }
 
 fun extractStringFromJson(jsonString: String): List<String> {
+    Log.i("DEBUG",jsonString)
     val jsonArray = Json.parseToJsonElement(jsonString).jsonArray
     val stringList = mutableListOf<String>()
     for (s in jsonArray.toList()) {

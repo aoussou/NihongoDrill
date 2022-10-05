@@ -6,14 +6,21 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -59,75 +66,93 @@ fun QuizScreen(
             Text(text = quizState.inputAnswer ?: "", fontSize = 12.sp)
 
 
-            if (quizState.questionType == "kaki" || quizState.questionType == "goji"){
-            Box(
-                modifier = Modifier
-                    .aspectRatio(1f)
-                    .fillMaxWidth()
-                    .border(BorderStroke(5.dp, Color.Black))
-                    .clickable {
-                        if (quizState.questionType == "goji" && quizState.selectedWrongKanji == null) {
-                            Toast
-                                .makeText(
-                                    localContext,
-                                    "Choose a kanji first.",
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
-                        }
-                    }
-            ) {
-
+            if (quizState.questionType == "kaki" || quizState.questionType == "goji") {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(.25F)
                         .aspectRatio(1f)
-                        .align(Alignment.TopEnd)
-                        .padding(12.dp)
-                        .border(
-                            if (predictedKanji != null) {
-                                BorderStroke(1.dp, Color.Black)
-                            } else BorderStroke(0.dp, Color.White)
-                        )
-                        .background(Color.White)
-                        .zIndex(if (predictedKanji != null) 1f else 0f)
+                        .fillMaxWidth()
+                        .border(BorderStroke(5.dp, Color.Black))
                         .clickable {
-                            onKanjiRecAction(KanjiRecAction.SetOtherGuessesList)
-                            onPopupAction(PopupAction.ShowOtherGuesses)
-                        },
-                    contentAlignment = Alignment.Center
+                            if (quizState.questionType == "goji" && quizState.selectedWrongKanji == null) {
+                                Toast
+                                    .makeText(
+                                        localContext,
+                                        "Choose a kanji first.",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show()
+                            }
+                        }
                 ) {
-                    if (predictedKanji != null) Text(text = predictedKanji, fontSize = 36.sp)
-                    if (otherGuessesList != null) {
-                        MySpinner(
-                            isExpanded = popupState.isShowOtherGuesses,
-                            onPopupAction = onPopupAction,
-                            items = otherGuessesList,
-                            onKanjiRecAction = onKanjiRecAction
-                        )
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(.25F)
+                            .aspectRatio(1f)
+                            .align(Alignment.TopEnd)
+                            .padding(12.dp)
+                            .border(
+                                if (predictedKanji != null) {
+                                    BorderStroke(1.dp, Color.Black)
+                                } else BorderStroke(0.dp, Color.White)
+                            )
+                            .background(Color.White)
+                            .zIndex(if (predictedKanji != null) 1f else 0f)
+                            .clickable {
+                                onKanjiRecAction(KanjiRecAction.SetOtherGuessesList)
+                                onPopupAction(PopupAction.ShowOtherGuesses)
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (predictedKanji != null) Text(text = predictedKanji, fontSize = 36.sp)
+                        if (otherGuessesList != null) {
+                            MySpinner(
+                                isExpanded = popupState.isShowOtherGuesses,
+                                onPopupAction = onPopupAction,
+                                items = otherGuessesList,
+                                onKanjiRecAction = onKanjiRecAction
+                            )
+                        }
                     }
+
+                    if (quizState.questionType == "goji" || quizState.selectedWrongKanji != null) {
+
+                        DrawingScreen(
+                            currentPath,
+                            drawingState,
+                            onDrawingAction,
+                        )
+
+                    }
+
+
                 }
 
-                if (quizState.questionType == "goji" || quizState.selectedWrongKanji != null) {
+                DrawingPropertiesMenu(
+                    drawingState = drawingState,
+                    onDrawingAction = onDrawingAction,
+                    onKanjiRecAction = onKanjiRecAction
+                )
 
-                    DrawingScreen(
-                        currentPath,
-                        drawingState,
-                        onDrawingAction,
+            } else if  (quizState.questionType == "yomi"){
+                val textState = remember { mutableStateOf(TextFieldValue()) }
+                TextField(
+                    value = textState.value,
+                    onValueChange = {
+                        textState.value = it;
+                        onQuizAction(
+                            QuizAction.InputAnswer(
+                                textState.value.text
+                            )
+                        )
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = {
+                        onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
+                    }
                     )
-
-                }
-
-
+                )
             }
-
-            DrawingPropertiesMenu(
-                drawingState = drawingState,
-                onDrawingAction = onDrawingAction,
-                onKanjiRecAction = onKanjiRecAction
-            )
-
-        }
 
         } else {
 

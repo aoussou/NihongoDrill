@@ -1,9 +1,8 @@
 package com.talisol.kankenkakitori.ui.screens
 
-import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -11,18 +10,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.quizUtils.extractStringFromJson
+import com.talisol.kankenkakitori.quizUtils.makeTargetRed
 import com.talisol.kankenkakitori.ui.states.QuizState
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.jsonArray
 
-@OptIn(ExperimentalFoundationApi::class)
+
 @Composable
 fun DouonScreen(
     quizState: QuizState,
     onQuizAction: (QuizAction) -> Unit
 ) {
 
-    val suggestionStrings = extractStringFromJson(quizState.target)
+    val mcaStrings = quizState.mcaList
     val questionsStrings = extractStringFromJson(quizState.question)
     val listKata = listOf("ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ")
 
@@ -36,21 +34,21 @@ Column(
 
 
     for (q in questionsStrings.indices) {
-
+        val annotatedString = makeTargetRed(questionsStrings[q], quizState.target!!)
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                questionsStrings[q],
+                annotatedString,
                 fontSize = 16.sp,
             )
 
             SelectionBox(
                 quizState,
                 onQuizAction,
-                suggestionStrings,
+                mcaStrings!!,
                 listKata,
                 q
             )
@@ -82,9 +80,9 @@ Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        for (s in suggestionStrings.indices) {
+        for (s in mcaStrings!!.indices) {
             Text(
-                "${listKata[s]} : ${suggestionStrings[s]}",
+                "${listKata[s]} : ${mcaStrings[s]}",
                 fontSize = 24.sp,
             )
 

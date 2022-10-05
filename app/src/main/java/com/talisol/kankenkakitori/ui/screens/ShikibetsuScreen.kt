@@ -28,7 +28,7 @@ fun ShikibetsuScreen(
     onQuizAction: (QuizAction) -> Unit
 ) {
 
-    val suggestionStrings = extractStringFromJson(quizState.target)
+    val suggestionStrings = extractStringFromJson(quizState.target!!)
 
 
     val listKata = listOf("ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ")

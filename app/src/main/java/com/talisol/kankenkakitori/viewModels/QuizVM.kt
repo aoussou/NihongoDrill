@@ -75,6 +75,14 @@ class QuizVM @Inject constructor() : ViewModel() {
             null
         }
 
+        val mcaList = if (
+            _quizState.value.questionType == "shikibetsu"
+            || _quizState.value.questionType == "douon"
+        ) {
+            extractStringFromJson(qas.mca_list!!).toMutableList()
+        }else{
+            null
+        }
 
         val selectedAnswersList =
             if (
@@ -82,7 +90,6 @@ class QuizVM @Inject constructor() : ViewModel() {
                 || _quizState.value.questionType == "douon"
             ) {
                 MutableList<String?>(correctAnswersList!!.size){null}
-
             }else{
             null
         }
@@ -95,7 +102,8 @@ class QuizVM @Inject constructor() : ViewModel() {
                 target = qas.target,
                 questionGlobalId = qas.global_id.toInt(),
                 correctAnswersList = correctAnswersList,
-                selectedAnswersList = selectedAnswersList
+                selectedAnswersList = selectedAnswersList,
+                mcaList = mcaList
             )
         }
     }

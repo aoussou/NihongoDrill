@@ -16,7 +16,7 @@ import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 import com.talisol.kankenkakitori.quizUtils.makeTargetRed
 
-@OptIn(ExperimentalFoundationApi::class)
+
 @Composable
 fun QuestionScreen(
     quizState: QuizState,
@@ -25,6 +25,7 @@ fun QuestionScreen(
 ) {
 
     when (quizState.questionType){
+        "yomi" -> KakiScreen(quizState)
         "kaki" -> KakiScreen(quizState)
         "goji" -> GojiScreen(quizState,onQuizAction)
         "shikibetsu" -> ShikibetsuScreen(quizState,onQuizAction)

@@ -12,7 +12,7 @@ import java.lang.reflect.Modifier
 fun KakiScreen(
     quizState: QuizState,
 ) {
-            val annotatedString = makeTargetRed(quizState.question, quizState.target)
+            val annotatedString = makeTargetRed(quizState.question, quizState.target!!)
         Text(
             text = annotatedString,
             fontSize = 16.sp,

@@ -4,7 +4,7 @@ package com.talisol.kankenkakitori.ui.states
 data class QuizState(
 
     val question: String = "",
-    val target: String = "",
+    val target: String? = null,
     val correctAnswerNbr: Int? = null,
     val selectedAnswer: Int? = null,
     val isAnswerConfirmed: Boolean = false,
@@ -22,5 +22,6 @@ data class QuizState(
     val selectedWrongKanji: String? = null,
     val selectedWrongKanjiInd: Int? = null,
     val correctAnswersList: MutableList<String>? = null,
-    val selectedAnswersList: MutableList<String?>? = null
+    val selectedAnswersList: MutableList<String?>? = null,
+    val mcaList: MutableList<String>? = null,
     )

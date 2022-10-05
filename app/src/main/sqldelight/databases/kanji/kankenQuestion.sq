@@ -2,8 +2,9 @@ CREATE TABLE  kankenQuestion(
     id INTEGER PRIMARY KEY NOT NULL,
     global_id INTEGER NOT NULL,
     question TEXT NOT NULL ,
-    target TEXT NOT NULL,
     answer TEXT NOT NULL,
+    target TEXT,
+    mca_list TEXT,
     kanken_kyu TEXT NOT NULL,
     question_type TEXT NOT NULL,
     FOREIGN KEY (global_id) REFERENCES progress(id)
