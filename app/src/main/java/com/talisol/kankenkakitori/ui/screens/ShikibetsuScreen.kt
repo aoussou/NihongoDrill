@@ -1,14 +1,13 @@
 package com.talisol.kankenkakitori.ui.screens
 
-import android.util.Log
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,7 +15,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.talisol.kankenkakitori.actions.QuizAction
-import com.talisol.kankenkakitori.quizUtils.extractStringFromJson
 import com.talisol.kankenkakitori.ui.states.QuizState
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
@@ -28,7 +26,7 @@ fun ShikibetsuScreen(
     onQuizAction: (QuizAction) -> Unit
 ) {
 
-    val suggestionStrings = extractStringFromJson(quizState.target!!)
+    val suggestionStrings = quizState.mcaList!!
 
 
     val listKata = listOf("ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ")
@@ -48,7 +46,7 @@ fun ShikibetsuScreen(
                         Column {
                             Text(listKata[index], fontSize = 24.sp)
                             Text(
-                                suggestionStrings[index].replace(""""""", ""),
+                                suggestionStrings[index],
                                 fontSize = 24.sp,
                             )
                         }
