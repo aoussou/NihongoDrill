@@ -22,9 +22,10 @@ class QuizSettingVM @Inject constructor(
     private val onlyNeverAnswered = false
     private val onlyMarked = false
 
-    val quizTypesList = listOf("kaki","goji","shikibetsu")
+    val quizTypesList: List<String> = kankenQuestionDataSource.getQuestionTypeList()
 
     val groupsList: List<String> = kankenQuestionDataSource.getKankenKyuList()
+
 
     private val _quizSelectionState = MutableStateFlow(QuizSelectionState())
     val quizSelectionState = _quizSelectionState.asStateFlow()

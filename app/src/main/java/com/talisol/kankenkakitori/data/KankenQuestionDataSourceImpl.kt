@@ -19,7 +19,9 @@ class KankenQuestionDataSourceImpl(
         return queries.getKankenKyulist().executeAsList()
     }
 
-
+    override fun getQuestionTypeList(): List<String> {
+        return queries.getQuestionTypeList().executeAsList()
+    }
 
 
 }

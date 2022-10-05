@@ -52,14 +52,14 @@ fun QuizScreen(
 
         val localContext = LocalContext.current
 
-        QuestionScreen(state = quizState, onQuizAction = onQuizAction)
+        QuestionScreen(quizState = quizState, onQuizAction = onQuizAction)
 
         if (!quizState.isAnswerConfirmed) {
 
             Text(text = quizState.inputAnswer ?: "", fontSize = 12.sp)
 
 
-            if (quizState.questionType == "kaki" && quizState.questionType == "goji"){
+            if (quizState.questionType == "kaki" || quizState.questionType == "goji"){
             Box(
                 modifier = Modifier
                     .aspectRatio(1f)

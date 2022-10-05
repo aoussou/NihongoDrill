@@ -5,7 +5,7 @@ CREATE TABLE  kankenQuestion(
     target TEXT NOT NULL,
     answer TEXT NOT NULL,
     kanken_kyu TEXT NOT NULL,
-    question_type TEXT,
+    question_type TEXT NOT NULL,
     FOREIGN KEY (global_id) REFERENCES progress(id)
 );
 
@@ -13,6 +13,11 @@ getKankenKyulist:
 SELECT DISTINCT kanken_kyu
 FROM kankenQuestion
 ORDER BY kanken_kyu;
+
+getQuestionTypeList:
+SELECT DISTINCT question_type
+FROM kankenQuestion
+ORDER BY question_type;
 
 selectKakitoriQuestions:
 SELECT *

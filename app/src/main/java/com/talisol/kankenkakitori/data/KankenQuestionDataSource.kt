@@ -9,6 +9,7 @@ interface KankenQuestionDataSource {
 
     fun getKankenKyuList(): List<String>
 
+    fun getQuestionTypeList(): List<String>
 
 
 }
