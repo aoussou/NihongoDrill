@@ -115,7 +115,7 @@ fun QuizScreen(
                         }
                     }
 
-                    if (quizState.questionType == "goji" || quizState.selectedWrongKanji != null) {
+                    if (quizState.questionType == "kaki" || quizState.selectedWrongKanji != null) {
 
                         DrawingScreen(
                             currentPath,
