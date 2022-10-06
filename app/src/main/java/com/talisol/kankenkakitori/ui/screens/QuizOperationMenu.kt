@@ -111,9 +111,7 @@ fun QuizOperationMenu(
 
         IconButton(onClick = {
             if (quizState.inputAnswer != null) {
-                if (quizState.questionType == "kaki"
-                    || quizState.questionType == "goki"
-                ) {
+                if (quizState.isKanjiRecRequired) {
                     onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
                     onKanjiRecAction(KanjiRecAction.ResetPredictedKanji)
                     onDrawingAction(DrawingAction.ClearAllPaths)

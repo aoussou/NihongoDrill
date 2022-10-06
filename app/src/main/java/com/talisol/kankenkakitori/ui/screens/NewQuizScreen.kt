@@ -69,9 +69,7 @@ fun NewQuizScreen(
 
 
             if (!quizState.isAnswerConfirmed) {
-                if (
-                    quizState.questionType == "kaki"
-                ) {
+                if (quizState.isKanjiRecRequired) {
 
                     KanjiDrawingWidget(
                         quizState,
@@ -86,7 +84,9 @@ fun NewQuizScreen(
                     )
                 }
 
-                if (quizState.questionType == "yomi") {
+                if (
+                    quizState.questionType == "yomi"
+                ) {
                     val textState = remember { mutableStateOf(TextFieldValue()) }
                     TextField(
                         value = textState.value,

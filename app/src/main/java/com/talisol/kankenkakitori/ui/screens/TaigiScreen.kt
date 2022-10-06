@@ -55,14 +55,15 @@ fun TaigiScreen(
     TaigiRow(
         questionLists.slice(0..4),
         correctAnswersList!!.slice(0..4),
-        targetsList.slice(0..4)
+        targetsList.slice(0..4),
+        onQuizAction,
     )
 
-    TaigiRow(
-        questionLists.slice(5..9),
-        correctAnswersList!!.slice(5..9),
-        targetsList.slice(5..9)
-    )
+//    TaigiRow(
+//        questionLists.slice(5..9),
+//        correctAnswersList!!.slice(5..9),
+//        targetsList.slice(5..9)
+//    )
 
 
 }

@@ -19,7 +19,7 @@ class QuizVM @Inject constructor() : ViewModel() {
 
     private val _quizState = MutableStateFlow(QuizState())
     val quizState = _quizState.asStateFlow()
-
+    private val kanjiRecRequired = listOf("kaki", "taigi", "goji", "yoji", "okuri")
 
     private val _qaList = MutableStateFlow(listOf<SelectKakitoriQuestions>())
 
@@ -66,6 +66,9 @@ class QuizVM @Inject constructor() : ViewModel() {
 
         val qas = _qaList.value[localQuestionNumber]
 
+        val isKanjiRecRequired = kanjiRecRequired.contains(_quizState.value.questionType)
+
+
         val correctAnswersList = if (
             _quizState.value.questionType == "shikibetsu"
             || _quizState.value.questionType == "douon"
@@ -106,7 +109,8 @@ class QuizVM @Inject constructor() : ViewModel() {
                 questionGlobalId = qas.global_id.toInt(),
                 correctAnswersList = correctAnswersList,
                 selectedAnswersList = selectedAnswersList,
-                mcaList = mcaList
+                mcaList = mcaList,
+                isKanjiRecRequired = isKanjiRecRequired
             )
         }
     }

@@ -20,10 +20,13 @@ fun QuestionScreen(
             "yomi" -> KakiScreen(quizState)
             "kaki" -> KakiScreen(quizState)
             "kousei" -> KouseiScreen(quizState,onQuizAction,onTrackingAction)
+            "shikibetsu" -> ShikibetsuScreen(quizState,onQuizAction)
             "taigi" -> TaigiScreen(quizState,onQuizAction)
             "goji" -> GojiScreen(quizState,onQuizAction)
-            "shikibetsu" -> ShikibetsuScreen(quizState,onQuizAction)
+            "yoji" -> KakiScreen(quizState)
             "douon" -> DouonScreen(quizState,onQuizAction)
+            "busyu" -> KouseiScreen(quizState,onQuizAction,onTrackingAction)
+            "okuri" -> KakiScreen(quizState)
         }
 
 
