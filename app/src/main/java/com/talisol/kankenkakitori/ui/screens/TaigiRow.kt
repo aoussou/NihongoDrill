@@ -5,7 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,6 +17,7 @@ import com.talisol.kankenkakitori.actions.QuizAction
 @Composable
 fun TaigiRow(
     questionLists: List<String>,
+    questionsRange: List<Int>,
     correctAnswersList: List<String>,
     targetsList: List<String>,
     onQuizAction: (QuizAction) -> Unit
@@ -32,7 +33,7 @@ fun TaigiRow(
         val rowModifier = Modifier
             .padding(4.dp)
 
-        for (ql_ind in 0..4) {
+        for (ql_ind in questionsRange) {
 
             val question = questionLists[ql_ind]
             val correctAnswer = correctAnswersList[ql_ind]
@@ -43,6 +44,7 @@ fun TaigiRow(
                 modifier = Modifier
                     .weight(1f)
             ) {
+
 
                 Row(
                     modifier = rowModifier,
@@ -75,9 +77,14 @@ fun TaigiRow(
                         modifier =
                         modifier
                             .border(BorderStroke(1.dp, Color.Black))
-                            .clickable { },
+                            .clickable {
+                                       onQuizAction(QuizAction.SetSelectedSubQuestion(ql_ind))
+                            }
+                        ,
                         contentAlignment = Alignment.Center
-                    ) {}
+                    ) {
+
+                    }
 
                     if (isFirst == 0) {
                         TaigiBox(

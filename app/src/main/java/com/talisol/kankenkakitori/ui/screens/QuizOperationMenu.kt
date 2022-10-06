@@ -82,7 +82,6 @@ fun QuizOperationMenu(
         IconButton(
             onClick = {
                 onPopupAction(PopupAction.ShowAlertDialog(giveUp))
-                Log.i("DEBUG","gave up sent")
             }
         ) {
             Icon(
@@ -132,15 +131,28 @@ fun QuizOperationMenu(
 
         IconButton(onClick = {
             if (predictedKanji != null) {
-                val newAnswer =
-                    if (quizState.inputAnswer == null) {
-                        predictedKanji
-                    } else {
-                        quizState.inputAnswer + predictedKanji
-                    }
-                onQuizAction(QuizAction.InputAnswer(newAnswer))
+
+                if (quizState.questionType == "busyu" && quizState.selectedSubQuestionNbr != null) {
+                    onQuizAction(
+                        QuizAction.UpdateAnswersList(
+                            predictedKanji,
+                            quizState.selectedSubQuestionNbr
+                        )
+                    )
+                } else {
+                    val newAnswer =
+                        if (quizState.inputAnswer == null) {
+                            predictedKanji
+                        } else {
+                            quizState.inputAnswer + predictedKanji
+                        }
+                    onQuizAction(QuizAction.InputAnswer(newAnswer))
+                }
+
+
                 onDrawingAction(DrawingAction.ClearAllPaths)
                 onKanjiRecAction(KanjiRecAction.ResetPredictedKanji)
+
             }
         }) {
             Icon(

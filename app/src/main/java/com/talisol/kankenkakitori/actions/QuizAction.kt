@@ -15,6 +15,8 @@ sealed class QuizAction {
     object StartQuiz: QuizAction()
     object EndQuiz : QuizAction()
 
+    data class SetSelectedSubQuestion(val number: Int): QuizAction()
+
     data class SetQuizType(val questionType: String) : QuizAction()
     data class UpdateAnswersList(val answer: String, val index: Int) : QuizAction()
 

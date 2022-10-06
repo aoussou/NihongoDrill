@@ -24,10 +24,10 @@ import com.talisol.kankenkakitori.drawingUtils.DrawingState
 import com.talisol.kankenkakitori.ui.MySpinner
 import com.talisol.kankenkakitori.ui.states.PopupState
 import com.talisol.kankenkakitori.ui.states.QuizState
+import kotlinx.serialization.descriptors.PrimitiveKind
 
 @Composable
 fun KanjiDrawingWidget(
-    quizState: QuizState,
     drawingState: DrawingState,
     popupState: PopupState,
     currentPath: Path,
@@ -36,6 +36,8 @@ fun KanjiDrawingWidget(
     onDrawingAction: (DrawingAction) -> Unit,
     onKanjiRecAction: (KanjiRecAction) -> Unit,
     onPopupAction: (PopupAction) -> Unit,
+    modifier: Modifier,
+    isDrawingAllowed: Boolean = true
 ) {
 
     Column(
@@ -50,6 +52,7 @@ fun KanjiDrawingWidget(
                 .fillMaxWidth()
                 .border(BorderStroke(5.dp, Color.Black))
                 .background(Color.White)
+                .then(modifier)
         ) {
             Box(
                 modifier = Modifier
@@ -82,12 +85,15 @@ fun KanjiDrawingWidget(
             }
 
 
-
+            if (isDrawingAllowed) {
                 DrawingScreen(
                     currentPath,
                     drawingState,
                     onDrawingAction,
                 )
+
+            }
+
 
 
         }

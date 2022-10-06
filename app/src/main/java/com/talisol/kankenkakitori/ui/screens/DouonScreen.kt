@@ -24,76 +24,71 @@ fun DouonScreen(
     val questionsStrings = extractStringFromJson(quizState.question)
     val listKata = listOf("ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ")
 
-Column(
-    modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight(.5F)
-    ,
-    verticalArrangement = Arrangement.SpaceBetween
-) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(.5F),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
 
 
-    for (q in questionsStrings.indices) {
-        val annotatedString = makeTargetRed(questionsStrings[q], quizState.target!!)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                annotatedString,
-                fontSize = 16.sp,
-            )
+        for (q in questionsStrings.indices) {
+            val annotatedString = makeTargetRed(questionsStrings[q], quizState.target!!)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    annotatedString,
+                    fontSize = 16.sp,
+                )
 
-            SelectionBox(
-                quizState,
-                onQuizAction,
-                mcaStrings!!,
-                listKata,
-                q
-            )
+                SelectionBox(
+                    quizState,
+                    onQuizAction,
+                    mcaStrings!!,
+                    listKata,
+                    q
+                )
 
-            if (quizState.correctAnswersList != null) {
+                if (quizState.correctAnswersList != null) {
 
-                val correctAnswer = quizState.correctAnswersList[q]
-                if (
-                    quizState.isAnswerConfirmed
-                    && (quizState.selectedAnswersList!![q] != correctAnswer)
-                ) {
-                    Text(
-                        text = correctAnswer,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Red
-                    )
+                    val correctAnswer = quizState.correctAnswersList[q]
+                    if (
+                        quizState.isAnswerConfirmed
+                        && (quizState.selectedAnswersList!![q] != correctAnswer)
+                    ) {
+                        Text(
+                            text = correctAnswer,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Red
+                        )
+                    }
+
                 }
 
             }
 
-        }
-
-
-    }
-
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        for (s in mcaStrings!!.indices) {
-            Text(
-                "${listKata[s]} : ${mcaStrings[s]}",
-                fontSize = 24.sp,
-            )
 
         }
+
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            for (s in mcaStrings!!.indices) {
+                Text(
+                    "${listKata[s]} : ${mcaStrings[s]}",
+                    fontSize = 24.sp,
+                )
+
+            }
+        }
+
     }
-
-}
-
-
-
-
 
 
 }

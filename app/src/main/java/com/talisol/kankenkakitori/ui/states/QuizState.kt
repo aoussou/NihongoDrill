@@ -24,5 +24,6 @@ data class QuizState(
     val correctAnswersList: MutableList<String>? = null,
     val selectedAnswersList: MutableList<String?>? = null,
     val mcaList: MutableList<String>? = null,
-    val isKanjiRecRequired: Boolean = false
+    val isKanjiRecRequired: Boolean = false,
+    val selectedSubQuestionNbr: Int? = null
     )

@@ -10,8 +10,6 @@ import databases.kanji.SelectKakitoriQuestions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.jsonArray
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,12 +36,18 @@ class QuizVM @Inject constructor() : ViewModel() {
             is QuizAction.SelectWrongKanji -> selectWrongKanji(action.kanji,action.kanjiInd)
             is QuizAction.SetQuizType -> setQuizType(action.questionType)
             is QuizAction.UpdateAnswersList -> updateAnswersList(action.answer,action.index)
+            is QuizAction.SetSelectedSubQuestion -> setSelectedSubquestionNbr(action.number)
         }
     }
 
     private fun inputAnswer(answerString: String?) {
         _quizState.update { it.copy(inputAnswer = answerString) }
     }
+
+    private fun setSelectedSubquestionNbr(subQuestionNbr: Int) {
+        _quizState.update { it.copy(selectedSubQuestionNbr = subQuestionNbr) }
+    }
+
 
     private fun updateAnswersList(answer: String,index:Int) {
 
@@ -172,6 +176,7 @@ class QuizVM @Inject constructor() : ViewModel() {
                         isLastQuestion = false,
                         isAnswerCorrect = null,
                         selectedWrongKanji = null,
+                        selectedWrongKanjiInd = null,
                     )
                 }
 
@@ -200,6 +205,7 @@ class QuizVM @Inject constructor() : ViewModel() {
                         isFirstQuestion = false,
                         isAnswerCorrect = null,
                         selectedWrongKanji = null,
+                        selectedWrongKanjiInd = null,
                     )
                 }
                 if (quizState.value.localQuestionNumber == _qaList.value.size - 1) _quizState.update {

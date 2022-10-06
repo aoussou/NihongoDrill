@@ -98,17 +98,16 @@ fun QuizScreen(
 //                            }
                     ) {
 
-                        KanjiDrawingWidget(
-                            quizState,
-                            drawingState,
-                            popupState,
-                            currentPath,
-                            predictedKanji,
-                            otherGuessesList,
-                            onDrawingAction,
-                            onKanjiRecAction,
-                            onPopupAction,
-                        )
+//                        KanjiDrawingWidget(
+//                            drawingState,
+//                            popupState,
+//                            currentPath,
+//                            predictedKanji,
+//                            otherGuessesList,
+//                            onDrawingAction,
+//                            onKanjiRecAction,
+//                            onPopupAction,
+//                        )
 
                     }
 
