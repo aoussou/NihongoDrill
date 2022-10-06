@@ -25,7 +25,7 @@ fun QuestionScreen(
             "goji" -> GojiScreen(quizState,onQuizAction)
             "yoji" -> KakiScreen(quizState)
             "douon" -> DouonScreen(quizState,onQuizAction)
-            "busyu" -> KouseiScreen(quizState,onQuizAction,onTrackingAction)
+            "busyu" -> BusyuScreen(quizState,onQuizAction,onTrackingAction)
             "okuri" -> KakiScreen(quizState)
         }
 

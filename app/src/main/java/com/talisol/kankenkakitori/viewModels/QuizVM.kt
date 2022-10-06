@@ -20,6 +20,8 @@ class QuizVM @Inject constructor() : ViewModel() {
     private val _quizState = MutableStateFlow(QuizState())
     val quizState = _quizState.asStateFlow()
     private val kanjiRecRequired = listOf("kaki", "taigi", "goji", "yoji", "okuri")
+    private val mcaType = listOf("shikibetsu","douon","taigi")
+
 
     private val _qaList = MutableStateFlow(listOf<SelectKakitoriQuestions>())
 
@@ -67,34 +69,22 @@ class QuizVM @Inject constructor() : ViewModel() {
         val qas = _qaList.value[localQuestionNumber]
 
         val isKanjiRecRequired = kanjiRecRequired.contains(_quizState.value.questionType)
+        val isMCAtype = mcaType.contains(_quizState.value.questionType)
 
-
-        val correctAnswersList = if (
-            _quizState.value.questionType == "shikibetsu"
-            || _quizState.value.questionType == "douon"
-            || _quizState.value.questionType == "taigi"
-        ) {
+        val correctAnswersList = if (isMCAtype) {
             extractStringFromJson(qas.answer).toMutableList()
         }else{
             null
         }
 
-        val mcaList = if (
-            _quizState.value.questionType == "shikibetsu"
-            || _quizState.value.questionType == "douon"
-            || _quizState.value.questionType == "taigi"
-        ) {
+        val mcaList = if (isMCAtype || _quizState.value.questionType == "busyu") {
             extractStringFromJson(qas.mca_list!!).toMutableList()
         }else{
             null
         }
 
         val selectedAnswersList =
-            if (
-                _quizState.value.questionType == "shikibetsu"
-                || _quizState.value.questionType == "douon"
-                || _quizState.value.questionType == "taigi"
-            ) {
+            if (isMCAtype) {
                 MutableList<String?>(correctAnswersList!!.size){null}
             }else{
             null

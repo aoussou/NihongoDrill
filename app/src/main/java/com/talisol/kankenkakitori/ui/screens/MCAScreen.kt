@@ -27,7 +27,7 @@ fun MCAScreen (
     ,
     verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        for (a in answersList.indices) {
+        for (a in answerTextList.indices) {
             val buttonAnswer = answersList[a]
             val isShowCorrectAnswer = quizState.isAnswerConfirmed
                     && buttonAnswer == quizState.correctAnswer
