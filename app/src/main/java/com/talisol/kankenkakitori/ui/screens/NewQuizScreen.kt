@@ -48,15 +48,16 @@ fun NewQuizScreen(
     QuizAlertDialog(popupState = popupState, onAction = onPopupAction)
 
 
-    Column(modifier = Modifier
-        .fillMaxSize(),
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
 
-    ){
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f)
-        ,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
             verticalArrangement = Arrangement.Top
         ) {
             QuestionScreen(
@@ -67,20 +68,18 @@ fun NewQuizScreen(
         }
 
 
-        Column(modifier = Modifier
-            .fillMaxWidth()
-        ,
-            verticalArrangement = Arrangement.Bottom
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
 
-        ){
+        ) {
 
 
             if (!quizState.isAnswerConfirmed) {
-
                 if (
                     quizState.questionType == "kaki"
-                    || quizState.questionType == "yomi"
-                    || quizState.questionType == "kousei"
                 ) {
 
                     KanjiDrawingWidget(
@@ -93,6 +92,26 @@ fun NewQuizScreen(
                         onDrawingAction,
                         onKanjiRecAction,
                         onPopupAction,
+                    )
+                }
+
+                if (quizState.questionType == "yomi") {
+                    val textState = remember { mutableStateOf(TextFieldValue()) }
+                    TextField(
+                        value = textState.value,
+                        onValueChange = {
+                            textState.value = it;
+                            onQuizAction(
+                                QuizAction.InputAnswer(
+                                    textState.value.text
+                                )
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = {
+                            onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
+                        }
+                        )
                     )
                 }
 
@@ -119,11 +138,9 @@ fun NewQuizScreen(
             }
 
 
-
         }
 
     }
-
 
 
 }
