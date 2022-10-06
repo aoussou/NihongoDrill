@@ -47,29 +47,52 @@ fun NewQuizScreen(
 
 
 
-    Box(modifier = Modifier
+    Column(modifier = Modifier
         .fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween
 
     ){
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .weight(1f)
+        ,
+            verticalArrangement = Arrangement.Top
+        ) {
+            QuestionScreen(
+                quizState = quizState,
+                onQuizAction = onQuizAction,
+                onTrackingAction = onTrackingAction,
+            )
+        }
+
 
         Column(modifier = Modifier
             .fillMaxWidth()
-            .align(Alignment.BottomCenter)
         ,
+            verticalArrangement = Arrangement.Bottom
 
         ){
 
-            KanjiDrawingWidget(
-                quizState,
-                drawingState,
-                popupState,
-                currentPath,
-                predictedKanji,
-                otherGuessesList,
-                onDrawingAction,
-                onKanjiRecAction,
-                onPopupAction,
-            )
+
+            if (
+                quizState.questionType == "kaki"
+                || quizState.questionType == "yomi"
+                || quizState.questionType == "kousei"
+            ) {
+
+                KanjiDrawingWidget(
+                    quizState,
+                    drawingState,
+                    popupState,
+                    currentPath,
+                    predictedKanji,
+                    otherGuessesList,
+                    onDrawingAction,
+                    onKanjiRecAction,
+                    onPopupAction,
+                )
+            }
+
 
             QuizOperationMenu(
                 quizState,
