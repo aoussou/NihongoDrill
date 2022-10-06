@@ -3,10 +3,7 @@ package com.talisol.kankenkakitori.ui.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Text
@@ -34,7 +31,13 @@ fun TaigiScreen(
 
 
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(.2F)
+        ,
+        verticalArrangement = Arrangement.Top
+    ) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(36.dp),
             verticalArrangement = Arrangement.Center,
@@ -57,19 +60,31 @@ fun TaigiScreen(
             }
         )
 
+//        TaigiRow3(
+//            questionLists.slice(0..4),
+//            correctAnswersList!!.slice(0..4),
+//            targetsList.slice(0..4)
+//        )
 
-        TaigiRow2(
-            questionLists.slice(0..4),
-            correctAnswersList!!.slice(0..4),
-            targetsList.slice(0..4)
-        )
 
-
-//        TaigiRow(
+//        TaigiRow2(
+//            questionLists.slice(0..4),
+//            correctAnswersList!!.slice(0..4),
+//            targetsList.slice(0..4)
+//        )
+//
+//        TaigiRow2(
 //            questionLists.slice(5..9),
 //            correctAnswersList!!.slice(5..9),
 //            targetsList.slice(5..9)
 //        )
+
+
+        TaigiRow(
+            questionLists.slice(5..9),
+            correctAnswersList!!.slice(5..9),
+            targetsList.slice(5..9)
+        )
 
     }
 

@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -17,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.actions.QuizSettingAction
+import com.talisol.kankenkakitori.ui.screens.KanjiDrawingWidget
+import com.talisol.kankenkakitori.ui.screens.NewQuizScreen
 import com.talisol.kankenkakitori.ui.screens.QuizScreen
 import com.talisol.kankenkakitori.ui.screens.SelectKyuScreen
 import com.talisol.kankenkakitori.ui.theme.KankenKakitoriTheme
@@ -51,79 +54,125 @@ class MainActivity : ComponentActivity() {
 
                 val trackingVM = viewModel<ProgressTrackingVM>()
 
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceEvenly
-                ) {
-
-                    if (!quizState.isQuizStarted) {
-
-                        if (localQuizState.chosenNumberOfQuestions == null ||
-                            localQuizState.groupChosen == null ||
-                            localQuizState.typeChosen == null
-                        ) {
-
-
-
-                            SelectKyuScreen(
-                                groupsList = quizSettingVM.groupsList,
-                                quizType = quizSettingVM.quizTypesList,
-                                onAction = quizSettingVM::onAction
-                            )
-
-                        } else {
-                            Column {
-                                Button(onClick = {
-                                    quizSettingVM.onAction(QuizSettingAction.LoadSelectedGroupQuestions)
-                                    quizSettingVM.onAction(QuizSettingAction.MakeLocalQuizQuestionList)
-                                    quizVM.onAction(
-                                        QuizAction.LoadQuestionList(
-                                            quizSettingVM.localQAlist.value
-                                        )
-                                    )
-                                    quizVM.onAction(
-                                        QuizAction.SetQuizType(
-                                            localQuizState.typeChosen!!
-                                        )
-                                    )
-                                    quizVM.onAction(QuizAction.StartQuiz)
-                                }) {
-                                    Text(text = "Start quiz,  ${localQuizState.chosenNumberOfQuestions} ${localQuizState.typeChosen} questions of ${localQuizState.groupChosen}")
-                                }
-
-                                Button(onClick = {
-                                    quizSettingVM.onAction(QuizSettingAction.SelectQuestionLevel(null))
-                                    quizSettingVM.onAction(QuizSettingAction.ChooseNumberOfQuestions(null))
-                                }) {
-                                    Text(text = "Go back to selection menu")
-                                }
-                            }
-                        }
+                NewQuizScreen(
+                    quizState = quizState,
+                    onQuizAction = quizVM::onAction,
+                    popupState = popupState,
+                    currentPath = currentPath,
+                    drawingState = drawingState,
+                    onDrawingAction = drawingVM::onAction,
+                    onKanjiRecAction = recognizerVM::onAction,
+                    predictedKanji = predictedKanji.value,
+                    otherGuessesList = otherGuessesList.value,
+                    onTrackingAction = trackingVM::onAction,
+                    onPopupAction = popupVM::onAction
+                )
 
 
-                    } else {
-                        QuizScreen(
-                            quizState = quizState,
-                            onQuizAction = quizVM::onAction,
-                            popupState = popupState,
-                            currentPath = currentPath,
-                            drawingState = drawingState,
-                            onDrawingAction = drawingVM::onAction,
-                            onKanjiRecAction = recognizerVM::onAction,
-                            predictedKanji = predictedKanji.value,
-                            otherGuessesList = otherGuessesList.value,
-                            onTrackingAction = trackingVM::onAction,
-                            onPopupAction = popupVM::onAction
-                        )
-                    }
-                }
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                    ,
+////                    verticalArrangement = Arrangement.Bottom,
+//                verticalAlignment = Alignment.Bottom
+//                ) {
+//
+//                    KanjiDrawingWidget(
+//                        quizState,
+//                        drawingState,
+//                        popupState,
+//                        currentPath,
+//                        predictedKanji = predictedKanji.value,
+//                        otherGuessesList = otherGuessesList.value,
+//                        onDrawingAction = drawingVM::onAction,
+//                        onKanjiRecAction = recognizerVM::onAction,
+//                        onPopupAction = popupVM::onAction
+//                    )
+//                }
+
+
+//                if (!quizState.isQuizStarted) {
+//
+//                    Column(
+//                        modifier = Modifier.fillMaxSize(),
+//                        horizontalAlignment = Alignment.CenterHorizontally,
+//                        verticalArrangement = Arrangement.SpaceEvenly
+//                    ) {
+//                        if (localQuizState.chosenNumberOfQuestions == null ||
+//                            localQuizState.groupChosen == null ||
+//                            localQuizState.typeChosen == null
+//                        ) {
+//
+//
+//                            SelectKyuScreen(
+//                                groupsList = quizSettingVM.groupsList,
+//                                quizType = quizSettingVM.quizTypesList,
+//                                onAction = quizSettingVM::onAction
+//                            )
+//
+//                        } else {
+//                            Column {
+//                                Button(onClick = {
+//                                    quizSettingVM.onAction(QuizSettingAction.LoadSelectedGroupQuestions)
+//                                    quizSettingVM.onAction(QuizSettingAction.MakeLocalQuizQuestionList)
+//                                    quizVM.onAction(
+//                                        QuizAction.LoadQuestionList(
+//                                            quizSettingVM.localQAlist.value
+//                                        )
+//                                    )
+//                                    quizVM.onAction(
+//                                        QuizAction.SetQuizType(
+//                                            localQuizState.typeChosen!!
+//                                        )
+//                                    )
+//                                    quizVM.onAction(QuizAction.StartQuiz)
+//                                }) {
+//                                    Text(text = "Start quiz,  ${localQuizState.chosenNumberOfQuestions} ${localQuizState.typeChosen} questions of ${localQuizState.groupChosen}")
+//                                }
+//
+//                                Button(onClick = {
+//                                    quizSettingVM.onAction(
+//                                        QuizSettingAction.SelectQuestionLevel(
+//                                            null
+//                                        )
+//                                    )
+//                                    quizSettingVM.onAction(
+//                                        QuizSettingAction.ChooseNumberOfQuestions(
+//                                            null
+//                                        )
+//                                    )
+//                                }) {
+//                                    Text(text = "Go back to selection menu")
+//                                }
+//                            }
+//
+//                        }
+//                    }
+//                } else {
+////                        NewQuizScreen(
+////                            quizState = quizState,
+////                            onQuizAction = quizVM::onAction,
+////                            popupState = popupState,
+////                            currentPath = currentPath,
+////                            drawingState = drawingState,
+////                            onDrawingAction = drawingVM::onAction,
+////                            onKanjiRecAction = recognizerVM::onAction,
+////                            predictedKanji = predictedKanji.value,
+////                            otherGuessesList = otherGuessesList.value,
+////                            onTrackingAction = trackingVM::onAction,
+////                            onPopupAction = popupVM::onAction
+////                        )
+//
+//                }
+
+
             }
-
         }
-
 
     }
 
 
 }
+
+
+

@@ -19,17 +19,20 @@ fun TaigiRow(
     targetsList: List<String>,
 ) {
 
-    val modifier = Modifier
-        .border(BorderStroke(1.dp, Color.Black))
-//        .fillMaxSize(.15F)
-        .aspectRatio(1f)
 
     Row(
         modifier = Modifier
-            .fillMaxHeight(.5F)
-            .fillMaxWidth(),
+            .fillMaxHeight(.2F)
+            .fillMaxWidth(.00001F),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
+
+        val modifier = Modifier
+            .border(BorderStroke(1.dp, Color.Black))
+            .fillMaxWidth(.000001F)
+            .aspectRatio(1f)
+            .weight(1f)
+
         for (ql_ind in 0..4) {
             val question = questionLists[ql_ind]
             val correctAnswer = correctAnswersList[ql_ind]

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -18,27 +17,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun TaigiRow2(
+fun TaigiRow3(
     questionLists: List<String>,
     correctAnswersList: List<String>,
     targetsList: List<String>,
 ) {
 
-    val modifier = Modifier
-        .border(BorderStroke(1.dp, Color.Black))
-        .aspectRatio(1F)
-        .fillMaxSize()
 
-
-    Column{
 
         LazyRow(modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(.4F)
+            .fillMaxHeight(.05F)
             ,
             horizontalArrangement = Arrangement.SpaceBetween,
             userScrollEnabled = false
         ) {
+
+
+
             itemsIndexed(questionLists) { index, item ->
 
                 val correctAnswer = correctAnswersList[index]
@@ -49,10 +45,19 @@ fun TaigiRow2(
                 Log.i("DEBUG",isSecond.toString())
 
 
-                Column {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
 
-                    Row{
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                    ){
 
+                        val modifier = Modifier
+                            .weight(1f)
+                            .border(BorderStroke(4.dp, Color.Black))
+                            .aspectRatio(1F)
                         Box(
                             modifier = modifier,
                             contentAlignment = Alignment.Center
@@ -75,31 +80,17 @@ fun TaigiRow2(
                             )
                         }
                     }
-                }
-            }
-        }
 
 
-        LazyRow(modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(.4F)
-            ,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            itemsIndexed(questionLists) { index, item ->
 
-                val correctAnswer = correctAnswersList[index]
-                val isSecond = targetsList[index].indexOf(correctAnswer)
-                val target = targetsList[index].replace(correctAnswer, "")
-                Log.i("DEBUG",correctAnswer)
-                Log.i("DEBUG",target)
-                Log.i("DEBUG",isSecond.toString())
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
 
-
-                Column {
-
-
-                    Row {
+                        val modifier = Modifier
+                            .weight(1f)
+                            .border(BorderStroke(4.dp, Color.Black))
+                            .aspectRatio(1F)
 
                         if (isSecond == 0) {
 
@@ -116,14 +107,10 @@ fun TaigiRow2(
                         }
 
                         Box(
-                            modifier = modifier
-                                .background(Color.White)
-                                .clickable{}
-                            ,
+                            modifier = modifier.background(Color.Red),
                             contentAlignment = Alignment.Center
-
                         ) {
-//                            Text(text = " ")
+                            Text(text = " ")
                         }
 
                         if (isSecond == 1) {
@@ -139,6 +126,9 @@ fun TaigiRow2(
                             }
                         }
                     }
+
+
+
                 }
             }
         }
@@ -150,7 +140,10 @@ fun TaigiRow2(
 
 
 
-    }
+
+
+
+
 
 
 

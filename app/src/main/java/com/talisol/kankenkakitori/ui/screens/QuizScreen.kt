@@ -49,113 +49,139 @@ fun QuizScreen(
     QuizAlertDialog(popupState = popupState, onAction = onPopupAction)
 
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
     ) {
 
         val localContext = LocalContext.current
 
-        QuestionScreen(
-            quizState = quizState,
-            onQuizAction = onQuizAction,
-            onTrackingAction = onTrackingAction
-        )
+
+        Box(modifier = Modifier.align(Alignment.TopCenter)) {
+            QuestionScreen(
+                quizState = quizState,
+                onQuizAction = onQuizAction,
+                onTrackingAction = onTrackingAction,
+            )
+        }
+
+
 
         if (!quizState.isAnswerConfirmed) {
 
             Text(text = quizState.inputAnswer ?: "", fontSize = 12.sp)
 
+            Column(modifier = Modifier.align(Alignment.Center)) {
 
-            if (quizState.questionType == "kaki" || quizState.questionType == "goji") {
-                Box(
-                    modifier = Modifier
-                        .aspectRatio(1f)
-                        .fillMaxWidth()
-                        .border(BorderStroke(5.dp, Color.Black))
-                        .clickable {
-                            if (quizState.questionType == "goji" && quizState.selectedWrongKanji == null) {
-                                Toast
-                                    .makeText(
-                                        localContext,
-                                        "Choose a kanji first.",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                    .show()
-                            }
-                        }
+                if (
+                    quizState.questionType == "kaki"
+                    || quizState.questionType == "goji"
+                    || quizState.questionType == "taigi"
                 ) {
 
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth(.25F)
                             .aspectRatio(1f)
-                            .align(Alignment.TopEnd)
-                            .padding(12.dp)
-                            .border(
-                                if (predictedKanji != null) {
-                                    BorderStroke(1.dp, Color.Black)
-                                } else BorderStroke(0.dp, Color.White)
-                            )
-                            .background(Color.White)
-                            .zIndex(if (predictedKanji != null) 1f else 0f)
-                            .clickable {
-                                onKanjiRecAction(KanjiRecAction.SetOtherGuessesList)
-                                onPopupAction(PopupAction.ShowOtherGuesses)
-                            },
-                        contentAlignment = Alignment.Center
+                            .fillMaxWidth()
+                            .border(BorderStroke(5.dp, Color.Black))
+//                            .clickable {
+//                                if (quizState.questionType == "goji" && quizState.selectedWrongKanji == null) {
+//                                    Toast
+//                                        .makeText(
+//                                            localContext,
+//                                            "Choose a kanji first.",
+//                                            Toast.LENGTH_SHORT
+//                                        )
+//                                        .show()
+//                                }
+//                            }
                     ) {
-                        if (predictedKanji != null) Text(text = predictedKanji, fontSize = 36.sp)
-                        if (otherGuessesList != null) {
-                            MySpinner(
-                                isExpanded = popupState.isShowOtherGuesses,
-                                onPopupAction = onPopupAction,
-                                items = otherGuessesList,
-                                onKanjiRecAction = onKanjiRecAction
-                            )
-                        }
-                    }
 
-                    if (quizState.questionType == "kaki" || quizState.selectedWrongKanji != null) {
-
-                        DrawingScreen(
-                            currentPath,
+                        KanjiDrawingWidget(
+                            quizState,
                             drawingState,
+                            popupState,
+                            currentPath,
+                            predictedKanji,
+                            otherGuessesList,
                             onDrawingAction,
+                            onKanjiRecAction,
+                            onPopupAction,
                         )
 
                     }
 
+//                        Box(
+//                            modifier = Modifier
+//                                .fillMaxWidth(.25F)
+//                                .aspectRatio(1f)
+//                                .padding(12.dp)
+//                                .border(
+//                                    if (predictedKanji != null) {
+//                                        BorderStroke(1.dp, Color.Black)
+//                                    } else BorderStroke(0.dp, Color.White)
+//                                )
+//                                .background(Color.White)
+//                                .zIndex(if (predictedKanji != null) 1f else 0f)
+//                                .clickable {
+//                                    onKanjiRecAction(KanjiRecAction.SetOtherGuessesList)
+//                                    onPopupAction(PopupAction.ShowOtherGuesses)
+//                                },
+//                            contentAlignment = Alignment.Center
+//                        ) {
+//                            if (predictedKanji != null) Text(text = predictedKanji, fontSize = 36.sp)
+//                            if (otherGuessesList != null) {
+//                                MySpinner(
+//                                    isExpanded = popupState.isShowOtherGuesses,
+//                                    onPopupAction = onPopupAction,
+//                                    items = otherGuessesList,
+//                                    onKanjiRecAction = onKanjiRecAction
+//                                )
+//                            }
+//                        }
+//
+//                        if (
+//                            quizState.questionType == "kaki"
+//                            || quizState.questionType == "taigi"
+//                            || quizState.selectedWrongKanji != null
+//                        ) {
+//                            DrawingScreen(
+//                                currentPath,
+//                                drawingState,
+//                                onDrawingAction,
+//                            )
+//                        }
+//
+//
+//                        DrawingPropertiesMenu(
+//                            drawingState = drawingState,
+//                            onDrawingAction = onDrawingAction,
+//                            onKanjiRecAction = onKanjiRecAction
+//                        )
+//
+//                    }
 
+                } else if (quizState.questionType == "yomi") {
+                    val textState = remember { mutableStateOf(TextFieldValue()) }
+                    TextField(
+                        value = textState.value,
+                        onValueChange = {
+                            textState.value = it;
+                            onQuizAction(
+                                QuizAction.InputAnswer(
+                                    textState.value.text
+                                )
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = {
+                            onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
+                        }
+                        )
+                    )
                 }
 
-                DrawingPropertiesMenu(
-                    drawingState = drawingState,
-                    onDrawingAction = onDrawingAction,
-                    onKanjiRecAction = onKanjiRecAction
-                )
-
-            } else if  (quizState.questionType == "yomi"){
-                val textState = remember { mutableStateOf(TextFieldValue()) }
-                TextField(
-                    value = textState.value,
-                    onValueChange = {
-                        textState.value = it;
-                        onQuizAction(
-                            QuizAction.InputAnswer(
-                                textState.value.text
-                            )
-                        )
-                    },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = {
-                        onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
-                    }
-                    )
-                )
             }
 
         } else {
@@ -198,16 +224,21 @@ fun QuizScreen(
         }
 
 
+//        Box(modifier = Modifier
+//            .align(Alignment.BottomCenter)
+//            .fillMaxHeight(.2F)
+//        ) {
+//            QuizOperationMenu(
+//                quizState,
+//                predictedKanji,
+//                onQuizAction,
+//                onPopupAction,
+//                onTrackingAction,
+//                onKanjiRecAction,
+//                onDrawingAction
+//            )
+//        }
 
-        QuizOperationMenu(
-            quizState,
-            predictedKanji,
-            onQuizAction,
-            onPopupAction,
-            onTrackingAction,
-            onKanjiRecAction,
-            onDrawingAction
-        )
 
     }
 
