@@ -77,7 +77,16 @@ fun TaigiRow(
                     }
 
 
-
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                    ) {
+                        val isAnswerCorrect =
+                            if (quizState.selectedAnswersList != null) {
+                                quizState.selectedAnswersList[ql_ind] == quizState.correctAnswersList!![ql_ind]
+                            } else {
+                                null
+                            }
 
                         Box(
                             modifier =
@@ -91,23 +100,50 @@ fun TaigiRow(
                                 )
                                 .clickable {
                                     onQuizAction(QuizAction.SetSelectedSubQuestion(ql_ind))
-                                }
-                            ,
+                                },
                             contentAlignment = Alignment.Center
                         ) {
 
-                            if (quizState.selectedAnswersList!= null) {
+                            if (quizState.selectedAnswersList != null) {
                                 if (quizState.selectedAnswersList[ql_ind] != null) {
                                     Text(
                                         text = quizState.selectedAnswersList[ql_ind]!!,
                                         fontSize = 28.sp,
-                                        fontWeight = FontWeight.Bold
+                                        fontWeight = FontWeight.Bold,
+                                        color =
+                                        if (quizState.isAnswerConfirmed && isAnswerCorrect != null) {
+                                            if (isAnswerCorrect) Color.Green else Color.Red
+                                        } else Color.Black
                                     )
                                 }
                             }
-
-
                         }
+
+                        if (isAnswerCorrect != null) {
+                            if (quizState.isAnswerConfirmed && !isAnswerCorrect) {
+
+                                    Box(
+                                        modifier =
+                                        modifier
+                                            .border(BorderStroke(1.dp, Color.Red)),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(
+                                            text = quizState.correctAnswersList!![ql_ind],
+                                            fontSize = 28.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color.Red
+                                        )
+                                    }
+
+
+                            }
+                        }
+
+
+                    }
+
+
 
 
 
