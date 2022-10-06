@@ -53,10 +53,40 @@ fun TaigiScreen(
     )
 
 
-    var isShowingTaigi by remember { mutableStateOf(true) }
+    if (!quizState.isAnswerConfirmed) {
+        var isShowingTaigi by remember { mutableStateOf(true) }
 
 
-    if (isShowingTaigi) {
+        if (isShowingTaigi) {
+
+            TaigiRow(
+                quizState,
+                questionLists,
+                (0..4).toList(),
+                correctAnswersList!!,
+                targetsList,
+                onQuizAction,
+            )
+
+            Button(onClick = { isShowingTaigi = false }) {
+                Text(text = "Ruigi")
+            }
+
+        } else {
+            TaigiRow(
+                quizState,
+                questionLists,
+                (5..9).toList(),
+                correctAnswersList!!,
+                targetsList,
+                onQuizAction,
+            )
+
+            Button(onClick = { isShowingTaigi = true }) {
+                Text(text = "Taigi")
+            }
+        }
+    } else {
 
         TaigiRow(
             quizState,
@@ -67,11 +97,6 @@ fun TaigiScreen(
             onQuizAction,
         )
 
-        Button(onClick = { isShowingTaigi = false }) {
-            Text(text = "Ruigi")
-        }
-
-    } else {
         TaigiRow(
             quizState,
             questionLists,
@@ -81,10 +106,10 @@ fun TaigiScreen(
             onQuizAction,
         )
 
-        Button(onClick = { isShowingTaigi = true }) {
-            Text(text = "Taigi")
-        }
+
+
     }
+
 
 
 

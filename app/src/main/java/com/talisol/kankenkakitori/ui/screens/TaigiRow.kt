@@ -43,6 +43,14 @@ fun TaigiRow(
             val isFirst = targetsList[ql_ind].indexOf(correctAnswer)
             val target = targetsList[ql_ind].replace(correctAnswer, "")
 
+            val isAnswerCorrect =
+                if (quizState.selectedAnswersList != null) {
+                    quizState.selectedAnswersList[ql_ind] == quizState.correctAnswersList!![ql_ind]
+                } else {
+                    null
+                }
+
+
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -75,79 +83,36 @@ fun TaigiRow(
                             text = target
                         )
                     }
-
-
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
+                    Box(
+                        modifier =
+                        modifier
+                            .border(
+                                if (
+                                    quizState.selectedSubQuestionNbr == ql_ind
+                                    && !quizState.isAnswerConfirmed)
+                                    BorderStroke(3.dp,Color.Blue)
+                                else BorderStroke(1.dp, Color.Black)
+                            )
+                            .clickable {
+                                onQuizAction(QuizAction.SetSelectedSubQuestion(ql_ind))
+                            },
+                        contentAlignment = Alignment.Center
                     ) {
-                        val isAnswerCorrect =
-                            if (quizState.selectedAnswersList != null) {
-                                quizState.selectedAnswersList[ql_ind] == quizState.correctAnswersList!![ql_ind]
-                            } else {
-                                null
-                            }
 
-                        Box(
-                            modifier =
-                            modifier
-                                .border(
-                                    if (quizState.selectedSubQuestionNbr == ql_ind) BorderStroke(
-                                        3.dp,
-                                        Color.Blue
-                                    )
-                                    else BorderStroke(1.dp, Color.Black)
+                        if (quizState.selectedAnswersList != null) {
+                            if (quizState.selectedAnswersList[ql_ind] != null) {
+                                Text(
+                                    text = quizState.selectedAnswersList[ql_ind]!!,
+                                    fontSize = 28.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color =
+                                    if (quizState.isAnswerConfirmed && isAnswerCorrect != null) {
+                                        if (isAnswerCorrect) Color.Green else Color.Red
+                                    } else Color.Black
                                 )
-                                .clickable {
-                                    onQuizAction(QuizAction.SetSelectedSubQuestion(ql_ind))
-                                },
-                            contentAlignment = Alignment.Center
-                        ) {
-
-                            if (quizState.selectedAnswersList != null) {
-                                if (quizState.selectedAnswersList[ql_ind] != null) {
-                                    Text(
-                                        text = quizState.selectedAnswersList[ql_ind]!!,
-                                        fontSize = 28.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color =
-                                        if (quizState.isAnswerConfirmed && isAnswerCorrect != null) {
-                                            if (isAnswerCorrect) Color.Green else Color.Red
-                                        } else Color.Black
-                                    )
-                                }
                             }
                         }
-
-                        if (isAnswerCorrect != null) {
-                            if (quizState.isAnswerConfirmed && !isAnswerCorrect) {
-
-                                    Box(
-                                        modifier =
-                                        modifier
-                                            .border(BorderStroke(1.dp, Color.Red)),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(
-                                            text = quizState.correctAnswersList!![ql_ind],
-                                            fontSize = 28.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            color = Color.Red
-                                        )
-                                    }
-
-
-                            }
-                        }
-
-
                     }
-
-
-
-
-
-
 
                     if (isFirst == 0) {
                         TaigiBox(
@@ -155,10 +120,70 @@ fun TaigiRow(
                             text = target
                         )
                     }
-
                 }
+
+                if (quizState.isAnswerConfirmed && !isAnswerCorrect!!) {
+                    Row(
+                        modifier = rowModifier,
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        if (isFirst == 1) {
+                            TaigiBox(
+                                modifier = modifier,
+                                text = ""
+                            )
+                        }
+                        Box(
+                            modifier =
+                            modifier
+                                .border(BorderStroke(1.dp, Color.Black)),
+                            contentAlignment = Alignment.Center
+                        ) {
+
+                            Text(
+                                text = quizState.correctAnswersList!![ql_ind],
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Red
+                            )
+
+                        }
+
+                        if (isFirst == 0) {
+                            TaigiBox(
+                                modifier = modifier,
+                                text = ""
+                            )
+                        }
+                    }
+                }
+
+
             }
         }
     }
 
 }
+
+
+//                        if (isAnswerCorrect != null) {
+//                            if (quizState.isAnswerConfirmed && !isAnswerCorrect) {
+//
+//                                    Box(
+//                                        modifier =
+//                                        modifier
+//                                            .border(BorderStroke(1.dp, Color.Red)),
+//                                        contentAlignment = Alignment.Center
+//                                    ) {
+//                                        Text(
+//                                            text = quizState.correctAnswersList!![ql_ind],
+//                                            fontSize = 28.sp,
+//                                            fontWeight = FontWeight.Bold,
+//                                            color = Color.Red
+//                                        )
+//                                    }
+//
+//
+//                            }
+//                        }

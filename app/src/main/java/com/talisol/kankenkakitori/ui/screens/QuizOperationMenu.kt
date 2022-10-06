@@ -118,6 +118,7 @@ fun QuizOperationMenu(
             } else if (
                 quizState.questionType == "shikibetsu"
                 || quizState.questionType == "douon"
+                || quizState.questionType == "taigi"
             ) {
                 onQuizAction(QuizAction.ConfirmAnswersList(onTrackingAction))
             }
