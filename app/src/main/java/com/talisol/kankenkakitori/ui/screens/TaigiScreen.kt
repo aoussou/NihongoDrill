@@ -4,8 +4,10 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,13 +35,11 @@ fun TaigiScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(.2F)
-        ,
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.Top
     ) {
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(36.dp),
+            columns = GridCells.Adaptive(38.dp),
             verticalArrangement = Arrangement.Center,
             content = {
                 items(suggestionStrings.size) { index ->
@@ -60,24 +60,13 @@ fun TaigiScreen(
             }
         )
 
-//        TaigiRow3(
-//            questionLists.slice(0..4),
-//            correctAnswersList!!.slice(0..4),
-//            targetsList.slice(0..4)
-//        )
 
+        TaigiRow(
+            questionLists.slice(0..4),
+            correctAnswersList!!.slice(0..4),
+            targetsList.slice(0..4)
+        )
 
-//        TaigiRow2(
-//            questionLists.slice(0..4),
-//            correctAnswersList!!.slice(0..4),
-//            targetsList.slice(0..4)
-//        )
-//
-//        TaigiRow2(
-//            questionLists.slice(5..9),
-//            correctAnswersList!!.slice(5..9),
-//            targetsList.slice(5..9)
-//        )
 
 
         TaigiRow(

@@ -24,37 +24,32 @@ fun TaigiRow2(
     targetsList: List<String>,
 ) {
 
-    val modifier = Modifier
-        .border(BorderStroke(1.dp, Color.Black))
-        .aspectRatio(1F)
-        .fillMaxSize()
+
+    Column(modifier = Modifier.fillMaxWidth()) {
 
 
-    Column{
+        Column(modifier = Modifier.fillMaxWidth()) {
 
-        LazyRow(modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(.4F)
-            ,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            userScrollEnabled = false
-        ) {
-            itemsIndexed(questionLists) { index, item ->
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                userScrollEnabled = false
+            ) {
+                itemsIndexed(questionLists) { index, item ->
 
-                val correctAnswer = correctAnswersList[index]
-                val isSecond = targetsList[index].indexOf(correctAnswer)
-                val target = targetsList[index].replace(correctAnswer, "")
-                Log.i("DEBUG",correctAnswer)
-                Log.i("DEBUG",target)
-                Log.i("DEBUG",isSecond.toString())
+                    val correctAnswer = correctAnswersList[index]
+                    val isSecond = targetsList[index].indexOf(correctAnswer)
+                    val target = targetsList[index].replace(correctAnswer, "")
+                    Log.i("DEBUG", correctAnswer)
+                    Log.i("DEBUG", target)
+                    Log.i("DEBUG", isSecond.toString())
 
 
-                Column {
 
-                    Row{
+                    Row {
 
                         Box(
-                            modifier = modifier,
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
@@ -65,7 +60,6 @@ fun TaigiRow2(
                         }
 
                         Box(
-                            modifier = modifier,
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
@@ -75,37 +69,38 @@ fun TaigiRow2(
                             )
                         }
                     }
+
                 }
             }
+
         }
 
-
-        LazyRow(modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(.4F)
-            ,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            itemsIndexed(questionLists) { index, item ->
-
-                val correctAnswer = correctAnswersList[index]
-                val isSecond = targetsList[index].indexOf(correctAnswer)
-                val target = targetsList[index].replace(correctAnswer, "")
-                Log.i("DEBUG",correctAnswer)
-                Log.i("DEBUG",target)
-                Log.i("DEBUG",isSecond.toString())
+        Column(modifier = Modifier.fillMaxWidth()) {
 
 
-                Column {
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                userScrollEnabled = false
+            ) {
+                itemsIndexed(questionLists) { index, item ->
+
+                    val correctAnswer = correctAnswersList[index]
+                    val isSecond = targetsList[index].indexOf(correctAnswer)
+                    val target = targetsList[index].replace(correctAnswer, "")
+                    Log.i("DEBUG", correctAnswer)
+                    Log.i("DEBUG", target)
+                    Log.i("DEBUG", isSecond.toString())
 
 
-                    Row {
+                    Row(
+                    ) {
 
                         if (isSecond == 0) {
 
                             Box(
-                                modifier = modifier,
-                                contentAlignment = Alignment.Center
+                                contentAlignment = Alignment.Center,
                             ) {
                                 Text(
                                     text = target,
@@ -116,20 +111,21 @@ fun TaigiRow2(
                         }
 
                         Box(
-                            modifier = modifier
+                            modifier = Modifier
                                 .background(Color.White)
-                                .clickable{}
+                                .clickable {}
+                                .border(BorderStroke(4.dp, Color.Black))
+                                .aspectRatio(1f)
+                                .fillMaxWidth(.1F)
                             ,
                             contentAlignment = Alignment.Center
 
                         ) {
-//                            Text(text = " ")
                         }
 
                         if (isSecond == 1) {
                             Box(
-                                modifier = modifier,
-                                contentAlignment = Alignment.Center
+                                contentAlignment = Alignment.Center,
                             ) {
                                 Text(
                                     text = target,
@@ -144,13 +140,12 @@ fun TaigiRow2(
         }
 
 
-
-
-
-
-
-
     }
+
+
+
+
+
 
 
 

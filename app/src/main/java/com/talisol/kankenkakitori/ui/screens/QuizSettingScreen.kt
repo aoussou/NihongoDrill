@@ -97,7 +97,7 @@ fun SelectKyuScreen(
                     QuizSettingAction.ChooseNumberOfQuestions(
                         textState.value.text.toInt()
                     )
-                );
+                )
                 focusManager.clearFocus()
 
                 Log.i("DEBUG", "number sent")

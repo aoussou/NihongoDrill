@@ -22,26 +22,25 @@ fun TaigiRow(
 
     Row(
         modifier = Modifier
-            .fillMaxHeight(.2F)
-            .fillMaxWidth(.00001F),
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
         val modifier = Modifier
             .border(BorderStroke(1.dp, Color.Black))
-            .fillMaxWidth(.000001F)
             .aspectRatio(1f)
             .weight(1f)
 
         for (ql_ind in 0..4) {
             val question = questionLists[ql_ind]
             val correctAnswer = correctAnswersList[ql_ind]
-            val isSecond = targetsList[ql_ind].indexOf(correctAnswer)
+            val isFirst = targetsList[ql_ind].indexOf(correctAnswer)
             val target = targetsList[ql_ind].replace(correctAnswer, "")
 
-            Column {
+            Column(modifier = Modifier
+                .weight(1F)
+                .padding(2.dp)
+            ) {
 
-                Row() {
+                Row(modifier = Modifier.weight(1F)) {
 
                     Box(
                         modifier = modifier,
@@ -69,9 +68,9 @@ fun TaigiRow(
 
 
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.weight(1F)
                 ) {
-                    if (isSecond == 0) {
+                    if (isFirst == 1) {
 
                         Box(
                             modifier = modifier,
@@ -92,7 +91,7 @@ fun TaigiRow(
 
                     }
 
-                    if (isSecond == 1) {
+                    if (isFirst == 0) {
                         Box(
                             modifier = modifier,
                             contentAlignment = Alignment.Center
