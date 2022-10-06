@@ -20,65 +20,72 @@ fun TaigiRow(
 ) {
 
 
-    Row(
-        modifier = Modifier
-    ) {
+    Column {
 
         val modifier = Modifier
-            .border(BorderStroke(1.dp, Color.Black))
-            .aspectRatio(1f)
             .weight(1f)
+            .aspectRatio(1f)
+            .border(BorderStroke(4.dp, Color.Black))
 
-        for (ql_ind in 0..4) {
-            val question = questionLists[ql_ind]
-            val correctAnswer = correctAnswersList[ql_ind]
-            val isFirst = targetsList[ql_ind].indexOf(correctAnswer)
-            val target = targetsList[ql_ind].replace(correctAnswer, "")
+        Row {
+            for (ql_ind in 0..4) {
 
-            Column(modifier = Modifier
-                .weight(1F)
-                .padding(2.dp)
-            ) {
+                val question = questionLists[ql_ind]
+                val correctAnswer = correctAnswersList[ql_ind]
+                val isFirst = targetsList[ql_ind].indexOf(correctAnswer)
+                val target = targetsList[ql_ind].replace(correctAnswer, "")
 
-                Row(modifier = Modifier.weight(1F)) {
 
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(10.dp)
+                ) {
                     Box(
                         modifier = modifier,
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = question[0].toString(),
-                            fontSize = 24.sp,
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }
-
                     Box(
                         modifier = modifier,
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = question[1].toString(),
-                            fontSize = 24.sp,
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }
-
                 }
+            }
+        }
 
+        Row {
+            for (ql_ind in 0..4) {
+
+                val question = questionLists[ql_ind]
+                val correctAnswer = correctAnswersList[ql_ind]
+                val isFirst = targetsList[ql_ind].indexOf(correctAnswer)
+                val target = targetsList[ql_ind].replace(correctAnswer, "")
 
                 Row(
-                    modifier = Modifier.weight(1F)
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(10.dp)
                 ) {
                     if (isFirst == 1) {
-
                         Box(
                             modifier = modifier,
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = target,
-                                fontSize = 24.sp,
+                                fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -87,9 +94,7 @@ fun TaigiRow(
                     Box(
                         modifier = modifier,
                         contentAlignment = Alignment.Center
-                    ) {
-
-                    }
+                    ){}
 
                     if (isFirst == 0) {
                         Box(
@@ -98,15 +103,115 @@ fun TaigiRow(
                         ) {
                             Text(
                                 text = target,
-                                fontSize = 24.sp,
+                                fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
+
                     }
                 }
             }
         }
-
     }
+
+//    Column {
+//        val modifier = Modifier
+//            .border(BorderStroke(1.dp, Color.Black))
+//            .aspectRatio(1f)
+//            .weight(1f)
+//
+//        Row(
+//        ) {
+//            for (ql_ind in 0..4) {
+//                val question = questionLists[ql_ind]
+//                val correctAnswer = correctAnswersList[ql_ind]
+//                val isFirst = targetsList[ql_ind].indexOf(correctAnswer)
+//                val target = targetsList[ql_ind].replace(correctAnswer, "")
+//
+//                Row(
+//                    modifier =
+//                    Modifier
+//                        .weight(1f)
+//                        .padding(2.dp),
+//                ) {
+//
+//                    Box(
+//                        modifier = modifier,
+//                        contentAlignment = Alignment.Center
+//                    ) {
+//                        Text(
+//                            text = question[0].toString(),
+//                            fontSize = 12.sp,
+//                            fontWeight = FontWeight.Bold
+//                        )
+//                    }
+//
+//                    Box(
+//                        modifier = modifier,
+//                        contentAlignment = Alignment.Center
+//                    ) {
+//                        Text(
+//                            text = question[1].toString(),
+//                            fontSize = 12.sp,
+//                            fontWeight = FontWeight.Bold
+//                        )
+//                    }
+//
+//                }
+//            }
+//
+//            Row(
+//            ) {
+//                for (ql_ind in 0..4) {
+//                    val question = questionLists[ql_ind]
+//                    val correctAnswer = correctAnswersList[ql_ind]
+//                    val isFirst = targetsList[ql_ind].indexOf(correctAnswer)
+//                    val target = targetsList[ql_ind].replace(correctAnswer, "")
+//
+//                    Row(
+//                        modifier =
+//                        Modifier
+//                            .weight(1f)
+//                            .padding(2.dp),
+//                    ) {
+//                        if (isFirst == 1) {
+//
+//                            Box(
+//                                modifier = modifier,
+//                                contentAlignment = Alignment.Center
+//                            ) {
+//                                Text(
+//                                    text = target,
+//                                    fontSize = 12.sp,
+//                                    fontWeight = FontWeight.Bold
+//                                )
+//                            }
+//                        }
+//
+//                        Box(
+//                            modifier = modifier,
+//                            contentAlignment = Alignment.Center
+//                        ) {
+//
+//                        }
+//
+//                        if (isFirst == 0) {
+//                            Box(
+//                                modifier = modifier,
+//                                contentAlignment = Alignment.Center
+//                            ) {
+//                                Text(
+//                                    text = target,
+//                                    fontSize = 12.sp,
+//                                    fontWeight = FontWeight.Bold
+//                                )
+//                            }
+//                        }
+//                    }
+//
+//                }
+//            }
+//        }
+//    }
 
 }

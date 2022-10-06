@@ -47,7 +47,8 @@ fun NewQuizScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f),
+                .weight(1f)
+            ,
             verticalArrangement = Arrangement.Top
         ) {
             QuestionScreen(
@@ -104,8 +105,6 @@ fun NewQuizScreen(
                         )
                     )
                 }
-
-
 
                 QuizOperationMenu(
                     quizState,

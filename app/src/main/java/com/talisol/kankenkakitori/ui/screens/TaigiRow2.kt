@@ -1,13 +1,8 @@
 package com.talisol.kankenkakitori.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,144 +20,70 @@ fun TaigiRow2(
 ) {
 
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Row(
+        modifier = Modifier
+    ) {
 
+        val modifier = Modifier
+            .border(BorderStroke(1.dp, Color.Black))
+            .aspectRatio(1f)
+            .weight(1f)
 
-        Column(modifier = Modifier.fillMaxWidth()) {
+        for (ql_ind in 0..4) {
+            val question = questionLists[ql_ind]
+            val correctAnswer = correctAnswersList[ql_ind]
+            val isFirst = targetsList[ql_ind].indexOf(correctAnswer)
+            val target = targetsList[ql_ind].replace(correctAnswer, "")
 
-            LazyRow(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                userScrollEnabled = false
+                .weight(1F)
+                .padding(2.dp)
+                ,
+                verticalArrangement = Arrangement.Top
             ) {
-                itemsIndexed(questionLists) { index, item ->
-
-                    val correctAnswer = correctAnswersList[index]
-                    val isSecond = targetsList[index].indexOf(correctAnswer)
-                    val target = targetsList[index].replace(correctAnswer, "")
-                    Log.i("DEBUG", correctAnswer)
-                    Log.i("DEBUG", target)
-                    Log.i("DEBUG", isSecond.toString())
 
 
-
-                    Row {
+                Row(
+                    modifier = Modifier.weight(1F)
+                ) {
+                    if (isFirst == 1) {
 
                         Box(
+                            modifier = modifier,
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = item[0].toString(),
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-
-                        Box(
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = item[1].toString(),
+                                text = target,
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
                     }
 
-                }
-            }
-
-        }
-
-        Column(modifier = Modifier.fillMaxWidth()) {
-
-
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                userScrollEnabled = false
-            ) {
-                itemsIndexed(questionLists) { index, item ->
-
-                    val correctAnswer = correctAnswersList[index]
-                    val isSecond = targetsList[index].indexOf(correctAnswer)
-                    val target = targetsList[index].replace(correctAnswer, "")
-                    Log.i("DEBUG", correctAnswer)
-                    Log.i("DEBUG", target)
-                    Log.i("DEBUG", isSecond.toString())
-
-
-                    Row(
+                    Box(
+                        modifier = modifier,
+                        contentAlignment = Alignment.Center
                     ) {
 
-                        if (isSecond == 0) {
+                    }
 
-                            Box(
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                Text(
-                                    text = target,
-                                    fontSize = 24.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-
+                    if (isFirst == 0) {
                         Box(
-                            modifier = Modifier
-                                .background(Color.White)
-                                .clickable {}
-                                .border(BorderStroke(4.dp, Color.Black))
-                                .aspectRatio(1f)
-                                .fillMaxWidth(.1F)
-                            ,
+                            modifier = modifier,
                             contentAlignment = Alignment.Center
-
                         ) {
-                        }
-
-                        if (isSecond == 1) {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                Text(
-                                    text = target,
-                                    fontSize = 24.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
+                            Text(
+                                text = target,
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     }
                 }
             }
         }
 
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
