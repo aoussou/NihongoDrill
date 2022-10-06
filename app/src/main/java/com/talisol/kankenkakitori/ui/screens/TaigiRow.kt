@@ -24,7 +24,10 @@ fun TaigiRow(
         val modifier = Modifier
             .weight(1f)
             .aspectRatio(1f)
-            .border(BorderStroke(4.dp, Color.Black))
+//            .border(BorderStroke(1.dp, Color.Black))
+
+        val rowModifier = Modifier
+            .padding(4.dp)
 
         for (ql_ind in 0..4) {
 
@@ -37,72 +40,50 @@ fun TaigiRow(
                 modifier = Modifier
                     .weight(1f)
             ) {
+
                 Row(
-                    modifier = Modifier
-                        .padding(10.dp)
+                    modifier = rowModifier,
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Box(
+                    TaigiBox(
                         modifier = modifier,
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = question[0].toString(),
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    Box(
+                        text = question[0].toString()
+                    )
+                    TaigiBox(
                         modifier = modifier,
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = question[1].toString(),
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+                        text = question[1].toString()
+                    )
                 }
 
-
-
                 Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(10.dp)
+                    modifier = rowModifier,
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     if (isFirst == 1) {
-                        Box(
+                        TaigiBox(
                             modifier = modifier,
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = target,
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
+                            text = target
+                        )
                     }
 
                     Box(
-                        modifier = modifier,
+                        modifier =
+                        modifier.border(BorderStroke(1.dp, Color.Black)),
                         contentAlignment = Alignment.Center
                     ) {}
 
                     if (isFirst == 0) {
-                        Box(
+                        TaigiBox(
                             modifier = modifier,
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = target,
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-
+                            text = target
+                        )
                     }
+
                 }
             }
         }
     }
+
 }

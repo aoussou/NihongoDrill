@@ -29,59 +29,40 @@ fun TaigiScreen(
     val targetsList = extractStringFromJson(quizState.target!!)
 
 
-//        LazyVerticalGrid(
-//            columns = GridCells.Adaptive(38.dp),
-//            verticalArrangement = Arrangement.Center,
-//            content = {
-//                items(suggestionStrings.size) { index ->
-//                    Box(
-//                        modifier = Modifier
-//                            .border(BorderStroke(1.dp, Color.Black))
-//                            .aspectRatio(1f),
-//                        contentAlignment = Alignment.Center
-//                    ) {
-//                        Column {
-//                            Text(
-//                                suggestionStrings[index],
-//                                fontSize = 12.sp,
-//                            )
-//                        }
-//                    }
-//                }
-//            }
-//        )
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(38.dp),
+        verticalArrangement = Arrangement.Center,
+        content = {
+            items(suggestionStrings.size) { index ->
+                Box(
+                    modifier = Modifier
+                        .border(BorderStroke(1.dp, Color.Black))
+                        .aspectRatio(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column {
+                        Text(
+                            suggestionStrings[index],
+                            fontSize = 12.sp,
+                        )
+                    }
+                }
+            }
+        }
+    )
 
 
-        TaigiRow(
-            questionLists.slice(0..4),
-            correctAnswersList!!.slice(0..4),
-            targetsList.slice(0..4)
-        )
+    TaigiRow(
+        questionLists.slice(0..4),
+        correctAnswersList!!.slice(0..4),
+        targetsList.slice(0..4)
+    )
 
-//        TaigiRow2(
-//            questionLists.slice(0..4),
-//            correctAnswersList!!.slice(0..4),
-//            targetsList.slice(0..4)
-//        )
-//
-//        TaigiRow3(
-//            questionLists.slice(0..4),
-//            correctAnswersList!!.slice(0..4),
-//            targetsList.slice(0..4)
-//        )
-
-//    }
-
-
-
-
-
-
-//        TaigiRow(
-//            questionLists.slice(5..9),
-//            correctAnswersList!!.slice(5..9),
-//            targetsList.slice(5..9)
-//        )
+    TaigiRow(
+        questionLists.slice(5..9),
+        correctAnswersList!!.slice(5..9),
+        targetsList.slice(5..9)
+    )
 
 
 }
