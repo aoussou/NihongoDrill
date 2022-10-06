@@ -1,14 +1,13 @@
 package com.talisol.kankenkakitori.ui.screens
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.Top
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -21,29 +20,26 @@ import com.talisol.kankenkakitori.ui.states.QuizState
 fun KakiScreen(
     quizState: QuizState,
 ) {
-        val annotatedString = makeTargetRed(quizState.question, quizState.target!!)
+    val annotatedString = makeTargetRed(quizState.question, quizState.target!!)
 
-//    Text(
-//        text = annotatedString,
-//        fontSize = 16.sp,
-//        fontWeight = FontWeight.Bold
-//    )
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .border(BorderStroke(5.dp, Color.Green))
-        ,
-        contentAlignment = Alignment.Center,
+            .border(BorderStroke(5.dp, Color.Green)),
+
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
 
 
         Text(
-            modifier = Modifier.align(Center),
             text = annotatedString,
-            fontSize = 16.sp,
+            fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
         )
+
+        Text(text = quizState.inputAnswer ?: "", fontSize = 24.sp)
 
     }
 

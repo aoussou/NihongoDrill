@@ -57,42 +57,6 @@ class MainActivity : ComponentActivity() {
 
                 val trackingVM = viewModel<ProgressTrackingVM>()
 
-//                Column {
-//                    Box(
-//                        modifier = Modifier
-//                            .background(Color.Red)
-//                            .border(BorderStroke(5.dp, Color.Green))
-//                            .fillMaxWidth()
-//                            .weight(1f)
-//                    ){
-//
-//                    }
-//                    Box(
-//                        contentAlignment = Center,
-//                        modifier = Modifier
-//                            .background(Color.Blue)
-//                            .fillMaxWidth()
-//                    ) {
-//                        Text(
-//                            "hello",
-//                            color = Color.White
-//                        )
-//                    }
-//                }
-
-//                NewQuizScreen(
-//                    quizState = quizState,
-//                    onQuizAction = quizVM::onAction,
-//                    popupState = popupState,
-//                    currentPath = currentPath,
-//                    drawingState = drawingState,
-//                    onDrawingAction = drawingVM::onAction,
-//                    onKanjiRecAction = recognizerVM::onAction,
-//                    predictedKanji = predictedKanji.value,
-//                    otherGuessesList = otherGuessesList.value,
-//                    onTrackingAction = trackingVM::onAction,
-//                    onPopupAction = popupVM::onAction
-//                )
 
 
 

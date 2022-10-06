@@ -74,35 +74,50 @@ fun NewQuizScreen(
         ){
 
 
-            if (
-                quizState.questionType == "kaki"
-                || quizState.questionType == "yomi"
-                || quizState.questionType == "kousei"
-            ) {
+            if (!quizState.isAnswerConfirmed) {
 
-                KanjiDrawingWidget(
+                if (
+                    quizState.questionType == "kaki"
+                    || quizState.questionType == "yomi"
+                    || quizState.questionType == "kousei"
+                ) {
+
+                    KanjiDrawingWidget(
+                        quizState,
+                        drawingState,
+                        popupState,
+                        currentPath,
+                        predictedKanji,
+                        otherGuessesList,
+                        onDrawingAction,
+                        onKanjiRecAction,
+                        onPopupAction,
+                    )
+                }
+
+
+                QuizOperationMenu(
                     quizState,
-                    drawingState,
-                    popupState,
-                    currentPath,
                     predictedKanji,
-                    otherGuessesList,
-                    onDrawingAction,
-                    onKanjiRecAction,
+                    onQuizAction,
                     onPopupAction,
+                    onTrackingAction,
+                    onKanjiRecAction,
+                    onDrawingAction
                 )
+            } else {
+
+                CheckScreen(
+                    quizState,
+                    onPopupAction,
+                    onTrackingAction,
+                    onQuizAction
+                )
+
+
             }
 
 
-            QuizOperationMenu(
-                quizState,
-                predictedKanji,
-                onQuizAction,
-                onPopupAction,
-                onTrackingAction,
-                onKanjiRecAction,
-                onDrawingAction
-            )
 
         }
 
