@@ -45,6 +45,7 @@ fun NewQuizScreen(
     onPopupAction: (PopupAction) -> Unit
 ) {
 
+    QuizAlertDialog(popupState = popupState, onAction = onPopupAction)
 
 
     Column(modifier = Modifier

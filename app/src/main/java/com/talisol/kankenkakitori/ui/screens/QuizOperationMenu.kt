@@ -82,6 +82,7 @@ fun QuizOperationMenu(
         IconButton(
             onClick = {
                 onPopupAction(PopupAction.ShowAlertDialog(giveUp))
+                Log.i("DEBUG","gave up sent")
             }
         ) {
             Icon(

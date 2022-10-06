@@ -33,14 +33,36 @@ fun KakiScreen(
     ) {
 
 
-        Text(
-            text = annotatedString,
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-        )
+            Text(
+                text = annotatedString,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+            )
+
 
         Text(text = quizState.inputAnswer ?: "", fontSize = 24.sp)
 
-    }
+
+        if (quizState.isAnswerConfirmed) {
+
+            if (quizState.isAnswerCorrect != null) {
+
+                if (!quizState.isAnswerCorrect) {
+                    CorrectVsWrongAnswerScreen(quizState)
+                } else (
+                        Text(
+                            text = "CORRECT",
+                            fontSize = 32.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        )
+            }
+
+            }
+
+
+        }
+
+
 
 }
