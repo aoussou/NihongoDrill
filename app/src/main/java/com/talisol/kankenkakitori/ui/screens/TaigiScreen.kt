@@ -5,8 +5,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,22 +53,40 @@ fun TaigiScreen(
     )
 
 
-    TaigiRow(
-        quizState,
-        questionLists,
-        (0..4).toList(),
-        correctAnswersList!!,
-        targetsList,
-        onQuizAction,
-    )
+    var isShowingTaigi by remember { mutableStateOf(true) }
 
-//    TaigiRow(
-//        questionLists,
-//        (5..9).toList(),
-//        correctAnswersList!!,
-//        targetsList,
-//        onQuizAction,
-//    )
+
+    if (isShowingTaigi) {
+
+        TaigiRow(
+            quizState,
+            questionLists,
+            (0..4).toList(),
+            correctAnswersList!!,
+            targetsList,
+            onQuizAction,
+        )
+
+        Button(onClick = { isShowingTaigi = false }) {
+            Text(text = "Ruigi")
+        }
+
+    } else {
+        TaigiRow(
+            quizState,
+            questionLists,
+            (5..9).toList(),
+            correctAnswersList!!,
+            targetsList,
+            onQuizAction,
+        )
+
+        Button(onClick = { isShowingTaigi = true }) {
+            Text(text = "Taigi")
+        }
+    }
+
+
 
 
 }

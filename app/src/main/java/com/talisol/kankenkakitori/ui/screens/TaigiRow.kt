@@ -76,32 +76,42 @@ fun TaigiRow(
                         )
                     }
 
-                    Box(
-                        modifier =
-                        modifier
-                            .border(
-                                if (quizState.selectedSubQuestionNbr == ql_ind) BorderStroke(3.dp, Color.Blue)
-                                else  BorderStroke(1.dp, Color.Black)
-                            )
-                            .clickable {
-                                onQuizAction(QuizAction.SetSelectedSubQuestion(ql_ind))
-                            }
-                        ,
-                        contentAlignment = Alignment.Center
-                    ) {
 
-                        if (quizState.selectedAnswersList!= null) {
-                            if (quizState.selectedAnswersList[ql_ind] != null) {
-                                Text(
-                                    text = quizState.selectedAnswersList[ql_ind]!!,
-                                    fontSize = 28.sp,
-                                    fontWeight = FontWeight.Bold
+
+
+                        Box(
+                            modifier =
+                            modifier
+                                .border(
+                                    if (quizState.selectedSubQuestionNbr == ql_ind) BorderStroke(
+                                        3.dp,
+                                        Color.Blue
+                                    )
+                                    else BorderStroke(1.dp, Color.Black)
                                 )
+                                .clickable {
+                                    onQuizAction(QuizAction.SetSelectedSubQuestion(ql_ind))
+                                }
+                            ,
+                            contentAlignment = Alignment.Center
+                        ) {
+
+                            if (quizState.selectedAnswersList!= null) {
+                                if (quizState.selectedAnswersList[ql_ind] != null) {
+                                    Text(
+                                        text = quizState.selectedAnswersList[ql_ind]!!,
+                                        fontSize = 28.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
                             }
+
+
                         }
 
 
-                    }
+
+
 
                     if (isFirst == 0) {
                         TaigiBox(
