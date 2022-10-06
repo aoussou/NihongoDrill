@@ -1,6 +1,5 @@
 package com.talisol.kankenkakitori.ui.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,7 +17,6 @@ import androidx.compose.ui.unit.sp
 import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GojiScreen(
     quizState: QuizState,

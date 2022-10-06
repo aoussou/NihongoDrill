@@ -1,11 +1,12 @@
 package com.talisol.kankenkakitori.ui.screens
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,9 +14,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.talisol.kankenkakitori.actions.QuizAction
+import com.talisol.kankenkakitori.ui.states.QuizState
 
 @Composable
 fun TaigiRow(
+    quizState: QuizState,
     questionLists: List<String>,
     questionsRange: List<Int>,
     correctAnswersList: List<String>,
@@ -76,13 +79,27 @@ fun TaigiRow(
                     Box(
                         modifier =
                         modifier
-                            .border(BorderStroke(1.dp, Color.Black))
+                            .border(
+                                if (quizState.selectedSubQuestionNbr == ql_ind) BorderStroke(3.dp, Color.Blue)
+                                else  BorderStroke(1.dp, Color.Black)
+                            )
                             .clickable {
-                                       onQuizAction(QuizAction.SetSelectedSubQuestion(ql_ind))
+                                onQuizAction(QuizAction.SetSelectedSubQuestion(ql_ind))
                             }
                         ,
                         contentAlignment = Alignment.Center
                     ) {
+
+                        if (quizState.selectedAnswersList!= null) {
+                            if (quizState.selectedAnswersList[ql_ind] != null) {
+                                Text(
+                                    text = quizState.selectedAnswersList[ql_ind]!!,
+                                    fontSize = 28.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+
 
                     }
 

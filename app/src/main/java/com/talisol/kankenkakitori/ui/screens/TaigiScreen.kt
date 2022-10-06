@@ -53,6 +53,7 @@ fun TaigiScreen(
 
 
     TaigiRow(
+        quizState,
         questionLists,
         (0..4).toList(),
         correctAnswersList!!,
@@ -60,13 +61,13 @@ fun TaigiScreen(
         onQuizAction,
     )
 
-    TaigiRow(
-        questionLists,
-        (5..9).toList(),
-        correctAnswersList!!,
-        targetsList,
-        onQuizAction,
-    )
+//    TaigiRow(
+//        questionLists,
+//        (5..9).toList(),
+//        correctAnswersList!!,
+//        targetsList,
+//        onQuizAction,
+//    )
 
 
 }

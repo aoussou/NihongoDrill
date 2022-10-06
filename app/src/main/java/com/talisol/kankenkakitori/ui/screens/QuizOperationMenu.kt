@@ -132,7 +132,7 @@ fun QuizOperationMenu(
         IconButton(onClick = {
             if (predictedKanji != null) {
 
-                if (quizState.questionType == "busyu" && quizState.selectedSubQuestionNbr != null) {
+                if (quizState.questionType == "taigi" && quizState.selectedSubQuestionNbr != null) {
                     onQuizAction(
                         QuizAction.UpdateAnswersList(
                             predictedKanji,
