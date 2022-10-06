@@ -116,6 +116,7 @@ fun NewQuizScreen(
                 }
 
 
+
                 QuizOperationMenu(
                     quizState,
                     predictedKanji,

@@ -9,35 +9,46 @@ import com.talisol.kankenkakitori.actions.TrackingAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 
 @Composable
-fun MCAScreen (
+fun MCAScreen2 (
     quizState: QuizState,
     answersList: List<String>,
     answerTextList: List<String>,
     onQuizAction: (QuizAction) -> Unit,
     onTrackingAction: (TrackingAction) -> Unit,
     modifier: Modifier = Modifier,
-    isShowCorrect: Boolean = false
 ) {
+
 
     Column(
     modifier = Modifier
-    .fillMaxWidth(1.0F)
-    .fillMaxHeight(1.0F)
-    .then(modifier)
+        .fillMaxWidth(1.0F)
+        .fillMaxHeight(1.0F)
+        .then(modifier)
     ,
     verticalArrangement = Arrangement.SpaceEvenly
     ) {
         for (a in answersList.indices) {
             val buttonAnswer = answersList[a]
+            val isShowCorrectAnswer = quizState.isAnswerConfirmed
+                    && buttonAnswer == quizState.correctAnswer
             MCAButton(
                 buttonAnswer,
                 answerTextList[a],
                 {
-                    onQuizAction(QuizAction.InputAnswer(buttonAnswer))
-                    onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
+                    if (!quizState.isAnswerConfirmed) {
+                        onQuizAction(QuizAction.InputAnswer(buttonAnswer))
+                        onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
+                    }
+
                 },
-                textColor = if (isShowCorrect && buttonAnswer == (quizState.correctAnswer) ) Color.Green else Color.Black,
-                isSelected = buttonAnswer == quizState.inputAnswer
+                textColor =
+                if (isShowCorrectAnswer) {Color.Green}
+                else if (
+                    quizState.isAnswerConfirmed
+                    && buttonAnswer == quizState.inputAnswer
+                ) {Color.Red}
+                else {Color.Black},
+                isSelected = (buttonAnswer == quizState.inputAnswer) || isShowCorrectAnswer
             )
         }
     }
