@@ -27,7 +27,7 @@ fun DouonScreen(
 Column(
     modifier = Modifier
         .fillMaxWidth()
-        .fillMaxHeight(.75F)
+        .fillMaxHeight(.5F)
     ,
     verticalArrangement = Arrangement.SpaceBetween
 ) {

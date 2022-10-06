@@ -4,8 +4,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,7 +19,6 @@ import com.talisol.kankenkakitori.ui.states.QuizState
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ShikibetsuScreen(
     quizState: QuizState,
@@ -33,7 +32,7 @@ fun ShikibetsuScreen(
 
     Column {
         LazyVerticalGrid(
-            cells = GridCells.Adaptive(72.dp),
+            columns = GridCells.Adaptive(72.dp),
             verticalArrangement = Arrangement.Center,
             content = {
                 items(suggestionStrings.size) { index ->

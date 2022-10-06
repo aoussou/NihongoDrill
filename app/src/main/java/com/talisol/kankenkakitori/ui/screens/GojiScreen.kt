@@ -5,8 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,7 +27,7 @@ fun GojiScreen(
     val charList = quizState.question.toList()
 
     LazyVerticalGrid(
-        cells = GridCells.Adaptive(28.dp),
+        columns = GridCells.Adaptive(28.dp),
         verticalArrangement = Arrangement.Center,
         content = {
             items(charList.size) { index ->
