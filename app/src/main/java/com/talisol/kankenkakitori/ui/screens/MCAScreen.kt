@@ -9,7 +9,7 @@ import com.talisol.kankenkakitori.actions.TrackingAction
 import com.talisol.kankenkakitori.ui.states.QuizState
 
 @Composable
-fun MCAScreen2 (
+fun MCAScreen (
     quizState: QuizState,
     answersList: List<String>,
     answerTextList: List<String>,

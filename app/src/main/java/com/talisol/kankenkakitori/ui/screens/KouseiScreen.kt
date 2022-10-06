@@ -45,7 +45,7 @@ fun KouseiScreen(
 
 
 
-            MCAScreen2(
+            MCAScreen(
                 quizState,
                 listKata,
                 listText,
