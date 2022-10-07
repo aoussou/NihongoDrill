@@ -57,7 +57,6 @@ fun QuizOperationMenu(
             onKanjiRecAction(KanjiRecAction.ResetPredictedKanji)
             onPopupAction(PopupAction.CloseAlertDialog)
 
-            if (quizState.isLastQuestion) onQuizAction(QuizAction.EndQuiz)
         }
     )
 
