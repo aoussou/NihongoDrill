@@ -34,7 +34,7 @@ fun QuizOperationMenu(
 
     val modifier = Modifier
         .fillMaxWidth()
-        .fillMaxHeight(.1F)
+        .fillMaxHeight(.25F)
         .background(Color.White)
         .border(BorderStroke(3.dp, Color.Blue))
 
