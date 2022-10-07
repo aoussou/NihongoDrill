@@ -59,6 +59,14 @@ fun QuizOperationMenu(
         }
     )
 
+    val confirmSubmission = PopupState(
+        dialogText = "Are you sure you want to submit your answers?",
+        onConfirmAction = {
+            onQuizAction(QuizAction.ConfirmAnswersList(onTrackingAction))
+            onPopupAction(PopupAction.CloseAlertDialog)
+        }
+    )
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -120,7 +128,7 @@ fun QuizOperationMenu(
                 || quizState.questionType == "douon"
                 || quizState.questionType == "taigi"
             ) {
-                onQuizAction(QuizAction.ConfirmAnswersList(onTrackingAction))
+                onPopupAction(PopupAction.ShowAlertDialog(confirmSubmission))
             }
         }) {
             Icon(

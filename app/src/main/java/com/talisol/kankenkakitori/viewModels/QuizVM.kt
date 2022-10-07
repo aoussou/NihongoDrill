@@ -177,6 +177,7 @@ class QuizVM @Inject constructor() : ViewModel() {
                         isAnswerCorrect = null,
                         selectedWrongKanji = null,
                         selectedWrongKanjiInd = null,
+                        selectedSubQuestionNbr = null
                     )
                 }
 
@@ -206,6 +207,7 @@ class QuizVM @Inject constructor() : ViewModel() {
                         isAnswerCorrect = null,
                         selectedWrongKanji = null,
                         selectedWrongKanjiInd = null,
+                        selectedSubQuestionNbr = null
                     )
                 }
                 if (quizState.value.localQuestionNumber == _qaList.value.size - 1) _quizState.update {
