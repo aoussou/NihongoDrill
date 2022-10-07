@@ -18,8 +18,8 @@ class QuizSettingVM @Inject constructor(
 ) : ViewModel() {
 
 
-    private val skipAllCorrect = false
-    private val onlyNeverAnswered = false
+    private val skipAllCorrect = true
+    private val onlyNeverAnswered = true
     private val onlyMarked = false
 
     val quizTypesList: List<String> = kankenQuestionDataSource.getQuestionTypeList()
@@ -59,8 +59,8 @@ class QuizSettingVM @Inject constructor(
 
         if (_quizSelectionState.value.chosenNumberOfQuestions!! <= _localQAlist.value.size) {
             _quizSelectionState.update { it.copy(actualNumberOfQuestions = _quizSelectionState.value.chosenNumberOfQuestions) }
-//            _localQAlist.value =
-//                _localQAlist.value.shuffled().take(_quizSelectionState.value.chosenNumberOfQuestions!!)
+            _localQAlist.value =
+                _localQAlist.value.shuffled().take(_quizSelectionState.value.chosenNumberOfQuestions!!)
             _localQAlist.value =
                 _localQAlist.value.take(_quizSelectionState.value.chosenNumberOfQuestions!!)
         } else {
