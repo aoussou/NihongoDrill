@@ -39,7 +39,7 @@ fun QuizOperationMenu(
         .border(BorderStroke(3.dp, Color.Blue))
 
     val omitQuestionDialog = PopupState(
-        dialogText = "Do you give up?",
+        dialogText = "Are you sure you want the quiz to omit this question?",
         onConfirmAction = {
             onTrackingAction(TrackingAction.StopAsking(quizState.questionGlobalId!!))
             onPopupAction(PopupAction.CloseAlertDialog)
@@ -50,9 +50,11 @@ fun QuizOperationMenu(
     )
 
     val giveUp = PopupState(
-        dialogText = "Are you sure you want the quiz to omit this question?",
+        dialogText = "Do you give up?",
         onConfirmAction = {
             onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
+            onDrawingAction(DrawingAction.ClearAllPaths)
+            onKanjiRecAction(KanjiRecAction.ResetPredictedKanji)
             onPopupAction(PopupAction.CloseAlertDialog)
 
             if (quizState.isLastQuestion) onQuizAction(QuizAction.EndQuiz)

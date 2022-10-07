@@ -22,7 +22,7 @@ import kotlin.math.roundToInt
 
 
 @Composable
-fun DrawingPropertiesMenu(
+fun DrawingOperationsMenu(
     drawingState: DrawingState,
     onDrawingAction: (DrawingAction) -> Unit,
     onKanjiRecAction: (KanjiRecAction) -> Unit,
@@ -83,6 +83,9 @@ fun DrawingPropertiesMenu(
 
 
         IconButton(onClick = {
+
+            onKanjiRecAction(KanjiRecAction.ResetPredictedKanji)
+
             val bounds = drawingState.composableBounds!!
             val bmp = Bitmap
                 .createBitmap(
@@ -94,7 +97,9 @@ fun DrawingPropertiesMenu(
                     translate(-bounds.left, -bounds.top)
                     drawingState.drawingScreenView!!.draw(this)
                 }
+
             onKanjiRecAction(KanjiRecAction.RecognizeKanji(bmp))
+
         }) {
             Icon(
                 painter = painterResource(id =  R.drawable.ic_outline_check_24),

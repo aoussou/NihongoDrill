@@ -46,8 +46,10 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
             is KanjiRecAction.RecognizeKanji -> predictKanji(action.bitmap)
             is KanjiRecAction.ResetPredictedKanji -> resetPredictedKanji()
             is KanjiRecAction.SaveImage -> saveImage(action.kanji,action.directory)
-            is KanjiRecAction.SetOtherGuessesList -> setOtherGuessesList()
+            is KanjiRecAction.SetOtherGuessesList -> getOtherGuessesList()
             is KanjiRecAction.SetPredictedKanji -> setPredictedKanji(action.kanji)
+            is KanjiRecAction.ResetOtherGuesses -> resetOtherGuessesList()
+            is KanjiRecAction.ResetBitmap -> resetBitmap()
         }
     }
 
@@ -68,56 +70,72 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
     private val map = Json.parseToJsonElement(jsonString).jsonObject.toMutableMap()
 
     private var _bitmap : MutableStateFlow<Bitmap?> = MutableStateFlow(null)
-    private val bitmap = _bitmap.asStateFlow()
 
 //    private val model = Model.newInstance(application.baseContext)
 
     @RequiresApi(Build.VERSION_CODES.P)
     private fun predictKanji(imgBitmap: Bitmap) {
-        _bitmap.value = imgBitmap
-        val model = Model.newInstance(context)
-        val tensorImage = imageProcessor.process(TensorImage.fromBitmap(imgBitmap))
-        val buffer = tensorImage.tensorBuffer
 
-        val prediction = model.process(buffer)
-        model.close()
-        val outputBuffer = prediction.outputFeature0AsTensorBuffer
-        val finalOutput = outputBuffer.floatArray
+            _bitmap.value = imgBitmap
+//            saveImage("inside","debug")
+            val model = Model.newInstance(context)
+            val tensorImage = imageProcessor.process(TensorImage.fromBitmap(imgBitmap))
+            val buffer = tensorImage.tensorBuffer
 
-        _reducedIndicesList = mutableListOf()
-        _reducedProbList = mutableListOf()
 
-        for (ind in finalOutput.indices) {
-            val prob = finalOutput[ind]
-            if (prob > 1e-4) {
-                _reducedIndicesList!!.add(ind)
-                _reducedProbList!!.add(prob)
+            val prediction = model.process(buffer)
+            model.close()
+            val outputBuffer = prediction.outputFeature0AsTensorBuffer
+            val finalOutput = outputBuffer.floatArray
+
+            _reducedIndicesList = mutableListOf()
+            _reducedProbList = mutableListOf()
+
+            for (ind in finalOutput.indices) {
+                val prob = finalOutput[ind]
+                if (prob > 1e-4) {
+                    _reducedIndicesList!!.add(ind)
+                    _reducedProbList!!.add(prob)
+                }
             }
-        }
 
-        val predictedNumber = _reducedProbList!!.indexOfFirst { it == _reducedProbList!!.max() }
-        val originalInd = _reducedIndicesList!![predictedNumber]
-        val rawString = map[originalInd.toString()].toString()
-        val processedString = rawString.replace(""""""", "")
+            val predictedNumber = _reducedProbList!!.indexOfFirst { it == _reducedProbList!!.max() }
+            val originalInd = _reducedIndicesList!![predictedNumber]
+            val rawString = map[originalInd.toString()].toString()
+            val processedString = rawString.replace(""""""", "")
 
-        _reducedIndicesList!!.removeAt(predictedNumber)
-        _reducedProbList!!.removeAt(predictedNumber)
+            _reducedIndicesList!!.removeAt(predictedNumber)
+            _reducedProbList!!.removeAt(predictedNumber)
 
-        Log.i("TEST", processedString)
+            Log.i("TEST", processedString)
 
-        _predictedKanji.value = processedString
+            _predictedKanji.value = processedString
+
+
+
+
 
     }
 
     private fun resetPredictedKanji() {
         _predictedKanji.value = null
         _otherGuessesList.value = null
+        _bitmap.value = null
         _reducedIndicesList = null
         _reducedProbList = null
+
+    }
+
+    private fun resetOtherGuessesList() {
+        _otherGuessesList.value = null
+    }
+
+    private fun resetBitmap() {
+        _otherGuessesList.value = null
     }
 
 
-    private fun setOtherGuessesList() {
+    private fun getOtherGuessesList() {
 
         if (_reducedIndicesList != null && _otherGuessesList.value == null) {
 
@@ -157,7 +175,7 @@ class KanjiRecognitionVM(application: Application) : AndroidViewModel(applicatio
 
         if (_bitmap.value != null) {
             val randomId = java.util.UUID.randomUUID().toString()
-            bitmap.let {
+            _bitmap.let {
                 File(context.filesDir, "$directory/${kanji}_$randomId.png")
                     .writeBitmap(_bitmap.value!!, Bitmap.CompressFormat.PNG, 85)
             }

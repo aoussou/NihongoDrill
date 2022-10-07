@@ -8,12 +8,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.node.modifierElementOf
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -23,8 +20,6 @@ import com.talisol.kankenkakitori.actions.PopupAction
 import com.talisol.kankenkakitori.drawingUtils.DrawingState
 import com.talisol.kankenkakitori.ui.MySpinner
 import com.talisol.kankenkakitori.ui.states.PopupState
-import com.talisol.kankenkakitori.ui.states.QuizState
-import kotlinx.serialization.descriptors.PrimitiveKind
 
 @Composable
 fun KanjiDrawingWidget(
@@ -105,7 +100,7 @@ fun KanjiDrawingWidget(
                 .fillMaxHeight(.2F)
 
         ) {
-            DrawingPropertiesMenu(
+            DrawingOperationsMenu(
                 drawingState = drawingState,
                 onDrawingAction = onDrawingAction,
                 onKanjiRecAction = onKanjiRecAction
