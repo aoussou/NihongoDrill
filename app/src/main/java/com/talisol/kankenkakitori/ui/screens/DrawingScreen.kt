@@ -13,8 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.input.pointer.consumeDownChange
-import androidx.compose.ui.input.pointer.consumePositionChange
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -54,16 +53,16 @@ fun DrawingScreen(
             onDragStart = { pointerInputChange ->
                 onAction(DrawingAction.UpdateMotion(MotionEvent.Down))
                 onAction(DrawingAction.UpdateCurrentPosition(pointerInputChange.position))
-                pointerInputChange.consumeDownChange()
+                if (pointerInputChange.pressed != pointerInputChange.previousPressed) pointerInputChange.consume()
             },
             onDrag = { pointerInputChange ->
                 onAction(DrawingAction.UpdateMotion(MotionEvent.Move))
                 onAction(DrawingAction.UpdateCurrentPosition(pointerInputChange.position))
-                pointerInputChange.consumePositionChange()
+                if (pointerInputChange.positionChange() != Offset.Zero) pointerInputChange.consume()
             },
             onDragEnd = { pointerInputChange ->
                 onAction(DrawingAction.UpdateMotion(MotionEvent.Up))
-                pointerInputChange.consumeDownChange()
+                if (pointerInputChange.pressed != pointerInputChange.previousPressed) pointerInputChange.consume()
             }
         )
 

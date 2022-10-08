@@ -7,6 +7,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,12 +22,13 @@ import com.talisol.kankenkakitori.actions.PopupAction
 import com.talisol.kankenkakitori.drawingUtils.DrawingState
 import com.talisol.kankenkakitori.ui.MySpinner
 import com.talisol.kankenkakitori.ui.states.PopupState
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun KanjiDrawingWidget(
-    drawingState: DrawingState,
+    drawingStateFlow: StateFlow<DrawingState>,
     popupState: PopupState,
-    currentPath: Path,
+    currentPathFlow: StateFlow<Path>,
     predictedKanji: String?,
     otherGuessesList: List<String>?,
     onDrawingAction: (DrawingAction) -> Unit,
@@ -34,6 +37,11 @@ fun KanjiDrawingWidget(
     modifier: Modifier,
     isDrawingAllowed: Boolean = true
 ) {
+
+
+    val currentPathState by currentPathFlow.collectAsState()
+    val drawingState by drawingStateFlow.collectAsState()
+
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -82,7 +90,7 @@ fun KanjiDrawingWidget(
 
             if (isDrawingAllowed) {
                 DrawingScreen(
-                    currentPath,
+                    currentPathState,
                     drawingState,
                     onDrawingAction,
                 )

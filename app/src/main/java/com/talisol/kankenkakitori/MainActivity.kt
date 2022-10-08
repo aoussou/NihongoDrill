@@ -33,8 +33,8 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
 
                 val drawingVM = viewModel<DrawingVM>()
-                val drawingState by drawingVM.drawingState.collectAsState()
-                val currentPath by drawingVM.currentPath.collectAsState()
+                val drawingState = drawingVM.drawingState
+                val currentPath = drawingVM.currentPath
 
                 val recognizerVM = viewModel<KanjiRecognitionVM>()
                 val otherGuessesList = recognizerVM.otherGuessesList.collectAsState()

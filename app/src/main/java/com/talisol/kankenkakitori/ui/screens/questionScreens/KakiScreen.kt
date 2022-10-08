@@ -1,5 +1,6 @@
 package com.talisol.kankenkakitori.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +21,9 @@ import com.talisol.kankenkakitori.ui.states.QuizState
 fun KakiScreen(
     quizState: QuizState,
 ) {
+
+    Log.i("DEBUG_KAKI","triggered")
+
     val annotatedString = makeTargetRed(quizState.question, quizState.target!!)
 
 

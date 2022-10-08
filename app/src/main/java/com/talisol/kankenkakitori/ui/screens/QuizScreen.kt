@@ -23,14 +23,15 @@ import com.talisol.kankenkakitori.actions.*
 import com.talisol.kankenkakitori.drawingUtils.DrawingState
 import com.talisol.kankenkakitori.ui.states.PopupState
 import com.talisol.kankenkakitori.ui.states.QuizState
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun QuizScreen(
     quizState: QuizState,
     popupState: PopupState,
     onQuizAction: (QuizAction) -> Unit,
-    currentPath: Path,
-    drawingState: DrawingState,
+    currentPath: StateFlow<Path>,
+    drawingState: StateFlow<DrawingState>,
     onDrawingAction: (DrawingAction) -> Unit,
     onKanjiRecAction: (KanjiRecAction) -> Unit,
     predictedKanji: String?,

@@ -6,10 +6,7 @@ import androidx.compose.foundation.gestures.drag
 import androidx.compose.foundation.gestures.forEachGesture
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.pointer.AwaitPointerEventScope
-import androidx.compose.ui.input.pointer.PointerInputChange
-import androidx.compose.ui.input.pointer.consumePositionChange
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.*
 
 
 suspend fun AwaitPointerEventScope.awaitDrawMotionEvent(
@@ -32,7 +29,7 @@ suspend fun AwaitPointerEventScope.awaitDrawMotionEvent(
             // Consuming position change causes change.positionChanged() to return false.
 
 
-            change.consumePositionChange()
+            if (change.positionChange() != Offset.Zero) change.consume()
         }
 
     if (change != null) {

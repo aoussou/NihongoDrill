@@ -65,7 +65,8 @@ fun SelectKyuScreen(
         ) {
             Text(text = "SELECT LEVEL")
             for (i in groupsList) {
-                Button(onClick = {
+                Button(
+                    onClick = {
                     onAction(QuizSettingAction.SelectQuestionLevel(i))
                 }) {
                     Text(text = i)
