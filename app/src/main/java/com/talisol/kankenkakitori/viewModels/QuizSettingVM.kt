@@ -50,8 +50,12 @@ class QuizSettingVM @Inject constructor(
     private fun makeLocalQuestionList() {
 
         _localQAlist.value = _localQAlist.value.filter {it.available.toInt() == 1 }
-        _localQAlist.value = _localQAlist.value.sortedBy { it.correct_streak }
-        _localQAlist.value = _localQAlist.value.sortedByDescending { it.total_wrong }
+        _localQAlist.value = _localQAlist.value.sortedWith(
+            compareBy<SelectKakitoriQuestions> {it.correct_streak}
+                .thenByDescending { it.total_wrong }
+                .thenBy { it.total_correct }
+        )
+
 
         if (onlyNeverAnswered) _localQAlist.value =
             _localQAlist.value.filter { it.total_correct == 0L && it.total_wrong == 0L }
