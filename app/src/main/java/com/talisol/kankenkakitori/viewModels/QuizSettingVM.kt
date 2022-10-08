@@ -19,7 +19,8 @@ class QuizSettingVM @Inject constructor(
 
 
     private val skipAllCorrect = true
-    private val onlyNeverAnswered = true
+    private val sortByFewestTries = true
+    private val onlyNeverAnswered = false
     private val onlyMarked = false
 
     val quizTypesList: List<String> = kankenQuestionDataSource.getQuestionTypeList()
@@ -49,11 +50,18 @@ class QuizSettingVM @Inject constructor(
     private fun makeLocalQuestionList() {
 
         _localQAlist.value = _localQAlist.value.filter {it.available.toInt() == 1 }
+        _localQAlist.value = _localQAlist.value.sortedBy { it.correct_streak }
+        _localQAlist.value = _localQAlist.value.sortedByDescending { it.total_wrong }
+
+        if (onlyNeverAnswered) _localQAlist.value =
+            _localQAlist.value.filter { it.total_correct == 0L && it.total_wrong == 0L }
+        if (sortByFewestTries) _localQAlist.value =
+            _localQAlist.value.sortedBy { it.total_correct + it.total_wrong }
 
         if (skipAllCorrect) _localQAlist.value =
             _localQAlist.value.filter { !(it.total_correct > 0L && it.total_wrong == 0L) }
-        if (onlyNeverAnswered) _localQAlist.value =
-            _localQAlist.value.filter { it.total_correct == 0L && it.total_wrong == 0L }
+
+
         if (onlyMarked) _localQAlist.value =
             _localQAlist.value.filter { it.marked_for_review == 1L}
 

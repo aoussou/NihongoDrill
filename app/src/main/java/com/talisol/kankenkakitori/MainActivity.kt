@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.actions.QuizSettingAction
-import com.talisol.kankenkakitori.ui.screens.NewQuizScreen
+import com.talisol.kankenkakitori.ui.screens.QuizScreen
 import com.talisol.kankenkakitori.ui.screens.SelectKyuScreen
 import com.talisol.kankenkakitori.ui.theme.KankenKakitoriTheme
 import com.talisol.kankenkakitori.viewModels.*
@@ -112,7 +112,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 } else {
-                        NewQuizScreen(
+                        QuizScreen(
                             quizState = quizState,
                             onQuizAction = quizVM::onAction,
                             popupState = popupState,

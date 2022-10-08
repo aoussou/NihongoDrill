@@ -25,7 +25,7 @@ import com.talisol.kankenkakitori.ui.states.PopupState
 import com.talisol.kankenkakitori.ui.states.QuizState
 
 @Composable
-fun NewQuizScreen(
+fun QuizScreen(
     quizState: QuizState,
     popupState: PopupState,
     onQuizAction: (QuizAction) -> Unit,

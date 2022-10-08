@@ -56,6 +56,18 @@ fun CheckScreen(
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
+
+        Box(
+            modifier = Modifier
+                .clickable {
+                    onPopupAction(PopupAction.ShowAlertDialog(iWasRightDialog))
+                }
+                .border(BorderStroke(2.dp, Color.Black)),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("STOP ASKING")
+        }
+
         Box(
             modifier = Modifier
                 .clickable {

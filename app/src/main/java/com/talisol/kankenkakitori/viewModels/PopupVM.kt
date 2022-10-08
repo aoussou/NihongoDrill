@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.update
 
 class PopupVM: ViewModel() {
 
+
+
     private val _popupState = MutableStateFlow(PopupState())
     val popupState = _popupState.asStateFlow()
 

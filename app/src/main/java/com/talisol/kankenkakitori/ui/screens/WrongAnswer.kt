@@ -46,6 +46,16 @@ fun WrongAnswer(
         }
     )
 
+    val omitQuestionDialog = PopupState(
+        dialogText = "Are you sure you want the quiz to omit this question?",
+        onConfirmAction = {
+            onTrackingAction(TrackingAction.StopAsking(quizState.questionGlobalId!!))
+            onPopupAction(PopupAction.CloseAlertDialog)
+            onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
+
+            if (quizState.isLastQuestion) onQuizAction(QuizAction.EndQuiz)
+        }
+    )
 
     Column(
         verticalArrangement = Arrangement.Top,
