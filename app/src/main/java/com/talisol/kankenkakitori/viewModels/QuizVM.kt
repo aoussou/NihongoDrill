@@ -57,14 +57,7 @@ class QuizVM @Inject constructor() : ViewModel() {
     }
 
     private fun endQuiz() {
-        _quizState.update {
-            it.copy(
-                isQuizStarted = false,
-                isQuizOver = true,
-                inputAnswer = null,
-                isAnswerConfirmed = false
-            )
-        }
+        _quizState.value = QuizState()
     }
 
 
