@@ -30,7 +30,7 @@ fun DouonScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(.5F),
+           ,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
 
@@ -41,7 +41,7 @@ fun DouonScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp)
+                    .padding(40.dp)
                     .weight(1f)
                 ,
                 verticalAlignment = Alignment.CenterVertically,
