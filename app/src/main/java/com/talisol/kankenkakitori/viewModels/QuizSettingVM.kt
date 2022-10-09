@@ -56,11 +56,8 @@ class QuizSettingVM @Inject constructor(
                 .thenBy { it.total_correct }
         )
 
-
         if (onlyNeverAnswered) _localQAlist.value =
             _localQAlist.value.filter { it.total_correct == 0L && it.total_wrong == 0L }
-        if (sortByFewestTries) _localQAlist.value =
-            _localQAlist.value.sortedBy { it.total_correct + it.total_wrong }
 
         if (skipAllCorrect) _localQAlist.value =
             _localQAlist.value.filter { !(it.total_correct > 0L && it.total_wrong == 0L) }
@@ -72,9 +69,10 @@ class QuizSettingVM @Inject constructor(
         if (_quizSelectionState.value.chosenNumberOfQuestions!! <= _localQAlist.value.size) {
             _quizSelectionState.update { it.copy(actualNumberOfQuestions = _quizSelectionState.value.chosenNumberOfQuestions) }
             _localQAlist.value =
-                _localQAlist.value.shuffled().take(_quizSelectionState.value.chosenNumberOfQuestions!!)
-            _localQAlist.value =
                 _localQAlist.value.take(_quizSelectionState.value.chosenNumberOfQuestions!!)
+            _localQAlist.value =
+                _localQAlist.value.shuffled()
+
         } else {
             _quizSelectionState.update { it.copy(actualNumberOfQuestions = localQAlist.value.size) }
         }
