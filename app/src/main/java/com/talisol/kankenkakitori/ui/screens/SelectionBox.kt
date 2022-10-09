@@ -23,18 +23,21 @@ fun SelectionBox(
     suggestionStrings: List<String>,
     listKata: List<String>,
     selectedAnswerIndex: Int,
+    modifier: Modifier = Modifier
 ) {
 
     var isExpanded by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
-            .fillMaxSize(.25F)
+            .fillMaxWidth(.00005F)
             .aspectRatio(1f)
-//            .padding(12.dp)
+            .padding(1.dp)
             .border(BorderStroke(1.dp, Color.Black))
             .background(Color.White)
-            .clickable { isExpanded = true },
+            .clickable { isExpanded = true }
+//            .then(modifier)
+        ,
         contentAlignment = Alignment.Center
     ) {
 

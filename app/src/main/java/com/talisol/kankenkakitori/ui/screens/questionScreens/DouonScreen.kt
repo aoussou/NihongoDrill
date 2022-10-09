@@ -7,6 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.talisol.kankenkakitori.actions.QuizAction
 import com.talisol.kankenkakitori.quizUtils.extractStringFromJson
@@ -24,6 +25,8 @@ fun DouonScreen(
     val questionsStrings = extractStringFromJson(quizState.question)
     val listKata = listOf("ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ")
 
+
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -31,17 +34,23 @@ fun DouonScreen(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
 
+        val selectionBoxModifier = Modifier.weight(1f)
 
         for (q in questionsStrings.indices) {
             val annotatedString = makeTargetRed(questionsStrings[q], quizState.target!!)
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+                    .weight(1f)
+                ,
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     annotatedString,
                     fontSize = 16.sp,
+//                    modifier = Modifier.weight(1f)
                 )
 
                 SelectionBox(
@@ -49,7 +58,8 @@ fun DouonScreen(
                     onQuizAction,
                     mcaStrings!!,
                     listKata,
-                    q
+                    q,
+                    selectionBoxModifier
                 )
 
                 if (quizState.correctAnswersList != null) {
@@ -80,10 +90,18 @@ fun DouonScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             for (s in mcaStrings!!.indices) {
-                Text(
-                    "${listKata[s]} : ${mcaStrings[s]}",
-                    fontSize = 24.sp,
-                )
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        "${listKata[s]} :",
+                        fontSize = 24.sp,
+                    )
+                    Text(
+                        "${mcaStrings[s]}",
+                        fontSize = 24.sp,
+                    )
+
+                }
+
 
             }
         }
