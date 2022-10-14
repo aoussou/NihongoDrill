@@ -11,7 +11,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.talisol.kankenkakitori"
+        applicationId "com.talisol.nihongodrill"
         minSdk 25
         targetSdk 33
         versionCode 1
@@ -96,6 +96,6 @@ dependencies {
 
 sqldelight{
     KanjiDatabase{
-        packageName = "com.talisol.kankenkakitori"
+        packageName = "com.talisol.nihongodrill"
     }
 }
