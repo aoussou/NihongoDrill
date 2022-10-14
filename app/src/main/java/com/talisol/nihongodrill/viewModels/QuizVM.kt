@@ -78,6 +78,7 @@ class QuizVM @Inject constructor() : ViewModel() {
             isMCAtype
             || _quizState.value.questionType == "busyu"
             || _quizState.value.questionType == "bunpou"
+            || _quizState.value.questionType!!.lowercase().contains("n2")
         ) {
             extractStringFromJson(qas.mca_list!!).toMutableList()
         }else{

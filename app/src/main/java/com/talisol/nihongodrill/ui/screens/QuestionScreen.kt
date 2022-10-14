@@ -29,6 +29,10 @@ fun QuestionScreen(
             "okuri" -> KakiScreen(quizState)
         }
 
+        if(quizState.questionType!!.lowercase().contains("n2") ){
+            JLPTScreen(quizState,onQuizAction,onTrackingAction)
+        }
+
 
 
 
