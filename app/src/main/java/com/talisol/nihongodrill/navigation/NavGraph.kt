@@ -23,7 +23,11 @@ fun SetupNavGraph(
         }
 
         composable(route = ScreenRoute.LevelSelection.route) {
-            LevelSectionScreen(quizSelectionState)
+            LevelSectionScreen(
+                navController = navController,
+                quizSelectionState = quizSelectionState,
+                onQuizSettingAction = onQuizSettingAction
+            )
         }
 
     }

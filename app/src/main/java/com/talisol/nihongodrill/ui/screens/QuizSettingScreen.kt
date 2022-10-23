@@ -46,7 +46,7 @@ fun QuizSettingScreen(
             Text(text = "SELECT TYPE")
             for (i in quizType) {
                 Button(onClick = {
-                    onAction(QuizSettingAction.ChooseQuestionType(i))
+//                    onAction(QuizSettingAction.ChooseQuestionType(i))
                 }) {
                     Text(text = i)
                 }
