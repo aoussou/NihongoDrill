@@ -1,9 +1,9 @@
-package com.talisol.kankenkakitori.di
+package com.talisol.nihongodrill.di
 
 import android.app.Application
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
-import com.talisol.nihongodrill.KanjiDatabase
+import com.talisol.nihongodrill.NihongoDatabase
 import com.talisol.nihongodrill.data.ManagerDataSource
 import com.talisol.nihongodrill.data.ManagerDataSourceImpl
 import com.talisol.nihongodrill.data.ProgressDataSource
@@ -22,7 +22,7 @@ object AppModule {
     @Singleton
     fun provideSqlDriver(app:Application): SqlDriver{
         return AndroidSqliteDriver(
-            schema = KanjiDatabase.Schema,
+            schema = NihongoDatabase.Schema,
             context = app,
             name = "nihongo.db"
         )
@@ -31,13 +31,13 @@ object AppModule {
     @Provides
     @Singleton
     fun provideKanjiDataSource(driver: SqlDriver): ManagerDataSource {
-        return ManagerDataSourceImpl(KanjiDatabase(driver))
+        return ManagerDataSourceImpl(NihongoDatabase(driver))
     }
 
     @Provides
     @Singleton
     fun provideProgressDataSource(driver: SqlDriver): ProgressDataSource {
-        return ProgressDataSourceImpl(KanjiDatabase(driver))
+        return ProgressDataSourceImpl(NihongoDatabase(driver))
     }
 
 

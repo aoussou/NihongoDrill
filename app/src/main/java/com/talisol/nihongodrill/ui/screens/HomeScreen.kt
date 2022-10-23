@@ -1,10 +1,14 @@
 package com.talisol.nihongodrill.ui.screens.questionScreens
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.talisol.nihongodrill.actions.QuizSettingAction
+import com.talisol.nihongodrill.navigation.ScreenRoute
 
 @Composable
 fun HomeScreen(
@@ -12,18 +16,26 @@ fun HomeScreen(
     navController: NavController
 ) {
 
-    Text("SELECT TEST TYPE")
+    Column(modifier = Modifier.fillMaxSize()) {
 
-    Button(onClick = {
-        onQuizSettingAction(QuizSettingAction.SelectCategory("jlpt"))
-    }) {
-        Text(text = "JLPT")
+        Text("SELECT TEST TYPE")
+
+        Button(onClick = {
+            onQuizSettingAction(QuizSettingAction.SelectCategory("jlpt"))
+            navController.navigate(ScreenRoute.LevelSelection.route)
+        }) {
+            Text(text = "JLPT")
+        }
+
+        Button(onClick = {
+            onQuizSettingAction(QuizSettingAction.SelectCategory("kanken"))
+            navController.navigate(ScreenRoute.LevelSelection.route)
+        }) {
+            Text(text = "漢検")
+        }
+
     }
 
-    Button(onClick = {
-        onQuizSettingAction(QuizSettingAction.SelectCategory("kanken"))
-    }) {
-        Text(text = "漢検")
-    }
+
 
 }

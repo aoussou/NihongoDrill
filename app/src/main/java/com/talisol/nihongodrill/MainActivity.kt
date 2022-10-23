@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val quizSettingVM = viewModel<QuizSettingVM>()
-//            val localQuizState by quizSettingVM.quizSelectionState.collectAsState()
+            val quizSelectionState by quizSettingVM.quizSelectionState.collectAsState()
 
             NihongoDrillTheme {
 
@@ -42,6 +42,7 @@ class MainActivity : ComponentActivity() {
                 SetupNavGraph(
                     navController = navController,
                     onQuizSettingAction = quizSettingVM::onAction,
+                    quizSelectionState = quizSelectionState
                 )
 
 

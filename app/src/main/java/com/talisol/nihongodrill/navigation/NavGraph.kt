@@ -6,13 +6,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.talisol.nihongodrill.actions.QuizSettingAction
 import com.talisol.nihongodrill.ui.screens.LevelSectionScreen
-import com.talisol.nihongodrill.ui.screens.QuizSettingScreen
 import com.talisol.nihongodrill.ui.screens.questionScreens.HomeScreen
+import com.talisol.nihongodrill.ui.states.QuizSelectionState
 
 @Composable
 fun SetupNavGraph(
     navController: NavHostController,
     onQuizSettingAction: (QuizSettingAction) -> Unit,
+    quizSelectionState: QuizSelectionState
 ) {
 
     NavHost(navController = navController, startDestination = ScreenRoute.HomeScreen.route) {
@@ -22,7 +23,7 @@ fun SetupNavGraph(
         }
 
         composable(route = ScreenRoute.LevelSelection.route) {
-            LevelSectionScreen()
+            LevelSectionScreen(quizSelectionState)
         }
 
     }

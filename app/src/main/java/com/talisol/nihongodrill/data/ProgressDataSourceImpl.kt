@@ -1,11 +1,11 @@
 package com.talisol.nihongodrill.data
 
-import com.talisol.nihongodrill.KanjiDatabase
-import databases.tracking.Progress
+import com.talisol.nihongodrill.NihongoDatabase
+import databases.Progress
 
 
 class ProgressDataSourceImpl(
-    db: KanjiDatabase
+    db: NihongoDatabase
 ) : ProgressDataSource {
 
     private val queries = db.progressQueries

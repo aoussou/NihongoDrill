@@ -3,10 +3,10 @@ package com.talisol.nihongodrill.viewModels
 import androidx.lifecycle.ViewModel
 import com.talisol.nihongodrill.actions.QuizAction
 import com.talisol.nihongodrill.actions.TrackingAction
+import com.talisol.nihongodrill.quizUtils.Question
 import com.talisol.nihongodrill.quizUtils.extractStringFromJson
 import com.talisol.nihongodrill.ui.states.QuizState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import databases.kanji.SelectKakitoriQuestions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -21,7 +21,7 @@ class QuizVM @Inject constructor() : ViewModel() {
     private val mcaType = listOf("shikibetsu","douon","taigi")
 
 
-    private val _qaList = MutableStateFlow(listOf<SelectKakitoriQuestions>())
+    private val _qaList = MutableStateFlow(listOf<Question>())
 
     fun onAction(action: QuizAction) {
         when (action) {
@@ -216,7 +216,7 @@ class QuizVM @Inject constructor() : ViewModel() {
     }
 
 
-    private fun loadQuestion(selectedQuestionsList: List<SelectKakitoriQuestions>) {
+    private fun loadQuestion(selectedQuestionsList: List<Question>) {
         _qaList.value = selectedQuestionsList
     }
 
