@@ -1,9 +1,10 @@
-package com.talisol.nihongodrill.ui.screens
+package com.talisol.nihongodrill.ui.screens.questionScreens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import com.talisol.nihongodrill.actions.QuizAction
 import com.talisol.nihongodrill.ui.states.QuizState
 
+
 @Composable
 fun TaigiRow(
     quizState: QuizState,
@@ -22,10 +24,15 @@ fun TaigiRow(
     questionsRange: List<Int>,
     correctAnswersList: List<String>,
     targetsList: List<String>,
-    onQuizAction: (QuizAction) -> Unit
+    onQuizAction: (QuizAction) -> Unit,
+    modifier: Modifier = Modifier
 ) {
 
-    Row {
+    Row(modifier = Modifier
+        .padding(bottom = 0.dp)
+        .then(modifier)
+
+    ) {
 
         val modifier = Modifier
             .weight(1f)
@@ -33,7 +40,7 @@ fun TaigiRow(
 //            .border(BorderStroke(1.dp, Color.Black))
 
         val rowModifier = Modifier
-            .padding(4.dp)
+            .padding(0.dp)
 
         for (ql_ind in questionsRange) {
 
@@ -42,12 +49,15 @@ fun TaigiRow(
             val isFirst = targetsList[ql_ind].indexOf(correctAnswer)
             val target = targetsList[ql_ind].replace(correctAnswer, "")
 
-            val isAnswerCorrect =
-                if (quizState.selectedAnswersList != null) {
-                    quizState.selectedAnswersList[ql_ind] == quizState.correctAnswersList!![ql_ind]
-                } else {
-                    null
-                }
+//            val isAnswerCorrect =
+//                if (quizState.selectedAnswersList != null) {
+//                    quizState.selectedAnswersList[ql_ind] == quizState.correctAnswersList!![ql_ind]
+//                } else {
+//                    null
+//                }
+
+            val isAnswerCorrect = quizState.selectedAnswersList!![ql_ind] == quizState.correctAnswersList!![ql_ind]
+
 
 
             Column(
@@ -70,6 +80,12 @@ fun TaigiRow(
                         text = question[1].toString()
                     )
                 }
+
+                Divider(
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(horizontal = 1.dp, vertical = 1.dp)
+                )
 
                 Row(
                     modifier = rowModifier,
@@ -157,32 +173,21 @@ fun TaigiRow(
                         }
                     }
                 }
-
-
             }
+
+
+            Divider(
+                color = Color.Black,
+                modifier = Modifier
+//                    .padding(horizontal = 1.dp, vertical = 1.dp)
+                    .padding(bottom = if(isAnswerCorrect!!) 120.dp else 1.dp, start = 1.dp,end=1.dp)
+                    .fillMaxHeight()
+                    .width(2.dp)
+            )
+
         }
     }
 
 }
 
 
-//                        if (isAnswerCorrect != null) {
-//                            if (quizState.isAnswerConfirmed && !isAnswerCorrect) {
-//
-//                                    Box(
-//                                        modifier =
-//                                        modifier
-//                                            .border(BorderStroke(1.dp, Color.Red)),
-//                                        contentAlignment = Alignment.Center
-//                                    ) {
-//                                        Text(
-//                                            text = quizState.correctAnswersList!![ql_ind],
-//                                            fontSize = 28.sp,
-//                                            fontWeight = FontWeight.Bold,
-//                                            color = Color.Red
-//                                        )
-//                                    }
-//
-//
-//                            }
-//                        }

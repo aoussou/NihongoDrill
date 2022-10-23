@@ -1,4 +1,4 @@
-package com.talisol.nihongodrill.ui.screens
+package com.talisol.nihongodrill.ui.screens.questionScreens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.Text

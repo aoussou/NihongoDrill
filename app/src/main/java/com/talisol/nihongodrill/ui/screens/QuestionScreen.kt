@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.talisol.nihongodrill.actions.QuizAction
 import com.talisol.nihongodrill.actions.TrackingAction
+import com.talisol.nihongodrill.ui.screens.questionScreens.TaigiScreen
 import com.talisol.nihongodrill.ui.states.QuizState
 
 
