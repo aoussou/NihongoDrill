@@ -18,7 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.talisol.nihongodrill.actions.QuizAction
 import com.talisol.nihongodrill.actions.QuizSettingAction
 import com.talisol.nihongodrill.ui.screens.QuizScreen
-import com.talisol.nihongodrill.ui.screens.SelectKyuScreen
+import com.talisol.nihongodrill.ui.screens.QuizSettingScreen
 import com.talisol.nihongodrill.ui.theme.NihongoDrillTheme
 import com.talisol.nihongodrill.viewModels.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
                         ) {
 
 
-                            SelectKyuScreen(
+                            QuizSettingScreen(
                                 groupsList = quizSettingVM.groupsList,
                                 quizType = quizSettingVM.quizTypesList,
                                 onAction = quizSettingVM::onAction

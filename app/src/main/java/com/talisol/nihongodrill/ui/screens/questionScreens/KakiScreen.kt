@@ -22,8 +22,6 @@ fun KakiScreen(
     quizState: QuizState,
 ) {
 
-    Log.i("DEBUG_KAKI","triggered")
-
     val annotatedString = makeTargetRed(quizState.question, quizState.target!!)
 
 

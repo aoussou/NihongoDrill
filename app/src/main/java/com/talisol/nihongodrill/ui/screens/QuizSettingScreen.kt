@@ -24,7 +24,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.talisol.nihongodrill.actions.QuizSettingAction
 
 @Composable
-fun SelectKyuScreen(
+fun QuizSettingScreen(
     groupsList: List<String>,
     quizType: List<String>,
     modifier: Modifier = Modifier,

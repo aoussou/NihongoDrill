@@ -25,7 +25,6 @@ fun GojiScreen(
 ) {
     val charList = quizState.question.toList()
 
-    Log.i("DEBUG_GOJI","triggered")
     LazyVerticalGrid(
         columns = GridCells.Adaptive(28.dp),
         verticalArrangement = Arrangement.Center,

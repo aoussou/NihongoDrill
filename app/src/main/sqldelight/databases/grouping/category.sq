@@ -1,0 +1,40 @@
+CREATE TABLE kanken (
+    id INTEGER PRIMARY KEY NOT NULL,
+    global_id INTEGER NOT NULL,
+    kyu INTEGER NOT NULL,
+    question_type TEXT NOT NULL,
+    source TEXT,
+    FOREIGN KEY (global_id) REFERENCES progress(id)
+);
+
+
+getKankenKyuList:
+SELECT DISTINCT kyu
+FROM kanken
+ORDER BY kyu;
+
+getKankenQuestionType:
+SELECT DISTINCT question_type
+FROM kanken
+WHERE kyu =: kyu
+ORDER BY question_type;
+
+CREATE TABLE jlpt (
+    id INTEGER PRIMARY KEY NOT NULL,
+    global_id INTEGER NOT NULL,
+    level INTEGER NOT NULL,
+    question_type TEXT NOT NULL,
+    source TEXT,
+    FOREIGN KEY (global_id) REFERENCES progress(id)
+);
+
+getJLPTlevelList:
+SELECT DISTINCT level
+FROM jlpt
+ORDER BY level;
+
+getJLPTquestionType:
+SELECT DISTINCT question_type
+FROM jlpt
+WHERE level =: level
+ORDER BY question_type;

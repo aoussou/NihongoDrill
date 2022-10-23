@@ -51,7 +51,8 @@ class QuizSettingVM @Inject constructor(
 
         _localQAlist.value = _localQAlist.value.filter {it.available.toInt() == 1 }
         _localQAlist.value = _localQAlist.value.sortedWith(
-            compareBy<SelectKakitoriQuestions> {it.correct_streak}
+            compareBy<SelectKakitoriQuestions> {it.total_correct + it.total_wrong}
+                .thenBy { it.correct_streak }
                 .thenByDescending { it.total_wrong }
                 .thenBy { it.total_correct }
         )

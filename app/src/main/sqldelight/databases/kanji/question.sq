@@ -1,32 +1,27 @@
-CREATE TABLE  kankenQuestion(
+CREATE TABLE  question(
     id INTEGER PRIMARY KEY NOT NULL,
     global_id INTEGER NOT NULL,
     question TEXT NOT NULL ,
     answer TEXT NOT NULL,
     target TEXT,
     mca_list TEXT,
-    kanken_kyu TEXT NOT NULL,
     question_type TEXT NOT NULL,
     FOREIGN KEY (global_id) REFERENCES progress(id)
 );
 
-getKankenKyulist:
-SELECT DISTINCT kanken_kyu
-FROM kankenQuestion
-ORDER BY kanken_kyu;
 
-getQuestionTypeList:
-SELECT DISTINCT question_type
-FROM kankenQuestion
-ORDER BY question_type;
+-- getQuestionTypeList:
+-- SELECT DISTINCT question_type
+-- FROM kankenQuestion
+-- ORDER BY question_type;
 
-selectKakitoriQuestions:
-SELECT *
-FROM
-kankenQuestion
-INNER JOIN progress
-ON kankenQuestion.global_id = progress.id
-WHERE kanken_kyu = :kanken_kyu AND question_type = :question_type;
+-- selectKakitoriQuestions:
+-- SELECT *
+-- FROM
+-- kankenQuestion
+-- INNER JOIN progress
+-- ON kankenQuestion.global_id = progress.id
+-- WHERE kanken_kyu = :kanken_kyu AND question_type = :question_type;
 
 -- CREATE TRIGGER create_new_global_id
 --     BEFORE INSERT ON kakitoriQuestion FOR EACH ROW
