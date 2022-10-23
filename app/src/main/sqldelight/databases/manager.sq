@@ -1,0 +1,20 @@
+getKankenKyuList:
+SELECT DISTINCT kyu
+FROM kanken
+ORDER BY kyu;
+
+getKankenQuestionTypeList:
+SELECT DISTINCT question_type
+FROM kanken
+WHERE kyu =: kyu
+ORDER BY question_type;
+
+kankenQuestion:
+SELECT * FROM
+kanken
+INNER JOIN question
+ON kanken.global_id = question.global_id
+INNER JOIN progress
+ON kanken.global_id = progress.id
+WHERE kyu = :kyu AND kanken.question_type = :question_type
+;

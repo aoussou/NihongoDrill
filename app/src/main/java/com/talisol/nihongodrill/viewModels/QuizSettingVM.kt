@@ -3,10 +3,11 @@ package com.talisol.nihongodrill.viewModels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.talisol.nihongodrill.actions.QuizSettingAction
-import com.talisol.nihongodrill.data.KankenQuestionDataSource
+import com.talisol.nihongodrill.data.ManagerDataSource
+import com.talisol.nihongodrill.quizUtils.Question
+import com.talisol.nihongodrill.quizUtils.converDBquestionList
 import com.talisol.nihongodrill.ui.states.QuizSelectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import databases.kanji.SelectKakitoriQuestions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -14,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuizSettingVM @Inject constructor(
-    private val kankenQuestionDataSource: KankenQuestionDataSource,
+    private val managerDataSource: ManagerDataSource,
 ) : ViewModel() {
 
 
@@ -23,15 +24,15 @@ class QuizSettingVM @Inject constructor(
     private val onlyNeverAnswered = false
     private val onlyMarked = false
 
-    val quizTypesList: List<String> = kankenQuestionDataSource.getQuestionTypeList()
+    val quizTypesList: List<String> = managerDataSource.getQuestionTypeList()
 
-    val groupsList: List<String> = kankenQuestionDataSource.getKankenKyuList()
+    val groupsList: List<Long> = managerDataSource.getKankenKyuList()
 
 
     private val _quizSelectionState = MutableStateFlow(QuizSelectionState())
     val quizSelectionState = _quizSelectionState.asStateFlow()
 
-    private val _localQAlist = MutableStateFlow(listOf<SelectKakitoriQuestions>())
+    private val _localQAlist = MutableStateFlow(listOf<Question>())
 
     val localQAlist = _localQAlist.asStateFlow()
 
@@ -51,7 +52,7 @@ class QuizSettingVM @Inject constructor(
 
         _localQAlist.value = _localQAlist.value.filter {it.available.toInt() == 1 }
         _localQAlist.value = _localQAlist.value.sortedWith(
-            compareBy<SelectKakitoriQuestions> {it.total_correct + it.total_wrong}
+            compareBy<Question> {it.total_correct + it.total_wrong}
                 .thenBy { it.correct_streak }
                 .thenByDescending { it.total_wrong }
                 .thenBy { it.total_correct }
@@ -81,10 +82,13 @@ class QuizSettingVM @Inject constructor(
 
     private fun loadSelectedQuestionGroup() {
         if (quizSelectionState.value.groupChosen!=null) {
-            _localQAlist.value = kankenQuestionDataSource.selectKakitoriQuestions(
-                _quizSelectionState.value.groupChosen!!,
+
+            val questionsList = managerDataSource.getKankenQuestionList(
+                _quizSelectionState.value.groupChosen!!.toLong(),
                 _quizSelectionState.value.typeChosen!!
             )
+
+            _localQAlist.value = converDBquestionList(questionsList)
         }
     }
 

@@ -1,6 +1,7 @@
 package com.talisol.nihongodrill.data
 
-import databases.tracking.Progress
+import databases.Progress
+
 
 interface ProgressDataSource {
 
@@ -16,7 +17,7 @@ interface ProgressDataSource {
 
     fun getTotalWrong(id:Long): Long
 
-    fun getCorrectStrek(id: Long): Long
+    fun getCorrectStreak(id: Long): Long
 
     fun makeUnavailable(id: Long)
 

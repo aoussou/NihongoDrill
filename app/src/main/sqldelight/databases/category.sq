@@ -8,17 +8,6 @@ CREATE TABLE kanken (
 );
 
 
-getKankenKyuList:
-SELECT DISTINCT kyu
-FROM kanken
-ORDER BY kyu;
-
-getKankenQuestionType:
-SELECT DISTINCT question_type
-FROM kanken
-WHERE kyu =: kyu
-ORDER BY question_type;
-
 CREATE TABLE jlpt (
     id INTEGER PRIMARY KEY NOT NULL,
     global_id INTEGER NOT NULL,

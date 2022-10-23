@@ -56,7 +56,7 @@ class ProgressTrackingVM @Inject constructor(
 
     private fun updateCorrectStreak(id:Int) {
 
-        val newCorrectStreak = progressDataSource.getCorrectStrek(id.toLong()) + 1
+        val newCorrectStreak = progressDataSource.getCorrectStreak(id.toLong()) + 1
         progressDataSource.updateCorrectStreak(
             id.toLong(),
             newCorrectStreak

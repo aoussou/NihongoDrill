@@ -15,7 +15,7 @@ fun SetupNavGraph(
     NavHost(navController = navController, startDestination = ScreenRoute.HomeScreen.route){
 
         composable(route = ScreenRoute.HomeScreen.route) {
-            HomeScreen()
+            HomeScreen(navController = navController)
         }
 
 //        composable(route = QuizSettingScreen(groupsList = , quizType = , onAction = ))

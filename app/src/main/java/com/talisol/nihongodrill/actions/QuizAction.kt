@@ -1,7 +1,6 @@
 package com.talisol.nihongodrill.actions
 
-import databases.kanji.SelectKakitoriQuestions
-
+import com.talisol.nihongodrill.quizUtils.Question
 
 sealed class QuizAction {
 
@@ -9,7 +8,7 @@ sealed class QuizAction {
     object PreviousQuestion : QuizAction()
     data class ConfirmAnswer(val trackingOnAction: (TrackingAction) -> Unit) : QuizAction()
     data class ConfirmAnswersList(val trackingOnAction: (TrackingAction) -> Unit) : QuizAction()
-    data class LoadQuestionList(val qaList: List<SelectKakitoriQuestions>) : QuizAction()
+    data class LoadQuestionList(val qaList: List<Question>) : QuizAction()
     data class InputAnswer(val answerString: String?) : QuizAction()
     data class SelectWrongKanji(val kanji: String?,val kanjiInd: Int?): QuizAction()
     object StartQuiz: QuizAction()

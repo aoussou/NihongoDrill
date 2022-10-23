@@ -15,12 +15,12 @@ CREATE TABLE  question(
 -- FROM kankenQuestion
 -- ORDER BY question_type;
 
--- selectKakitoriQuestions:
+selectKakitoriQuestions:
 -- SELECT *
 -- FROM
--- kankenQuestion
+-- question
 -- INNER JOIN progress
--- ON kankenQuestion.global_id = progress.id
+-- ON question.global_id = progress.id
 -- WHERE kanken_kyu = :kanken_kyu AND question_type = :question_type;
 
 -- CREATE TRIGGER create_new_global_id

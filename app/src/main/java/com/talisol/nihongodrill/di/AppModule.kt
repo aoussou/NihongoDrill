@@ -4,8 +4,8 @@ import android.app.Application
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 import com.talisol.nihongodrill.KanjiDatabase
-import com.talisol.nihongodrill.data.KankenQuestionDataSource
-import com.talisol.nihongodrill.data.KankenQuestionDataSourceImpl
+import com.talisol.nihongodrill.data.ManagerDataSource
+import com.talisol.nihongodrill.data.ManagerDataSourceImpl
 import com.talisol.nihongodrill.data.ProgressDataSource
 import com.talisol.nihongodrill.data.ProgressDataSourceImpl
 import dagger.Module
@@ -30,8 +30,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideKanjiDataSource(driver: SqlDriver): KankenQuestionDataSource {
-        return KankenQuestionDataSourceImpl(KanjiDatabase(driver))
+    fun provideKanjiDataSource(driver: SqlDriver): ManagerDataSource {
+        return ManagerDataSourceImpl(KanjiDatabase(driver))
     }
 
     @Provides

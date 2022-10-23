@@ -35,7 +35,7 @@ class ProgressDataSourceImpl(
         return queries.getTotalWrong(id).executeAsOne()
     }
 
-    override fun getCorrectStrek(id: Long): Long {
+    override fun getCorrectStreak(id: Long): Long {
         return queries.getCorrectStreak(id).executeAsOne()
     }
 

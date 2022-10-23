@@ -98,7 +98,7 @@ dependencies {
 }
 
 sqldelight{
-    KanjiDatabase{
+    NihongoDatabase{
         packageName = "com.talisol.nihongodrill"
     }
 }
