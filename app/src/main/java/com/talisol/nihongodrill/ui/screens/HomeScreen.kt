@@ -22,6 +22,7 @@ fun HomeScreen(
 
         Button(onClick = {
             onQuizSettingAction(QuizSettingAction.SelectCategory("jlpt"))
+            onQuizSettingAction(QuizSettingAction.LoadSelectedGroupQuestions)
             navController.navigate(ScreenRoute.LevelSelection.route)
         }) {
             Text(text = "JLPT")

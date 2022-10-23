@@ -1,6 +1,8 @@
 package com.talisol.nihongodrill.data
 
 import com.talisol.nihongodrill.NihongoDatabase
+import databases.Jlpt
+import databases.JlptQuestion
 import databases.KankenQuestion
 
 
@@ -10,17 +12,33 @@ class ManagerDataSourceImpl(
 
     private val queries = db.managerQueries
 
-    override fun getKankenKyuList(): List<Long> {
+    override fun getKankenKyuList(): List<String> {
         return queries.getKankenKyuList().executeAsList()
     }
 
-    override fun getKankenQuestionList(kyu: Long,type: String): List<KankenQuestion> {
+    override fun getKankenQuestionTypeList(kyu: String): List<String> {
+        return queries.getKankenQuestionTypeList(kyu).executeAsList()
+    }
+
+    override fun selectKankenQuestions(kyu: String, type: String): List<KankenQuestion> {
         return queries.kankenQuestion(kyu,type).executeAsList()
     }
 
-    override fun selectKankenQuestions(kyu: Long, type: String): List<KankenQuestion> {
-        return queries.kankenQuestion(kyu,type).executeAsList()
+
+    override fun getJLPTlevelList(): List<String> {
+        return queries.getJLPTlevelList().executeAsList()
     }
 
+    override fun getJLPTQuestionTypeList(level: String): List<String> {
+        return queries.getJLPTquestionType(level).executeAsList()
+    }
+
+//    override fun selectJLPTQuestions(level: String, type: String): List<JlptQuestion> {
+//        return queries.jlptQuestion(level,type).executeAsList()
+//    }
+
+    override fun getAllJLPTQuestions(): List<JlptQuestion> {
+        return queries.jlptQuestion().executeAsList()
+    }
 
 }

@@ -18,3 +18,33 @@ INNER JOIN progress
 ON kanken.global_id = progress.id
 WHERE kyu = :kyu AND kanken.question_type = :question_type
 ;
+
+getJLPTlevelList:
+SELECT DISTINCT level
+FROM jlpt
+ORDER BY level;
+
+getJLPTquestionType:
+SELECT DISTINCT question_type
+FROM jlpt
+WHERE level =: level
+ORDER BY question_type;
+
+-- jlptQuestion:
+-- SELECT * FROM
+-- jlpt
+-- INNER JOIN question
+-- ON jlpt.global_id = question.global_id
+-- INNER JOIN progress
+-- ON jlpt.global_id = progress.id
+-- WHERE level = :level AND jlpt.question_type = :question_type
+-- ;
+
+jlptQuestion:
+SELECT * FROM
+jlpt
+INNER JOIN question
+ON jlpt.global_id = question.global_id
+INNER JOIN progress
+ON jlpt.global_id = progress.id
+;

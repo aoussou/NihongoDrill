@@ -5,7 +5,7 @@ CREATE TABLE  question(
     answer TEXT NOT NULL,
     target TEXT,
     mca_list TEXT,
-    question_type TEXT NOT NULL,
+    format TEXT NOT NULL,
     FOREIGN KEY (global_id) REFERENCES progress(id)
 );
 

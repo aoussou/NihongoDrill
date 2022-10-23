@@ -1,9 +1,10 @@
 CREATE TABLE kanken (
     id INTEGER PRIMARY KEY NOT NULL,
     global_id INTEGER NOT NULL,
-    kyu INTEGER NOT NULL,
+    kyu TEXT NOT NULL,
     question_type TEXT NOT NULL,
     source TEXT,
+    reference TEXT,
     FOREIGN KEY (global_id) REFERENCES progress(id)
 );
 
@@ -11,19 +12,10 @@ CREATE TABLE kanken (
 CREATE TABLE jlpt (
     id INTEGER PRIMARY KEY NOT NULL,
     global_id INTEGER NOT NULL,
-    level INTEGER NOT NULL,
+    level TEXT NOT NULL,
     question_type TEXT NOT NULL,
     source TEXT,
+    reference TEXT,
     FOREIGN KEY (global_id) REFERENCES progress(id)
 );
 
-getJLPTlevelList:
-SELECT DISTINCT level
-FROM jlpt
-ORDER BY level;
-
-getJLPTquestionType:
-SELECT DISTINCT question_type
-FROM jlpt
-WHERE level =: level
-ORDER BY question_type;

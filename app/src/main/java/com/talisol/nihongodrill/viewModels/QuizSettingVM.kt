@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.talisol.nihongodrill.actions.QuizSettingAction
 import com.talisol.nihongodrill.data.ManagerDataSource
 import com.talisol.nihongodrill.quizUtils.Question
-import com.talisol.nihongodrill.quizUtils.converDBquestionList
+import com.talisol.nihongodrill.quizUtils.convertDBquestionList
 import com.talisol.nihongodrill.ui.states.QuizSelectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +26,7 @@ class QuizSettingVM @Inject constructor(
 
     val quizTypesList: List<String> = listOf("JLPT","漢検")
 
-    val groupsList: List<Long> = managerDataSource.getKankenKyuList()
+//    val groupsList: List<String> = managerDataSource.getKankenKyuList()
 
 
     private val _quizSelectionState = MutableStateFlow(QuizSelectionState())
@@ -82,14 +82,22 @@ class QuizSettingVM @Inject constructor(
     }
 
     private fun loadSelectedQuestionGroup() {
-        if (quizSelectionState.value.groupChosen!=null) {
 
-            val questionsList = managerDataSource.getKankenQuestionList(
-                _quizSelectionState.value.groupChosen!!.toLong(),
-                _quizSelectionState.value.typeChosen!!
-            )
+        if (quizSelectionState.value.selectedCategory!=null) {
+            if (_quizSelectionState.value.selectedCategory == "jlpt") {
+                val questionsList = managerDataSource.getAllJLPTQuestions()
+                _localQAlist.value = convertDBquestionList(questionsList)
 
-            _localQAlist.value = converDBquestionList(questionsList)
+                val piu = _localQAlist.value.map{it.level!!}.distinct()
+                _quizSelectionState.update { it.copy(levelList = piu) }
+
+                val foo = _localQAlist.value.map{ it.question_type }.distinct()
+                _quizSelectionState.update { it.copy(questionTypeList = foo) }
+
+            }
+
+
+
         }
     }
 
@@ -112,6 +120,11 @@ class QuizSettingVM @Inject constructor(
         _quizSelectionState.update { it.copy(selectedCategory = category) }
         Log.i("DEBUG","Selected category $category")
     }
+
+
+
+
+
 
 
 }
