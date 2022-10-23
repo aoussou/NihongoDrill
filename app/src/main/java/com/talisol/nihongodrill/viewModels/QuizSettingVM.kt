@@ -45,12 +45,9 @@ class QuizSettingVM @Inject constructor(
             is QuizSettingAction.SelectQuestionType -> setQuestionType(action.type)
             is QuizSettingAction.SelectQuestionSource -> setQuestionSource(action.source)
             is QuizSettingAction.SelectQuestionReference -> setQuestionReference(action.reference)
-
             is QuizSettingAction.LoadSelectedGroupQuestions -> loadSelectedQuestionGroup()
-
             is QuizSettingAction.ChooseNumberOfQuestions -> setNumberOfQuestions(action.number)
             is QuizSettingAction.MakeLocalQuizQuestionList -> makeLocalQuestionList()
-
             is QuizSettingAction.ApplyAllQuestionSelectors -> applyAllQuestionSelectors()
         }
     }
@@ -88,18 +85,12 @@ class QuizSettingVM @Inject constructor(
     }
 
     private fun loadSelectedQuestionGroup() {
-
         if (quizSelectionState.value.selectedCategory != null) {
             if (_quizSelectionState.value.selectedCategory == "jlpt") {
                 val questionsList = managerDataSource.getAllJLPTQuestions()
-
                 _localQAlist.value = convertDBquestionList(questionsList)
-
                 updateAllSelectionLists()
-
             }
-
-
         }
     }
 
@@ -122,7 +113,6 @@ class QuizSettingVM @Inject constructor(
     }
 
 
-
     private fun filterQuestionsByLevel() {
         _localQAlist.value =
             _localQAlist.value.filter { it.level == _quizSelectionState.value.selectedLevel }
@@ -135,7 +125,6 @@ class QuizSettingVM @Inject constructor(
         updateAllSelectionLists()
         Log.i("DEBUG", "Selected type $type")
     }
-
 
 
     private fun filterQuestionsByType() {
@@ -153,7 +142,6 @@ class QuizSettingVM @Inject constructor(
     }
 
 
-
     private fun filterQuestionsBySource() {
         _localQAlist.value =
             _localQAlist.value.filter { it.source == _quizSelectionState.value.selectedQuestionSource }
@@ -168,7 +156,6 @@ class QuizSettingVM @Inject constructor(
 
         Log.i("DEBUG", "Selected reference $reference")
     }
-
 
 
     private fun filterQuestionsByReference() {

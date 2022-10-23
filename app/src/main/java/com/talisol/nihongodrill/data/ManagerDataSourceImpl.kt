@@ -1,7 +1,6 @@
 package com.talisol.nihongodrill.data
 
 import com.talisol.nihongodrill.NihongoDatabase
-import databases.Jlpt
 import databases.JlptQuestion
 import databases.KankenQuestion
 

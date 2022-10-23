@@ -76,9 +76,9 @@ class QuizVM @Inject constructor() : ViewModel() {
 
         val mcaList = if (
             isMCAtype
-            || _quizState.value.questionType == "busyu"
-            || _quizState.value.questionType == "bunpou"
-            || _quizState.value.questionType!!.lowercase().contains("n2")
+            || qas.format == "busyu"
+            || qas.format == "bunpou"
+            || qas.format == "mcq"
         ) {
             extractStringFromJson(qas.mca_list!!).toMutableList()
         }else{
@@ -102,7 +102,8 @@ class QuizVM @Inject constructor() : ViewModel() {
                 correctAnswersList = correctAnswersList,
                 selectedAnswersList = selectedAnswersList,
                 mcaList = mcaList,
-                isKanjiRecRequired = isKanjiRecRequired
+                isKanjiRecRequired = isKanjiRecRequired,
+                questionFormat = qas.format
             )
         }
     }

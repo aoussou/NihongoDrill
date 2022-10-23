@@ -23,14 +23,14 @@ fun HomeScreen(
         Button(onClick = {
             onQuizSettingAction(QuizSettingAction.SelectCategory("jlpt"))
             onQuizSettingAction(QuizSettingAction.LoadSelectedGroupQuestions)
-            navController.navigate(ScreenRoute.LevelSelection.route)
+            navController.navigate(ScreenRoute.QuestionsSelection.route)
         }) {
             Text(text = "JLPT")
         }
 
         Button(onClick = {
             onQuizSettingAction(QuizSettingAction.SelectCategory("kanken"))
-            navController.navigate(ScreenRoute.LevelSelection.route)
+            navController.navigate(ScreenRoute.QuestionsSelection.route)
         }) {
             Text(text = "漢検")
         }

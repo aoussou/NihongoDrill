@@ -1,5 +1,6 @@
 package com.talisol.nihongodrill.ui.screens
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.talisol.nihongodrill.actions.QuizAction
@@ -16,7 +17,7 @@ fun QuestionScreen(
     modifier: Modifier = Modifier,
 ) {
 
-        when (quizState.questionType){
+        when (quizState.questionFormat){
             "yomi" -> KakiScreen(quizState)
             "kaki" -> KakiScreen(quizState)
             "kousei" -> KouseiScreen(quizState,onQuizAction,onTrackingAction)
@@ -28,10 +29,8 @@ fun QuestionScreen(
             "busyu" -> BusyuScreen(quizState,onQuizAction,onTrackingAction)
             "bunpou" -> JLPTScreen(quizState,onQuizAction,onTrackingAction)
             "okuri" -> KakiScreen(quizState)
-        }
-
-        if(quizState.questionType!!.lowercase().contains("n2") ){
-            JLPTScreen(quizState,onQuizAction,onTrackingAction)
+            "mcq" -> JLPTScreen(quizState,onQuizAction,onTrackingAction)
+            else -> Log.i("DEBUG",quizState.questionFormat.toString())
         }
 
 

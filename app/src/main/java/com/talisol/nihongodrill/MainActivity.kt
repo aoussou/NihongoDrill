@@ -34,6 +34,24 @@ class MainActivity : ComponentActivity() {
 
             val quizSettingVM = viewModel<QuizSettingVM>()
             val quizSelectionState by quizSettingVM.quizSelectionState.collectAsState()
+            val localQAlist by quizSettingVM.localQAlist.collectAsState()
+
+            val drawingVM = viewModel<DrawingVM>()
+            val drawingState = drawingVM.drawingState
+            val currentPath = drawingVM.currentPath
+
+            val recognizerVM = viewModel<KanjiRecognitionVM>()
+            val otherGuessesList = recognizerVM.otherGuessesList.collectAsState()
+            val predictedKanji = recognizerVM.predictedKanji.collectAsState()
+
+
+            val popupVM = viewModel<PopupVM>()
+            val popupState by popupVM.popupState.collectAsState()
+
+            val quizVM = viewModel<QuizVM>()
+            val quizState by quizVM.quizState.collectAsState()
+
+            val trackingVM = viewModel<ProgressTrackingVM>()
 
             NihongoDrillTheme {
 
@@ -42,7 +60,19 @@ class MainActivity : ComponentActivity() {
                 SetupNavGraph(
                     navController = navController,
                     onQuizSettingAction = quizSettingVM::onAction,
-                    quizSelectionState = quizSelectionState
+                    quizSelectionState = quizSelectionState,
+                    quizState = quizState,
+                    onQuizAction = quizVM::onAction,
+                    popupState = popupState,
+                    currentPath = currentPath,
+                    drawingState = drawingState,
+                    onDrawingAction = drawingVM::onAction,
+                    onKanjiRecAction = recognizerVM::onAction,
+                    predictedKanji = predictedKanji.value,
+                    otherGuessesList = otherGuessesList.value,
+                    onTrackingAction = trackingVM::onAction,
+                    onPopupAction = popupVM::onAction,
+                    localQAlist = localQAlist
                 )
 
 
