@@ -24,7 +24,7 @@ class QuizSettingVM @Inject constructor(
     private val onlyNeverAnswered = false
     private val onlyMarked = false
 
-    val quizTypesList: List<String> = managerDataSource.getQuestionTypeList()
+    val quizTypesList: List<String> = listOf("JLPT","漢検")
 
     val groupsList: List<Long> = managerDataSource.getKankenKyuList()
 
@@ -40,6 +40,7 @@ class QuizSettingVM @Inject constructor(
     fun onAction(action: QuizSettingAction) {
 
         when (action) {
+            is QuizSettingAction.SelectCategory -> setCategory(action.category)
             is QuizSettingAction.LoadSelectedGroupQuestions -> loadSelectedQuestionGroup()
             is QuizSettingAction.SelectQuestionLevel -> setQuestionLevel(action.questionGroupID)
             is QuizSettingAction.ChooseNumberOfQuestions -> setNumberOfQuestions(action.number)
@@ -104,7 +105,12 @@ class QuizSettingVM @Inject constructor(
 
     private fun setQuestionType(type: String?) {
         _quizSelectionState.update { it.copy(typeChosen = type) }
-        Log.i("DEBUG","Selected level $type")
+        Log.i("DEBUG","Selected type $type")
+    }
+
+    private fun setCategory(category: String?) {
+        _quizSelectionState.update { it.copy(selectedCategory = category) }
+        Log.i("DEBUG","Selected category $category")
     }
 
 

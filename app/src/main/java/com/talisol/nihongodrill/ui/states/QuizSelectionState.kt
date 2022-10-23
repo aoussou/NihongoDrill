@@ -1,6 +1,7 @@
 package com.talisol.nihongodrill.ui.states
 
 data class QuizSelectionState(
+    val selectedCategory: String? = null,
     val chosenNumberOfQuestions: Int? = null,
     val actualNumberOfQuestions: Int? = null,
     val groupChosen: String? = null,

@@ -1,6 +1,7 @@
 package com.talisol.nihongodrill.actions
 
 sealed class QuizSettingAction {
+    data class SelectCategory(val category: String?) : QuizSettingAction()
     data class SelectQuestionLevel(val questionGroupID: String?) : QuizSettingAction()
     data class ChooseNumberOfQuestions(val number: Int?) : QuizSettingAction()
     data class ChooseQuestionType(val type: String?) : QuizSettingAction()
