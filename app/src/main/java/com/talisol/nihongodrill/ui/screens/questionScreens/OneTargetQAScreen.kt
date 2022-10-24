@@ -1,6 +1,5 @@
-package com.talisol.nihongodrill.ui.screens
+package com.talisol.nihongodrill.ui.screens.questionScreens
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -15,10 +14,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.talisol.nihongodrill.quizUtils.makeTargetRed
+import com.talisol.nihongodrill.ui.screens.CorrectVsWrongAnswerScreen
 import com.talisol.nihongodrill.ui.states.QuizState
 
 @Composable
-fun KakiScreen(
+fun OneTargetQAScreen(
     quizState: QuizState,
 ) {
 
