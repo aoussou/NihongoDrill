@@ -18,7 +18,7 @@ fun QuestionScreen(
 ) {
 
         when (quizState.questionFormat){
-            "yomi" -> KakiScreen(quizState)
+            "type" -> KakiScreen(quizState)
             "kaki" -> KakiScreen(quizState)
             "kousei" -> KouseiScreen(quizState,onQuizAction,onTrackingAction)
             "shikibetsu" -> ShikibetsuScreen(quizState,onQuizAction)

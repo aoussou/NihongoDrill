@@ -37,7 +37,7 @@ fun DouonScreen(
         val selectionBoxModifier = Modifier.weight(1f)
 
         for (q in questionsStrings.indices) {
-            val annotatedString = makeTargetRed(questionsStrings[q], quizState.target!!)
+            val annotatedString = makeTargetRed(questionsStrings[q], quizState.target)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

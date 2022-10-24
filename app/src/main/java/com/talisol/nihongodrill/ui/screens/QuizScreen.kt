@@ -166,7 +166,7 @@ fun QuizScreen(
                 }
 
                 if (
-                    quizState.questionType == "yomi"
+                    quizState.questionFormat == "type"
                 ) {
                     val textState = remember { mutableStateOf(TextFieldValue()) }
                     TextField(
