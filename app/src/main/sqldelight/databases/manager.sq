@@ -16,7 +16,6 @@ INNER JOIN question
 ON kanken.global_id = question.global_id
 INNER JOIN progress
 ON kanken.global_id = progress.id
-WHERE kyu = :kyu AND kanken.question_type = :question_type
 ;
 
 getJLPTlevelList:

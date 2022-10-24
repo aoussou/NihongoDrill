@@ -19,8 +19,9 @@ class ManagerDataSourceImpl(
         return queries.getKankenQuestionTypeList(kyu).executeAsList()
     }
 
-    override fun selectKankenQuestions(kyu: String, type: String): List<KankenQuestion> {
-        return queries.kankenQuestion(kyu,type).executeAsList()
+
+    override fun getAllKankenQuestions(): List<KankenQuestion> {
+        return queries.kankenQuestion().executeAsList()
     }
 
 

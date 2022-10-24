@@ -30,6 +30,7 @@ fun HomeScreen(
 
         Button(onClick = {
             onQuizSettingAction(QuizSettingAction.SelectCategory("kanken"))
+            onQuizSettingAction(QuizSettingAction.LoadSelectedGroupQuestions)
             navController.navigate(ScreenRoute.QuestionsSelection.route)
         }) {
             Text(text = "漢検")

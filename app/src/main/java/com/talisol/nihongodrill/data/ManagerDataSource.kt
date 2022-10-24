@@ -1,6 +1,7 @@
 package com.talisol.nihongodrill.data
 
 import databases.JlptQuestion
+import databases.Kanken
 import databases.KankenQuestion
 
 interface ManagerDataSource {
@@ -9,7 +10,8 @@ interface ManagerDataSource {
 
     fun getKankenQuestionTypeList(kyu: String): List<String>
 
-    fun selectKankenQuestions(kyu: String, type: String): List<KankenQuestion>
+
+    fun getAllKankenQuestions(): List<KankenQuestion>
 
 
     fun getJLPTlevelList(): List<String>

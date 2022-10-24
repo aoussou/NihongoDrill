@@ -26,9 +26,6 @@ class QuizSettingVM @Inject constructor(
 
     val quizTypesList: List<String> = listOf("JLPT", "漢検")
 
-//    val groupsList: List<String> = managerDataSource.getKankenKyuList()
-
-
     private val _quizSelectionState = MutableStateFlow(QuizSelectionState())
     val quizSelectionState = _quizSelectionState.asStateFlow()
 
@@ -89,8 +86,13 @@ class QuizSettingVM @Inject constructor(
             if (_quizSelectionState.value.selectedCategory == "jlpt") {
                 val questionsList = managerDataSource.getAllJLPTQuestions()
                 _localQAlist.value = convertDBquestionList(questionsList)
-                updateAllSelectionLists()
+            }else if (_quizSelectionState.value.selectedCategory == "kanken") {
+                val questionsList = managerDataSource.getAllKankenQuestions()
+                _localQAlist.value = convertDBquestionList(questionsList)
             }
+
+
+            updateAllSelectionLists()
         }
     }
 
