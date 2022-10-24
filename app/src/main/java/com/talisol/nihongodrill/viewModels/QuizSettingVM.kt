@@ -121,11 +121,13 @@ class QuizSettingVM @Inject constructor(
     }
 
     private fun setQuestionType(type: String?) {
-        _quizSelectionState.update { it.copy(typeChosen = type) }
+        _quizSelectionState.update { it.copy(selectedQuestionType = type) }
+        Log.i("DEBUG", "Selected type $type")
         if (type != null) filterQuestionsByType()
         else applyAllQuestionSelectors()
+        Log.i("DEBUG", "#q ${_localQAlist.value.size}")
         updateAllSelectionLists()
-        Log.i("DEBUG", "Selected type $type")
+
     }
 
 
