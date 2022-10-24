@@ -166,21 +166,15 @@ class QuizSettingVM @Inject constructor(
     }
 
     private fun applyAllQuestionSelectors() {
-
         loadSelectedQuestionGroup()
-
         if (_quizSelectionState.value.selectedLevel != null) filterQuestionsByLevel()
-
         if (_quizSelectionState.value.selectedQuestionType != null) filterQuestionsByType()
-
         if (_quizSelectionState.value.selectedQuestionSource != null) filterQuestionsBySource()
-
         if (_quizSelectionState.value.selectedQuestionRef != null) filterQuestionsByReference()
-
-
     }
 
     private fun updateAllSelectionLists() {
+
         _quizSelectionState.update { it ->
             it.copy(levelList = _localQAlist.value.map { it.level!! }.distinct())
         }

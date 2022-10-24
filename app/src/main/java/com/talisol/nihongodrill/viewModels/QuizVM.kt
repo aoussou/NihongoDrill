@@ -1,5 +1,6 @@
 package com.talisol.nihongodrill.viewModels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.talisol.nihongodrill.actions.QuizAction
 import com.talisol.nihongodrill.actions.TrackingAction
@@ -65,8 +66,9 @@ class QuizVM @Inject constructor() : ViewModel() {
 
         val qas = _qaList.value[localQuestionNumber]
 
-        val isKanjiRecRequired = kanjiRecRequired.contains(_quizState.value.questionType)
-        val isMCAtype = mcaType.contains(_quizState.value.questionType)
+        val isKanjiRecRequired = kanjiRecRequired.contains(qas.format)
+        Log.i("DEBUG",isKanjiRecRequired.toString())
+        val isMCAtype = mcaType.contains(qas.format)
 
         val correctAnswersList = if (isMCAtype) {
             extractStringFromJson(qas.answer).toMutableList()
