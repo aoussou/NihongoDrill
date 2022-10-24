@@ -16,22 +16,34 @@ import kotlinx.serialization.json.jsonArray
 // IT'S BEING CALLED ALL THE TIME WHEN DRAWING CHARACTER
 fun makeTargetRed(string:String,target:String): AnnotatedString{
 
-    Log.i("DEBUG",string)
+    Log.i("DEBUG", "$string target: $target" )
     val startIndex = string.indexOf(target)
-    val beforeTargetString = string.substring(0,startIndex)
-    val targetString = string.substring(startIndex,startIndex+target.length)
-    val afterTargetString = string.substring(startIndex+target.length)
+    if (startIndex != -1) {
 
-    val annotatedString = buildAnnotatedString {
+        val beforeTargetString = string.substring(0, startIndex)
+        val targetString = string.substring(startIndex, startIndex + target.length)
+        val afterTargetString = string.substring(startIndex + target.length)
 
-        append(beforeTargetString)
-        withStyle(style = SpanStyle(color = Color.Red)) {
-            append(targetString)
+        val annotatedString = buildAnnotatedString {
+
+            append(beforeTargetString)
+            withStyle(style = SpanStyle(color = Color.Red)) {
+                append(targetString)
+            }
+            append(afterTargetString)
         }
-        append(afterTargetString)
+        return annotatedString
+    } else {
+
+        val annotatedString = buildAnnotatedString {
+            append(string)
+        }
+        return annotatedString
+
     }
 
-    return annotatedString
+
+
 }
 
 fun extractStringFromJson(jsonString: String): List<String> {
