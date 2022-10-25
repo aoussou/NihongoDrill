@@ -15,5 +15,7 @@ data class QuizSelectionState(
     val actualNumberOfQuestions: Int? = null,
     val groupChosen: String? = null,
 //    val typeChosen: String? = null,
-    val isQuizReady: Boolean = false
+    val isQuizReady: Boolean = false,
+    val isShuffle: Boolean = true,
+    val isOnlyNeverAnswered: Boolean = false
 )

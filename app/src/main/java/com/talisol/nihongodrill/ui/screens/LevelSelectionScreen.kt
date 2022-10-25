@@ -1,7 +1,6 @@
 package com.talisol.nihongodrill.ui.screens
 
 import android.util.Log
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -9,6 +8,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -172,6 +172,40 @@ fun LevelSectionScreen(
                     Log.i("DEBUG", "number sent")
                 })
         )
+
+        val isShuffle = remember { mutableStateOf(quizSelectionState.isShuffle) }
+        
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Text(text = "shuffle")
+            Switch(
+                checked = isShuffle.value,
+                onCheckedChange = {
+                    isShuffle.value = it
+                    onQuizSettingAction(QuizSettingAction.SetIsShuffle(it))
+                }
+            )
+        }
+
+
+        val isOnlyNeverAnswered = remember { mutableStateOf(quizSelectionState.isOnlyNeverAnswered) }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Text(text = "never answered only")
+            Switch(
+                checked = isOnlyNeverAnswered.value,
+                onCheckedChange = {
+                    isOnlyNeverAnswered.value = it
+                    onQuizSettingAction(QuizSettingAction.SetIsOnlyNeverAnswered(it))
+                }
+            )
+        }
+
+
 
         Button(onClick = {
 

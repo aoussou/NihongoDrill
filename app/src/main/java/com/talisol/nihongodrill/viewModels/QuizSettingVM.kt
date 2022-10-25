@@ -21,7 +21,6 @@ class QuizSettingVM @Inject constructor(
 
     private val skipAllCorrect = true
     private val sortByFewestTries = true
-    private val onlyNeverAnswered = false
     private val onlyMarked = false
 
     val quizTypesList: List<String> = listOf("JLPT", "漢検")
@@ -46,6 +45,8 @@ class QuizSettingVM @Inject constructor(
             is QuizSettingAction.ChooseNumberOfQuestions -> setNumberOfQuestions(action.number)
             is QuizSettingAction.MakeLocalQuizQuestionList -> makeLocalQuestionList()
             is QuizSettingAction.ApplyAllQuestionSelectors -> applyAllQuestionSelectors()
+            is QuizSettingAction.SetIsShuffle -> setIsShuffle(action.isShuffle)
+            is QuizSettingAction.SetIsOnlyNeverAnswered -> setIsOnlyNeverAnswered(action.isOnlyNeverAnswered)
         }
     }
 
@@ -59,8 +60,7 @@ class QuizSettingVM @Inject constructor(
                 .thenBy { it.total_correct }
         )
 
-        if (onlyNeverAnswered) _localQAlist.value =
-            _localQAlist.value.filter { it.total_correct == 0L && it.total_wrong == 0L }
+
 
         if (skipAllCorrect) _localQAlist.value =
             _localQAlist.value.filter { !(it.total_correct > 0L && it.total_wrong == 0L) }
@@ -71,15 +71,20 @@ class QuizSettingVM @Inject constructor(
 
         if (_quizSelectionState.value.chosenNumberOfQuestions!! <= _localQAlist.value.size) {
             _quizSelectionState.update { it.copy(actualNumberOfQuestions = _quizSelectionState.value.chosenNumberOfQuestions) }
-            _localQAlist.value =
-                _localQAlist.value.shuffled()
+
             _localQAlist.value =
                 _localQAlist.value.take(_quizSelectionState.value.chosenNumberOfQuestions!!)
 
-            Log.i("DEBUG shuffle","shuffled")
+            Log.i("DEBUG shuffle", "shuffled")
         } else {
             _quizSelectionState.update { it.copy(actualNumberOfQuestions = localQAlist.value.size) }
         }
+
+        if (quizSelectionState.value.isShuffle) {
+            _localQAlist.value =
+                _localQAlist.value.shuffled()
+        }
+
 
         return _localQAlist.value
     }
@@ -94,7 +99,7 @@ class QuizSettingVM @Inject constructor(
             if (_quizSelectionState.value.selectedCategory == "jlpt") {
                 val questionsList = managerDataSource.getAllJLPTQuestions()
                 _localQAlist.value = convertDBquestionList(questionsList)
-            }else if (_quizSelectionState.value.selectedCategory == "kanken") {
+            } else if (_quizSelectionState.value.selectedCategory == "kanken") {
                 val questionsList = managerDataSource.getAllKankenQuestions()
                 _localQAlist.value = convertDBquestionList(questionsList)
             }
@@ -204,6 +209,21 @@ class QuizSettingVM @Inject constructor(
                 .distinct())
         }
     }
+
+    private fun setIsShuffle(isShuffle: Boolean) {
+        _quizSelectionState.update { it.copy(isShuffle = isShuffle) }
+    }
+
+    private fun setIsOnlyNeverAnswered(isOnlyNeverAnswered: Boolean) {
+        _quizSelectionState.update { it.copy(isOnlyNeverAnswered = isOnlyNeverAnswered) }
+
+        if (quizSelectionState.value.isOnlyNeverAnswered) _localQAlist.value =
+            _localQAlist.value.filter { it.total_correct == 0L && it.total_wrong == 0L }
+
+        updateAllSelectionLists()
+
+    }
+
 
 }
 

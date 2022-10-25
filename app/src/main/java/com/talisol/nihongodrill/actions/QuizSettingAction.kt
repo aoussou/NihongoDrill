@@ -6,6 +6,10 @@ sealed class QuizSettingAction {
     data class SelectQuestionType(val type: String?) : QuizSettingAction()
     data class SelectQuestionSource(val source: String?) : QuizSettingAction()
     data class SelectQuestionReference(val reference: String?) : QuizSettingAction()
+    data class SetIsShuffle(val isShuffle: Boolean) : QuizSettingAction()
+    data class SetIsOnlyNeverAnswered(val isOnlyNeverAnswered: Boolean) : QuizSettingAction()
+
+
     object ApplyAllQuestionSelectors: QuizSettingAction()
 
 
