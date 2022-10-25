@@ -3,6 +3,7 @@ package com.talisol.nihongodrill.data
 import databases.JlptQuestion
 import databases.Kanken
 import databases.KankenQuestion
+import databases.WordExplanation
 
 interface ManagerDataSource {
 
@@ -20,4 +21,6 @@ interface ManagerDataSource {
 //    fun selectJLPTQuestions(level: String, type: String): List<JlptQuestion>
 
     fun getAllJLPTQuestions(): List<JlptQuestion>
+
+    fun getWordExplanation(word: String): WordExplanation?
 }

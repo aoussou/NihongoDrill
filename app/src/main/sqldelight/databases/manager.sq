@@ -47,3 +47,9 @@ ON jlpt.global_id = question.global_id
 INNER JOIN progress
 ON jlpt.global_id = progress.id
 ;
+
+wordExplanation:
+SELECT explanation_ja, explanation_en FROM
+explanation
+WHERE word =: word
+;

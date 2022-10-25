@@ -23,14 +23,25 @@ fun CorrectVsWrongAnswerScreen(
         horizontalAlignment = Alignment.Start
     ) {
 
+        if (quizState.explanation != null) {
+            Box(Modifier.padding(16.dp)) {
+                Text(text = quizState.explanation)
+            }
+        }
+
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+
+
+
+
             Box {
                 Text(text = "Your answer:")
             }
+
             Box(
                 modifier = Modifier.padding(16.dp),
                 contentAlignment = Alignment.CenterEnd
@@ -62,6 +73,7 @@ fun CorrectVsWrongAnswerScreen(
         }
 
         Row(
+            modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {

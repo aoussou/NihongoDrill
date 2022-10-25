@@ -3,6 +3,7 @@ package com.talisol.nihongodrill.data
 import com.talisol.nihongodrill.NihongoDatabase
 import databases.JlptQuestion
 import databases.KankenQuestion
+import databases.WordExplanation
 
 
 class ManagerDataSourceImpl(
@@ -39,6 +40,10 @@ class ManagerDataSourceImpl(
 
     override fun getAllJLPTQuestions(): List<JlptQuestion> {
         return queries.jlptQuestion().executeAsList()
+    }
+
+    override fun getWordExplanation(word: String): WordExplanation?  {
+        return queries.wordExplanation(word).executeAsOneOrNull()
     }
 
 }

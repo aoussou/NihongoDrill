@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.talisol.nihongodrill.actions.QuizAction
 import com.talisol.nihongodrill.actions.TrackingAction
+import com.talisol.nihongodrill.data.ManagerDataSource
 import com.talisol.nihongodrill.quizUtils.Question
 import com.talisol.nihongodrill.quizUtils.extractStringFromJson
 import com.talisol.nihongodrill.ui.states.QuizState
@@ -14,7 +15,9 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class QuizVM @Inject constructor() : ViewModel() {
+class QuizVM @Inject constructor(
+    private val managerDataSource: ManagerDataSource,
+) : ViewModel() {
 
     private val _quizState = MutableStateFlow(QuizState())
     val quizState = _quizState.asStateFlow()
@@ -93,6 +96,8 @@ class QuizVM @Inject constructor() : ViewModel() {
             }else{
             null
         }
+
+        getExplanation(qas)
 
         _quizState.update {
             it.copy(
@@ -243,6 +248,24 @@ class QuizVM @Inject constructor() : ViewModel() {
 
     private fun setQuizType(type: String?) {
         _quizState.update { it.copy(questionType = type) }
+    }
+
+    private fun getExplanation(question: Question) {
+
+        if (question.format == "kaki") {
+            val whole = question.question.replace(question.target!!,question.answer)
+
+            Log.i("DEBUG whole",whole)
+
+            val explanation = managerDataSource.getWordExplanation(whole)
+            if (explanation != null) {
+                val explanationJA = explanation.explanation_ja
+                Log.i("DEBUG explanationJA",explanationJA!!)
+                _quizState.update { it.copy(explanation = explanationJA) }
+            }
+
+        }
+
     }
 
 }

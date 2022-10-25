@@ -1,0 +1,7 @@
+CREATE TABLE  explanation(
+    id INTEGER PRIMARY KEY NOT NULL,
+    word TEXT,
+    explanation_ja TEXT,
+    explanation_en TEXT,
+    source_jp TEXT
+);
