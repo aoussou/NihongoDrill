@@ -2,9 +2,7 @@ package com.talisol.nihongodrill.ui.screens.questionScreens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -49,7 +47,14 @@ fun OneTargetQAScreen(
 
             if (quizState.isAnswerCorrect != null) {
 
+                if (quizState.explanation != null) {
+                    Box(Modifier.padding(16.dp)) {
+                        Text(text = quizState.explanation)
+                    }
+                }
+
                 if (!quizState.isAnswerCorrect) {
+
                     CorrectVsWrongAnswerScreen(quizState)
                 } else (
                         Text(

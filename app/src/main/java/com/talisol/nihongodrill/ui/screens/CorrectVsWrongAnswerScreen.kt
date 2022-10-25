@@ -23,11 +23,6 @@ fun CorrectVsWrongAnswerScreen(
         horizontalAlignment = Alignment.Start
     ) {
 
-        if (quizState.explanation != null) {
-            Box(Modifier.padding(16.dp)) {
-                Text(text = quizState.explanation)
-            }
-        }
 
         Row(
             modifier = Modifier.padding(16.dp),

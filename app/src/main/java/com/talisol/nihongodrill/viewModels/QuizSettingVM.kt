@@ -72,9 +72,10 @@ class QuizSettingVM @Inject constructor(
         if (_quizSelectionState.value.chosenNumberOfQuestions!! <= _localQAlist.value.size) {
             _quizSelectionState.update { it.copy(actualNumberOfQuestions = _quizSelectionState.value.chosenNumberOfQuestions) }
             _localQAlist.value =
-                _localQAlist.value.take(_quizSelectionState.value.chosenNumberOfQuestions!!)
-            _localQAlist.value =
                 _localQAlist.value.shuffled()
+            _localQAlist.value =
+                _localQAlist.value.take(_quizSelectionState.value.chosenNumberOfQuestions!!)
+
             Log.i("DEBUG shuffle","shuffled")
         } else {
             _quizSelectionState.update { it.copy(actualNumberOfQuestions = localQAlist.value.size) }
