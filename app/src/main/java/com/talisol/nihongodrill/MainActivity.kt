@@ -72,7 +72,8 @@ class MainActivity : ComponentActivity() {
                     otherGuessesList = otherGuessesList.value,
                     onTrackingAction = trackingVM::onAction,
                     onPopupAction = popupVM::onAction,
-                    localQAlist = localQAlist
+                    localQAlist = localQAlist,
+                    getQuizQuestionList = quizSettingVM::getQuizQuestionList
                 )
 
 

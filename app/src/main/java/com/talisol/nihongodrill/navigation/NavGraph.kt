@@ -32,7 +32,8 @@ fun SetupNavGraph(
     otherGuessesList: List<String>?,
     onTrackingAction: (TrackingAction) -> Unit,
     onPopupAction: (PopupAction) -> Unit,
-    localQAlist: List<Question>
+    localQAlist: List<Question>,
+    getQuizQuestionList: ()-> List<Question>
 ) {
 
     NavHost(navController = navController, startDestination = ScreenRoute.HomeScreen.route) {
@@ -47,7 +48,8 @@ fun SetupNavGraph(
                 quizSelectionState = quizSelectionState,
                 onQuizSettingAction = onQuizSettingAction,
                 localQAlist = localQAlist,
-                onQuizAction = onQuizAction
+                onQuizAction = onQuizAction,
+                getQuizQuestionList = getQuizQuestionList
             )
         }
 

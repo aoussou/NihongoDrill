@@ -33,7 +33,8 @@ fun LevelSectionScreen(
     quizSelectionState: QuizSelectionState,
     onQuizSettingAction: (QuizSettingAction) -> Unit,
     localQAlist: List<Question>,
-    onQuizAction: (QuizAction) -> Unit
+    onQuizAction: (QuizAction) -> Unit,
+    getQuizQuestionList: ()-> List<Question>
 ) {
 
     val refScrollState = rememberScrollState()
@@ -152,7 +153,7 @@ fun LevelSectionScreen(
             label = { Text("Number of Random Question") },
             value = textState.value,
             onValueChange = {
-                textState.value = it;
+                textState.value = it
 
             },
             keyboardOptions = KeyboardOptions(
@@ -176,7 +177,8 @@ fun LevelSectionScreen(
 
 
             onQuizSettingAction(QuizSettingAction.MakeLocalQuizQuestionList)
-            onQuizAction(QuizAction.LoadQuestionList(localQAlist))
+            val quizQuestionList = getQuizQuestionList()
+            onQuizAction(QuizAction.LoadQuestionList(quizQuestionList))
             onQuizAction(QuizAction.StartQuiz)
 
 

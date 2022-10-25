@@ -49,7 +49,7 @@ class QuizSettingVM @Inject constructor(
         }
     }
 
-    private fun makeLocalQuestionList() {
+    private fun makeLocalQuestionList(): List<Question> {
 
         _localQAlist.value = _localQAlist.value.filter { it.available.toInt() == 1 }
         _localQAlist.value = _localQAlist.value.sortedWith(
@@ -75,10 +75,17 @@ class QuizSettingVM @Inject constructor(
                 _localQAlist.value.take(_quizSelectionState.value.chosenNumberOfQuestions!!)
             _localQAlist.value =
                 _localQAlist.value.shuffled()
-
+            Log.i("DEBUG shuffle","shuffled")
         } else {
             _quizSelectionState.update { it.copy(actualNumberOfQuestions = localQAlist.value.size) }
         }
+
+        return _localQAlist.value
+    }
+
+    fun getQuizQuestionList(): List<Question> {
+
+        return makeLocalQuestionList()
     }
 
     private fun loadSelectedQuestionGroup() {
