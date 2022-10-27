@@ -213,7 +213,7 @@ class QuizVM @Inject constructor(
                         isAnswerCorrect = null,
                         selectedWrongKanji = null,
                         selectedWrongKanjiInd = null,
-                        selectedSubQuestionNbr = null
+                        selectedSubQuestionNbr = null,
                     )
                 }
                 if (quizState.value.localQuestionNumber == _qaList.value.size - 1) _quizState.update {
@@ -260,8 +260,10 @@ class QuizVM @Inject constructor(
             val explanation = managerDataSource.getWordExplanation(whole)
             if (explanation != null) {
                 val explanationJA = explanation.explanation_ja
-                Log.i("DEBUG explanationJA",explanationJA!!)
+                Log.i("DEBUG explanationJA", explanationJA!!)
                 _quizState.update { it.copy(explanation = explanationJA) }
+            } else {
+                _quizState.update { it.copy(explanation = null) }
             }
 
         }

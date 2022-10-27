@@ -37,7 +37,8 @@ fun LevelSectionScreen(
     getQuizQuestionList: ()-> List<Question>
 ) {
 
-    val refScrollState = rememberScrollState()
+    val refScrollStateType = rememberScrollState()
+    val refScrollStateSubgroup = rememberScrollState()
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -82,7 +83,9 @@ fun LevelSectionScreen(
                     }
                 }
 
-                Column() {
+                Column(
+                    modifier = Modifier.verticalScroll(refScrollStateType)
+                ) {
                     Text(text = "TYPE")
                     Button(onClick = {
                         onQuizSettingAction(QuizSettingAction.SelectQuestionType(null))
@@ -97,7 +100,6 @@ fun LevelSectionScreen(
                             ) {
                                 Text(text = type, fontSize = 12.sp)
                             }
-
                         }
                     }
                 }
@@ -113,14 +115,13 @@ fun LevelSectionScreen(
                             }) {
                                 Text(text = source, fontSize = 12.sp)
                             }
-
                         }
                     }
                 }
 
 
                 Column(
-                    modifier = Modifier.verticalScroll(refScrollState)
+                    modifier = Modifier.verticalScroll(refScrollStateSubgroup)
                 ) {
                     Text(text = "SUBGROUP")
                     if (
