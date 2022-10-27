@@ -114,18 +114,16 @@ fun TaigiRow(
                         contentAlignment = Alignment.Center
                     ) {
 
-                        if (quizState.selectedAnswersList != null) {
-                            if (quizState.selectedAnswersList[ql_ind] != null) {
-                                Text(
-                                    text = quizState.selectedAnswersList[ql_ind]!!,
-                                    fontSize = 28.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color =
-                                    if (quizState.isAnswerConfirmed && isAnswerCorrect != null) {
-                                        if (isAnswerCorrect) Color.Green else Color.Red
-                                    } else Color.Black
-                                )
-                            }
+                        if (quizState.selectedAnswersList[ql_ind] != null) {
+                            Text(
+                                text = quizState.selectedAnswersList[ql_ind]!!,
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Bold,
+                                color =
+                                if (quizState.isAnswerConfirmed) {
+                                    if (isAnswerCorrect) Color.Green else Color.Red
+                                } else Color.Black
+                            )
                         }
                     }
 
@@ -137,7 +135,7 @@ fun TaigiRow(
                     }
                 }
 
-                if (quizState.isAnswerConfirmed && !isAnswerCorrect!!) {
+                if (quizState.isAnswerConfirmed && !isAnswerCorrect) {
                     Row(
                         modifier = rowModifier,
                         verticalAlignment = Alignment.CenterVertically,
@@ -157,7 +155,7 @@ fun TaigiRow(
                         ) {
 
                             Text(
-                                text = quizState.correctAnswersList!![ql_ind],
+                                text = quizState.correctAnswersList[ql_ind],
                                 fontSize = 28.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.Red
@@ -180,7 +178,7 @@ fun TaigiRow(
                 color = Color.Black,
                 modifier = Modifier
 //                    .padding(horizontal = 1.dp, vertical = 1.dp)
-                    .padding(bottom = if(isAnswerCorrect!!) 120.dp else 1.dp, start = 1.dp,end=1.dp)
+                    .padding(bottom = if(isAnswerCorrect) 120.dp else 1.dp, start = 1.dp,end=1.dp)
                     .fillMaxHeight()
                     .width(2.dp)
             )

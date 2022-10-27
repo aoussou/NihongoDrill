@@ -55,6 +55,7 @@ class QuizVM @Inject constructor(
 
     private fun updateAnswersList(answer: String,index:Int) {
 
+        Log.i("DEBUG taigi","in update")
         val selectedAnswersList:  MutableList<String?> = _quizState.value.selectedAnswersList!!
         selectedAnswersList[index] = answer
         _quizState.update { it.copy(selectedAnswersList = selectedAnswersList) }

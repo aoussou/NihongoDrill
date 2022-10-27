@@ -1,5 +1,6 @@
 package com.talisol.nihongodrill.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -149,9 +150,9 @@ fun QuizOperationMenu(
                     onDrawingAction(DrawingAction.ClearAllPaths)
                 }
             } else if (
-                quizState.questionType == "shikibetsu"
-                || quizState.questionType == "douon"
-                || quizState.questionType == "taigi"
+                quizState.questionFormat == "shikibetsu"
+                || quizState.questionFormat == "douon"
+                || quizState.questionFormat == "taigi"
             ) {
                 onPopupAction(PopupAction.ShowAlertDialog(confirmSubmission))
             }
@@ -166,13 +167,14 @@ fun QuizOperationMenu(
         IconButton(onClick = {
             if (predictedKanji != null) {
 
-                if (quizState.questionType == "taigi" && quizState.selectedSubQuestionNbr != null) {
+                if (quizState.questionFormat == "taigi" && quizState.selectedSubQuestionNbr != null) {
                     onQuizAction(
                         QuizAction.UpdateAnswersList(
                             predictedKanji,
                             quizState.selectedSubQuestionNbr
                         )
                     )
+                    Log.i("DEBUG taigi","update sent")
                 } else {
                     val newAnswer =
                         if (quizState.inputAnswer == null) {
