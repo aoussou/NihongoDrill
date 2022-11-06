@@ -27,8 +27,11 @@ class PopupVM: ViewModel() {
         _popupState.update {
             it.copy(
                 isAlertDialogShown = true,
+                title = newPopupState.title,
                 dialogText = newPopupState.dialogText,
-                onConfirmAction = newPopupState.onConfirmAction
+                onConfirmAction = newPopupState.onConfirmAction,
+                dismissButtonText = newPopupState.dismissButtonText,
+                confirmButtonText = newPopupState.confirmButtonText
             )
         }
     }
