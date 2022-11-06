@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.talisol.nihongodrill.actions.*
@@ -60,6 +59,7 @@ fun QuizScreen(
                 quizState = quizState,
                 onQuizAction = onQuizAction,
                 onTrackingAction = onTrackingAction,
+                onPopupAction = onPopupAction
             )
         }
 

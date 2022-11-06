@@ -27,5 +27,6 @@ data class QuizState(
     val isKanjiRecRequired: Boolean = false,
     val selectedSubQuestionNbr: Int? = null,
     val questionFormat : String? = null,
-    val explanation: String? = null
+    val explanation: String? = null,
+    val questionTranslation: String? = null
     )

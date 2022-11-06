@@ -292,12 +292,14 @@ class QuizVM @Inject constructor(
 
     private fun getExplanation(question: Question) {
 
-        if (question.format == "kaki" || question.format == "type") {
+        if (question.format == "kaki" || question.format == "type" || question.format == "mcq") {
 
             val whole = if (question.format == "kaki") {
                 question.question.replace(question.target!!, question.answer)
-            } else {
+            } else if (question.format == "type") {
                 question.question
+            } else {
+                question.answer
             }
 
 
@@ -341,7 +343,7 @@ class QuizVM @Inject constructor(
             val explanation = extractMapFromJson(selectedSentence, "translation").toString().replace(""""""","")
 
             _quizState.update { it.copy(question = question) }
-            _quizState.update { it.copy(explanation = explanation) }
+            _quizState.update { it.copy(questionTranslation = explanation) }
 
 
         }

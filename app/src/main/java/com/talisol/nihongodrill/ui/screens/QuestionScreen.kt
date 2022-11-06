@@ -3,8 +3,10 @@ package com.talisol.nihongodrill.ui.screens
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.talisol.nihongodrill.actions.PopupAction
 import com.talisol.nihongodrill.actions.QuizAction
 import com.talisol.nihongodrill.actions.TrackingAction
+import com.talisol.nihongodrill.ui.screens.questionScreens.JLPTScreen
 import com.talisol.nihongodrill.ui.screens.questionScreens.OneTargetQAScreen
 import com.talisol.nihongodrill.ui.screens.questionScreens.TaigiScreen
 import com.talisol.nihongodrill.ui.states.QuizState
@@ -15,6 +17,7 @@ fun QuestionScreen(
     quizState: QuizState,
     onQuizAction: (QuizAction) -> Unit,
     onTrackingAction: (TrackingAction) -> Unit,
+    onPopupAction: (PopupAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -28,9 +31,9 @@ fun QuestionScreen(
             "yoji" -> OneTargetQAScreen(quizState)
             "douon" -> DouonScreen(quizState,onQuizAction)
             "busyu" -> BusyuScreen(quizState,onQuizAction,onTrackingAction)
-            "bunpou" -> JLPTScreen(quizState,onQuizAction,onTrackingAction)
+            "bunpou" -> JLPTScreen(quizState,onQuizAction,onTrackingAction,onPopupAction)
             "okuri" -> OneTargetQAScreen(quizState)
-            "mcq" -> JLPTScreen(quizState,onQuizAction,onTrackingAction)
+            "mcq" -> JLPTScreen(quizState,onQuizAction,onTrackingAction,onPopupAction)
             else -> Log.i("DEBUG",quizState.questionFormat.toString())
         }
 
