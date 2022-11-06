@@ -253,16 +253,24 @@ class QuizVM @Inject constructor(
 
     private fun getExplanation(question: Question) {
 
-        if (question.format == "kaki") {
-            val whole = question.question.replace(question.target!!,question.answer)
+        if (question.format == "kaki" || question.format == "type") {
+
+            val whole = if (question.format == "kaki") {
+                question.question.replace(question.target!!,question.answer)
+            }else{
+                question.question
+            }
+
 
             Log.i("DEBUG whole",whole)
 
             val explanation = managerDataSource.getWordExplanation(whole)
             if (explanation != null) {
-                val explanationJA = explanation.explanation_ja
-                Log.i("DEBUG explanationJA", explanationJA!!)
-                _quizState.update { it.copy(explanation = explanationJA) }
+                val explanation = explanation.explanation_ja ?: explanation.explanation_en
+
+
+                Log.i("DEBUG explanationJA", explanation!!)
+                _quizState.update { it.copy(explanation = explanation) }
             } else {
                 _quizState.update { it.copy(explanation = null) }
             }

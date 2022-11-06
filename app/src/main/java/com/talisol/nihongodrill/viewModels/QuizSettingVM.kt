@@ -54,9 +54,10 @@ class QuizSettingVM @Inject constructor(
 
         _localQAlist.value = _localQAlist.value.filter { it.available.toInt() == 1 }
         _localQAlist.value = _localQAlist.value.sortedWith(
-            compareBy<Question> { it.total_correct + it.total_wrong }
-                .thenBy { it.correct_streak }
+            compareBy<Question> { +it.correct_streak  }
                 .thenByDescending { it.total_wrong }
+                .thenBy { it.total_correct + it.total_wrong }
+
                 .thenBy { it.total_correct }
         )
 
@@ -71,11 +72,6 @@ class QuizSettingVM @Inject constructor(
 
         if (_quizSelectionState.value.chosenNumberOfQuestions!! <= _localQAlist.value.size) {
             _quizSelectionState.update { it.copy(actualNumberOfQuestions = _quizSelectionState.value.chosenNumberOfQuestions) }
-
-            if (quizSelectionState.value.isShuffle) {
-                _localQAlist.value =
-                    _localQAlist.value.shuffled()
-            }
 
             _localQAlist.value =
                 _localQAlist.value.take(_quizSelectionState.value.chosenNumberOfQuestions!!)

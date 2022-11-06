@@ -37,6 +37,7 @@ fun LevelSectionScreen(
     getQuizQuestionList: ()-> List<Question>
 ) {
 
+    val refScrollLevel= rememberScrollState()
     val refScrollStateType = rememberScrollState()
     val refScrollStateSubgroup = rememberScrollState()
 
@@ -64,7 +65,9 @@ fun LevelSectionScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
-                Column() {
+                Column(
+                    modifier = Modifier.verticalScroll(refScrollLevel)
+                ) {
 
                     Text(text = "LEVEL")
                     Button(onClick = {
