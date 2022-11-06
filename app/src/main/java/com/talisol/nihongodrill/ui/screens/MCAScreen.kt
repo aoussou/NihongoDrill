@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.talisol.nihongodrill.actions.QuizAction
 import com.talisol.nihongodrill.actions.TrackingAction
+import com.talisol.nihongodrill.quizUtils.processTarget
 import com.talisol.nihongodrill.ui.states.QuizState
 
 @Composable

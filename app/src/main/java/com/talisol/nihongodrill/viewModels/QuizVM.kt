@@ -2,17 +2,26 @@ package com.talisol.nihongodrill.viewModels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.talisol.nihongodrill.actions.QuizAction
 import com.talisol.nihongodrill.actions.TrackingAction
 import com.talisol.nihongodrill.data.ManagerDataSource
 import com.talisol.nihongodrill.quizUtils.Question
+import com.talisol.nihongodrill.quizUtils.extractMapFromJson
 import com.talisol.nihongodrill.quizUtils.extractStringFromJson
+import com.talisol.nihongodrill.remote.PostsService
+import com.talisol.nihongodrill.remote.dto.PostRequest
 import com.talisol.nihongodrill.ui.states.QuizState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.jsonObject
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class QuizVM @Inject constructor(
@@ -21,8 +30,9 @@ class QuizVM @Inject constructor(
 
     private val _quizState = MutableStateFlow(QuizState())
     val quizState = _quizState.asStateFlow()
+    private val service = PostsService.create()
     private val kanjiRecRequired = listOf("kaki", "taigi", "goji", "yoji", "okuri")
-    private val mcaType = listOf("shikibetsu","douon","taigi")
+    private val mcaType = listOf("shikibetsu", "douon", "taigi")
 
 
     private val _qaList = MutableStateFlow(listOf<Question>())
@@ -37,9 +47,9 @@ class QuizVM @Inject constructor(
             is QuizAction.StartQuiz -> startQuiz()
             is QuizAction.InputAnswer -> inputAnswer(action.answerString)
             is QuizAction.EndQuiz -> endQuiz()
-            is QuizAction.SelectWrongKanji -> selectWrongKanji(action.kanji,action.kanjiInd)
+            is QuizAction.SelectWrongKanji -> selectWrongKanji(action.kanji, action.kanjiInd)
             is QuizAction.SetQuizType -> setQuizType(action.questionType)
-            is QuizAction.UpdateAnswersList -> updateAnswersList(action.answer,action.index)
+            is QuizAction.UpdateAnswersList -> updateAnswersList(action.answer, action.index)
             is QuizAction.SetSelectedSubQuestion -> setSelectedSubquestionNbr(action.number)
         }
     }
@@ -53,10 +63,10 @@ class QuizVM @Inject constructor(
     }
 
 
-    private fun updateAnswersList(answer: String,index:Int) {
+    private fun updateAnswersList(answer: String, index: Int) {
 
-        Log.i("DEBUG taigi","in update")
-        val selectedAnswersList:  MutableList<String?> = _quizState.value.selectedAnswersList!!
+        Log.i("DEBUG taigi", "in update")
+        val selectedAnswersList: MutableList<String?> = _quizState.value.selectedAnswersList!!
         selectedAnswersList[index] = answer
         _quizState.update { it.copy(selectedAnswersList = selectedAnswersList) }
     }
@@ -71,12 +81,12 @@ class QuizVM @Inject constructor(
         val qas = _qaList.value[localQuestionNumber]
 
         val isKanjiRecRequired = kanjiRecRequired.contains(qas.format)
-        Log.i("DEBUG",isKanjiRecRequired.toString())
+        Log.i("DEBUG", isKanjiRecRequired.toString())
         val isMCAtype = mcaType.contains(qas.format)
 
         val correctAnswersList = if (isMCAtype) {
             extractStringFromJson(qas.answer).toMutableList()
-        }else{
+        } else {
             null
         }
 
@@ -87,36 +97,62 @@ class QuizVM @Inject constructor(
             || qas.format == "mcq"
         ) {
             extractStringFromJson(qas.mca_list!!).toMutableList()
-        }else{
+        } else {
             null
         }
 
         val selectedAnswersList =
             if (isMCAtype) {
-                MutableList<String?>(correctAnswersList!!.size){null}
-            }else{
-            null
-        }
+                MutableList<String?>(correctAnswersList!!.size) { null }
+            } else {
+                null
+            }
 
         getExplanation(qas)
 
-        _quizState.update {
-            it.copy(
-                localQuestionNumber = localQuestionNumber,
-                question = qas.question,
-                correctAnswer = qas.answer,
-                target = qas.target,
-                questionGlobalId = qas.global_id.toInt(),
-                correctAnswersList = correctAnswersList,
-                selectedAnswersList = selectedAnswersList,
-                mcaList = mcaList,
-                isKanjiRecRequired = isKanjiRecRequired,
-                questionFormat = qas.format
-            )
+        if (qas.question == "auto") {
+            viewModelScope.launch {
+
+                val shuffledList = mcaList?.shuffled()?.take(5)?.toMutableList()
+                shuffledList?.add(qas.answer)
+                shuffledList?.shuffle()
+
+                _quizState.update {
+                    it.copy(
+                        localQuestionNumber = localQuestionNumber,
+                        question = getJotobaExampleSentence(qas.answer).replace(qas.answer,"　(　）"),
+                        correctAnswer = qas.answer,
+                        target = qas.target,
+                        questionGlobalId = qas.global_id.toInt(),
+                        correctAnswersList = correctAnswersList,
+                        selectedAnswersList = selectedAnswersList,
+                        mcaList = shuffledList,
+                        isKanjiRecRequired = isKanjiRecRequired,
+                        questionFormat = qas.format
+                    )
+                }
+            }
+
+        } else {
+            _quizState.update {
+                it.copy(
+                    localQuestionNumber = localQuestionNumber,
+                    question = qas.question,
+                    correctAnswer = qas.answer,
+                    target = qas.target,
+                    questionGlobalId = qas.global_id.toInt(),
+                    correctAnswersList = correctAnswersList,
+                    selectedAnswersList = selectedAnswersList,
+                    mcaList = mcaList,
+                    isKanjiRecRequired = isKanjiRecRequired,
+                    questionFormat = qas.format
+                )
+            }
         }
+
     }
 
-    private fun confirmAnswer(trackingOnAction: (TrackingAction)-> Unit) {
+    private fun confirmAnswer(trackingOnAction: (TrackingAction) -> Unit) {
         if (!_quizState.value.isAnswerConfirmed) {
 
             _quizState.update { it.copy(isAnswerConfirmed = true) }
@@ -124,7 +160,8 @@ class QuizVM @Inject constructor(
 
             if (_quizState.value.questionType == "goji") {
                 if (_quizState.value.selectedWrongKanji != _quizState.value.target) {
-                    _quizState.update {it.copy(isAnswerCorrect = false)
+                    _quizState.update {
+                        it.copy(isAnswerCorrect = false)
                     }
                     trackingOnAction(TrackingAction.AddOneWrong(id))
                     return
@@ -142,7 +179,7 @@ class QuizVM @Inject constructor(
         }
     }
 
-    private fun confirmAnswersList(trackingOnAction: (TrackingAction)-> Unit) {
+    private fun confirmAnswersList(trackingOnAction: (TrackingAction) -> Unit) {
 
         if (!_quizState.value.isAnswerConfirmed) {
 
@@ -161,7 +198,6 @@ class QuizVM @Inject constructor(
         }
 
     }
-
 
 
     private fun previousQuestion() {
@@ -188,7 +224,11 @@ class QuizVM @Inject constructor(
                     )
                 }
 
-                if (quizState.value.localQuestionNumber == 0) _quizState.update { it.copy(isFirstQuestion = true) }
+                if (quizState.value.localQuestionNumber == 0) _quizState.update {
+                    it.copy(
+                        isFirstQuestion = true
+                    )
+                }
 
             }
         }
@@ -243,7 +283,7 @@ class QuizVM @Inject constructor(
         }
     }
 
-    private fun selectWrongKanji(kanji: String?,kanjiInd: Int?) {
+    private fun selectWrongKanji(kanji: String?, kanjiInd: Int?) {
         _quizState.update { it.copy(selectedWrongKanji = kanji, selectedWrongKanjiInd = kanjiInd) }
     }
 
@@ -256,13 +296,13 @@ class QuizVM @Inject constructor(
         if (question.format == "kaki" || question.format == "type") {
 
             val whole = if (question.format == "kaki") {
-                question.question.replace(question.target!!,question.answer)
-            }else{
+                question.question.replace(question.target!!, question.answer)
+            } else {
                 question.question
             }
 
 
-            Log.i("DEBUG whole",whole)
+            Log.i("DEBUG whole", whole)
 
             val explanation = managerDataSource.getWordExplanation(whole)
             if (explanation != null) {
@@ -274,9 +314,39 @@ class QuizVM @Inject constructor(
             } else {
                 _quizState.update { it.copy(explanation = null) }
             }
+        }
+    }
 
+    private suspend fun getJotobaExampleSentence(word: String): String {
+
+        val request = PostRequest(
+            query = word,
+            language = "English",
+            no_english = true
+        )
+
+        val jotobaResponse = service.createPost(request)
+
+        Log.i("INVM0", jotobaResponse.toString())
+
+        if (jotobaResponse != null) {
+            val sentencesJsonElement = extractMapFromJson(jotobaResponse, "sentences")
+            val sentencesElementList =
+                extractStringFromJson(sentencesJsonElement.toString(), removeQuotationMarks = false)
+            val randomIndex = Random.nextInt(sentencesElementList.size)
+            val selectedSentence = sentencesElementList[randomIndex]
+
+            Log.i("INVM0", selectedSentence)
+
+            val question = extractMapFromJson(selectedSentence, "content").toString()
+
+            return question.replace(""""""", "")
         }
 
+        return "couldn't find"
+
+
     }
+
 
 }

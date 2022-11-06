@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.talisol.nihongodrill.quizUtils.makeTargetRed
+import com.talisol.nihongodrill.quizUtils.processTarget
 import com.talisol.nihongodrill.ui.screens.CorrectVsWrongAnswerScreen
 import com.talisol.nihongodrill.ui.states.QuizState
 
@@ -20,7 +20,7 @@ fun OneTargetQAScreen(
     quizState: QuizState,
 ) {
 
-    val annotatedString = makeTargetRed(quizState.question, quizState.target!!)
+    val annotatedString = processTarget(quizState.question, quizState.target!!)
 
 
     Column(

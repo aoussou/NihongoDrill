@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.talisol.nihongodrill.actions.QuizAction
 import com.talisol.nihongodrill.quizUtils.extractStringFromJson
-import com.talisol.nihongodrill.quizUtils.makeTargetRed
+import com.talisol.nihongodrill.quizUtils.processTarget
 import com.talisol.nihongodrill.ui.states.QuizState
 
 
@@ -37,7 +37,7 @@ fun DouonScreen(
         val selectionBoxModifier = Modifier.weight(1f)
 
         for (q in questionsStrings.indices) {
-            val annotatedString = makeTargetRed(questionsStrings[q], quizState.target)
+            val annotatedString = processTarget(questionsStrings[q], quizState.target)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

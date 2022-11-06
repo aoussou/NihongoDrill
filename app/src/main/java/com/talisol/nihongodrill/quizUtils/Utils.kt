@@ -7,10 +7,12 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
 
 
-fun makeTargetRed(string:String,target:String?): AnnotatedString{
+fun processTarget(string:String, target:String?): AnnotatedString{
 
     Log.i("DEBUG", "$string target: $target" )
 
@@ -52,14 +54,22 @@ fun makeTargetRed(string:String,target:String?): AnnotatedString{
 
 }
 
-fun extractStringFromJson(jsonString: String): List<String> {
+fun extractStringFromJson(jsonString: String, removeQuotationMarks: Boolean = true): List<String> {
     Log.i("DEBUG",jsonString)
     val jsonArray = Json.parseToJsonElement(jsonString).jsonArray
     val stringList = mutableListOf<String>()
     for (s in jsonArray.toList()) {
-        val suggestionString = s.toString().replace(""""""", "")
+        var suggestionString = s.toString()
+            if (removeQuotationMarks) suggestionString = suggestionString.replace(""""""", "")
         stringList.add(suggestionString)
     }
 
     return stringList
+}
+
+fun extractMapFromJson(jsonString: String, keyWord: String):  JsonElement? {
+
+    val jsonMap = Json.parseToJsonElement(jsonString).jsonObject.toMutableMap()
+
+    return jsonMap[keyWord]
 }

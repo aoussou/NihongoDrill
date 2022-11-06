@@ -9,6 +9,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.talisol.nihongodrill.actions.QuizAction
 import com.talisol.nihongodrill.actions.TrackingAction
+import com.talisol.nihongodrill.quizUtils.processTarget
 import com.talisol.nihongodrill.ui.states.QuizState
 
 @Composable
@@ -18,8 +19,17 @@ fun JLPTScreen(
     onTrackingAction: (TrackingAction) -> Unit,
 ) {
 
-    val listKata = listOf("ア", "イ", "ウ", "エ", "オ")
+
     val listText = quizState.mcaList
+
+    val listKata = if (listText != null) {
+        (1..listText.size).toList().map { it.toString() }
+    } else {
+        listOf()
+    }
+
+    val annotatedString = processTarget(quizState.question, quizState.target!!)
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -38,7 +48,7 @@ fun JLPTScreen(
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = quizState.question,
+                text = annotatedString,
                 fontSize = 36.sp,
                 fontWeight = FontWeight.Bold
             )
