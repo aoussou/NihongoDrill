@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.talisol.nihongodrill.actions.QuizAction
 import com.talisol.nihongodrill.actions.TrackingAction
@@ -40,18 +41,26 @@ fun JLPTScreen(
 
     ) {
 
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
             ,
-            horizontalArrangement = Arrangement.Center
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = annotatedString,
                 fontSize = 36.sp,
                 fontWeight = FontWeight.Bold
             )
+
+            if (quizState.isAnswerConfirmed) {
+                if (quizState.explanation != null) {
+                    Box(Modifier.padding(16.dp)) {
+                        Text(text = quizState.explanation)
+                    }
+                }
+            }
         }
 
 

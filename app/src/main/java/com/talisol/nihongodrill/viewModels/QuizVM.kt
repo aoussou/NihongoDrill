@@ -112,7 +112,7 @@ class QuizVM @Inject constructor(
 
         if (qas.question == "auto") {
             viewModelScope.launch {
-
+                getJotobaExampleSentence(qas.answer)
                 val shuffledList = mcaList?.shuffled()?.take(5)?.toMutableList()
                 shuffledList?.add(qas.answer)
                 shuffledList?.shuffle()
@@ -120,7 +120,6 @@ class QuizVM @Inject constructor(
                 _quizState.update {
                     it.copy(
                         localQuestionNumber = localQuestionNumber,
-                        question = getJotobaExampleSentence(qas.answer).replace(qas.answer,"　(　）"),
                         correctAnswer = qas.answer,
                         target = qas.target,
                         questionGlobalId = qas.global_id.toInt(),
@@ -317,7 +316,7 @@ class QuizVM @Inject constructor(
         }
     }
 
-    private suspend fun getJotobaExampleSentence(word: String): String {
+    private suspend fun getJotobaExampleSentence(word: String) {
 
         val request = PostRequest(
             query = word,
@@ -338,12 +337,15 @@ class QuizVM @Inject constructor(
 
             Log.i("INVM0", selectedSentence)
 
-            val question = extractMapFromJson(selectedSentence, "content").toString()
+            val question = extractMapFromJson(selectedSentence, "content").toString().replace(word,"　(　）").replace(""""""","")
+            val explanation = extractMapFromJson(selectedSentence, "translation").toString().replace(""""""","")
 
-            return question.replace(""""""", "")
+            _quizState.update { it.copy(question = question) }
+            _quizState.update { it.copy(explanation = explanation) }
+
+
         }
 
-        return "couldn't find"
 
 
     }

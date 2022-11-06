@@ -33,11 +33,11 @@ fun OneTargetQAScreen(
     ) {
 
 
-            Text(
-                text = annotatedString,
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-            )
+        Text(
+            text = annotatedString,
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold,
+        )
 
 
         Text(text = quizState.inputAnswer ?: "", fontSize = 24.sp)
@@ -54,7 +54,6 @@ fun OneTargetQAScreen(
                 }
 
                 if (!quizState.isAnswerCorrect) {
-
                     CorrectVsWrongAnswerScreen(quizState)
                 } else (
                         Text(
@@ -65,11 +64,10 @@ fun OneTargetQAScreen(
                         )
             }
 
-            }
-
-
         }
 
+
+    }
 
 
 }
