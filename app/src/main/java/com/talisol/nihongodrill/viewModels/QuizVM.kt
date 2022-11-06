@@ -330,20 +330,43 @@ class QuizVM @Inject constructor(
 
         Log.i("INVM0", jotobaResponse.toString())
 
-        if (jotobaResponse != null) {
+        if (jotobaResponse != null ) {
             val sentencesJsonElement = extractMapFromJson(jotobaResponse, "sentences")
             val sentencesElementList =
                 extractStringFromJson(sentencesJsonElement.toString(), removeQuotationMarks = false)
-            val randomIndex = Random.nextInt(sentencesElementList.size)
-            val selectedSentence = sentencesElementList[randomIndex]
 
-            Log.i("INVM0", selectedSentence)
+            Log.i("INVM1", word)
+            Log.i("INVM2", sentencesElementList.size.toString())
 
-            val question = extractMapFromJson(selectedSentence, "content").toString().replace(word,"　(　）").replace(""""""","")
-            val explanation = extractMapFromJson(selectedSentence, "translation").toString().replace(""""""","")
+            if (sentencesElementList.size != 0) {
 
-            _quizState.update { it.copy(question = question) }
-            _quizState.update { it.copy(questionTranslation = explanation) }
+                val randomIndex = Random.nextInt(sentencesElementList.size)
+                val selectedSentence = sentencesElementList[randomIndex]
+
+                Log.i("INVM0", selectedSentence)
+
+                val question =
+                    extractMapFromJson(selectedSentence, "content").toString().replace(word, "　(　）")
+                        .replace(""""""", "")
+                val explanation = extractMapFromJson(selectedSentence, "translation").toString()
+                    .replace(""""""", "")
+
+                _quizState.update { it.copy(question = question) }
+                _quizState.update { it.copy(questionTranslation = explanation) }
+
+            } else {
+                val explanation = managerDataSource.getWordExplanation(word)
+                if (explanation != null) {
+                    val explanation = explanation.explanation_ja ?: explanation.explanation_en
+
+
+                    Log.i("DEBUG explanationJA", explanation!!)
+                    _quizState.update { it.copy(question = explanation) }
+                } else {
+                    _quizState.update { it.copy(question = "$word no example") }
+                }
+            }
+
 
 
         }

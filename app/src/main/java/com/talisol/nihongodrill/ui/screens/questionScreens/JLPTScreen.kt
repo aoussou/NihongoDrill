@@ -1,6 +1,8 @@
 package com.talisol.nihongodrill.ui.screens.questionScreens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +26,7 @@ fun JLPTScreen(
     onTrackingAction: (TrackingAction) -> Unit,
     onPopupAction: (PopupAction) -> Unit
 ) {
-
+    val scroll = rememberScrollState(0)
     val explanationPopup = PopupState(
         title = "Explanation:",
         dialogText = quizState.explanation,
@@ -63,9 +65,10 @@ fun JLPTScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
+                modifier = Modifier.verticalScroll(scroll),
                 text = annotatedString,
                 fontSize = 36.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
 
             if (quizState.isAnswerConfirmed) {
