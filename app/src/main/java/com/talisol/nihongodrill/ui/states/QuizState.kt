@@ -28,5 +28,6 @@ data class QuizState(
     val selectedSubQuestionNbr: Int? = null,
     val questionFormat : String? = null,
     val explanation: String? = null,
-    val questionTranslation: String? = null
+    val questionTranslation: String? = null,
+    val mcaNumber: Int = 4
     )

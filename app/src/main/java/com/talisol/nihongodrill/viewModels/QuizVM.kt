@@ -17,9 +17,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.jsonObject
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -51,7 +48,14 @@ class QuizVM @Inject constructor(
             is QuizAction.SetQuizType -> setQuizType(action.questionType)
             is QuizAction.UpdateAnswersList -> updateAnswersList(action.answer, action.index)
             is QuizAction.SetSelectedSubQuestion -> setSelectedSubquestionNbr(action.number)
+            is QuizAction.SetMCAnbr -> setMCAnumber(action.number)
         }
+    }
+
+    private fun setMCAnumber(mcaNumber: Int) {
+
+        _quizState.update { it.copy(mcaNumber = mcaNumber) }
+
     }
 
     private fun inputAnswer(answerString: String?) {
@@ -113,7 +117,8 @@ class QuizVM @Inject constructor(
         if (qas.question == "auto") {
             viewModelScope.launch {
                 getJotobaExampleSentence(qas.answer)
-                val shuffledList = mcaList?.shuffled()?.take(5)?.toMutableList()
+                val shuffledList =
+                    mcaList?.shuffled()?.take(_quizState.value.mcaNumber)?.toMutableList()
                 shuffledList?.add(qas.answer)
                 shuffledList?.shuffle()
 
@@ -330,7 +335,7 @@ class QuizVM @Inject constructor(
 
         Log.i("INVM0", jotobaResponse.toString())
 
-        if (jotobaResponse != null ) {
+        if (jotobaResponse != null) {
             val sentencesJsonElement = extractMapFromJson(jotobaResponse, "sentences")
             val sentencesElementList =
                 extractStringFromJson(sentencesJsonElement.toString(), removeQuotationMarks = false)
@@ -368,9 +373,7 @@ class QuizVM @Inject constructor(
             }
 
 
-
         }
-
 
 
     }
