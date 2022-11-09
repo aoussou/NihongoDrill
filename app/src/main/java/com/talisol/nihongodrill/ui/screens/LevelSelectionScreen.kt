@@ -151,13 +151,13 @@ fun LevelSectionScreen(
 
         Text(text = "${localQAlist.size} questions available")
 
-        val textState = remember { mutableStateOf(TextFieldValue()) }
-        val focusManager = LocalFocusManager.current
+        val numberOfQuestionTextState = remember { mutableStateOf(TextFieldValue()) }
+        val numberOfQuestionFocusManager = LocalFocusManager.current
         OutlinedTextField(
             label = { Text("Number of Random Question") },
-            value = textState.value,
+            value = numberOfQuestionTextState.value,
             onValueChange = {
-                textState.value = it
+                numberOfQuestionTextState.value = it
 
             },
             keyboardOptions = KeyboardOptions(
@@ -168,12 +168,39 @@ fun LevelSectionScreen(
                 onDone = {
                     onQuizSettingAction(
                         QuizSettingAction.ChooseNumberOfQuestions(
-                            textState.value.text.toInt()
+                            numberOfQuestionTextState.value.text.toInt()
                         )
                     )
-                    focusManager.clearFocus()
+                    numberOfQuestionFocusManager.clearFocus()
 
                     Log.i("DEBUG", "number sent")
+                })
+        )
+
+
+
+        val textMCA = remember { mutableStateOf(TextFieldValue("4")) }
+        val focusManagerMCA = LocalFocusManager.current
+        OutlinedTextField(
+            label = { Text("Number of MCA") },
+            value = textMCA.value,
+            onValueChange = {
+                textMCA.value = it
+            },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Number
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    onQuizAction(
+                        QuizAction.SetMCAnbr(
+                            textMCA.value.text.toInt()
+                        )
+                    )
+                    focusManagerMCA.clearFocus()
+
+//                    Log.i("DEBUG", "number sent")
                 })
         )
 

@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import com.talisol.nihongodrill.actions.QuizAction
 import com.talisol.nihongodrill.actions.QuizSettingAction
 
 @Composable
@@ -28,7 +29,8 @@ fun QuizSettingScreen(
     groupsList: List<String>,
     quizType: List<String>,
     modifier: Modifier = Modifier,
-    onAction: (QuizSettingAction) -> Unit
+    onQuizSettingAction: (QuizSettingAction) -> Unit,
+    onQuizAction: (QuizAction) -> Unit
 ) {
 
     Row(horizontalArrangement = Arrangement.SpaceBetween){
@@ -67,7 +69,7 @@ fun QuizSettingScreen(
             for (i in groupsList) {
                 Button(
                     onClick = {
-                    onAction(QuizSettingAction.SelectQuestionLevel(i))
+                    onQuizSettingAction(QuizSettingAction.SelectQuestionLevel(i))
                 }) {
                     Text(text = i)
                 }
@@ -94,7 +96,7 @@ fun QuizSettingScreen(
         ),
         keyboardActions = KeyboardActions(
             onDone = {
-                onAction(
+                onQuizSettingAction(
                     QuizSettingAction.ChooseNumberOfQuestions(
                         textState.value.text.toInt()
                     )
@@ -104,6 +106,33 @@ fun QuizSettingScreen(
                 Log.i("DEBUG", "number sent")
             })
     )
+
+    val textMCA = remember { mutableStateOf(TextFieldValue()) }
+    val focusManagerMCA = LocalFocusManager.current
+    OutlinedTextField(
+        label = { Text("Number of MCA") },
+        value = textMCA.value,
+        onValueChange = {
+            textMCA.value = it;
+
+        },
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Done,
+            keyboardType = KeyboardType.Number
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                onQuizAction(
+                    QuizAction.SetMCAnbr(
+                        textMCA.value.text.toInt()
+                    )
+                )
+                focusManagerMCA.clearFocus()
+
+                Log.i("DEBUG", "number sent")
+            })
+    )
+
 
 
 }
