@@ -118,7 +118,7 @@ class QuizVM @Inject constructor(
             viewModelScope.launch {
                 getJotobaExampleSentence(qas.answer)
                 val shuffledList =
-                    mcaList?.shuffled()?.take(_quizState.value.mcaNumber)?.toMutableList()
+                    mcaList?.shuffled()?.take(_quizState.value.mcaNumber - 1)?.toMutableList()
                 shuffledList?.add(qas.answer)
                 shuffledList?.shuffle()
 
