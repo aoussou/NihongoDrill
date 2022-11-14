@@ -1,0 +1,9 @@
+CREATE TABLE  example(
+    id INTEGER PRIMARY KEY NOT NULL,
+    word TEXT NOT NULL,
+    sentence_ja TEXT NOT NULL,
+    sentence_en TEXT,
+    form TEXT,
+    is_hiragana INTEGER NOT NULL ,
+    source_jp TEXT
+);

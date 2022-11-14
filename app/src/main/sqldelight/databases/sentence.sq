@@ -1,8 +1,0 @@
-CREATE TABLE  sentence(
-    id INTEGER PRIMARY KEY NOT NULL,
-    sentence_ja TEXT,
-    sentence_en TEXT,
-    word TEXT,
-    is_hiragana INTEGER,
-    source_jp TEXT
-);

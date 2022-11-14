@@ -1,9 +1,7 @@
 package com.talisol.nihongodrill.data
 
 import com.talisol.nihongodrill.NihongoDatabase
-import databases.JlptQuestion
-import databases.KankenQuestion
-import databases.WordExplanation
+import databases.*
 
 
 class ManagerDataSourceImpl(
@@ -44,6 +42,10 @@ class ManagerDataSourceImpl(
 
     override fun getWordExplanation(word: String): WordExplanation?  {
         return queries.wordExplanation(word).executeAsOneOrNull()
+    }
+
+    override fun getExamplesList(word: String): List<WordExample> {
+        return queries.wordExample(word).executeAsList()
     }
 
 }

@@ -53,3 +53,9 @@ SELECT explanation_ja, explanation_en FROM
 explanation
 WHERE word =: word
 ;
+
+wordExample:
+SELECT * FROM
+example
+WHERE word =: word
+;
