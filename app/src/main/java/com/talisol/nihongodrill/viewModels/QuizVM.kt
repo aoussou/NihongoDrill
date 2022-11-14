@@ -111,7 +111,6 @@ class QuizVM @Inject constructor(
                 null
             }
 
-        setExplanation(qas)
 
         if (qas.question == "auto") {
             viewModelScope.launch {
@@ -165,7 +164,9 @@ class QuizVM @Inject constructor(
                     mcaList.shuffled().take(_quizState.value.mcaNumber - 1).toMutableList()
 
 
-                val newMCAlist = mutableListOf(correctInflectedVerb)
+                var newMCAlist = mutableListOf(correctInflectedVerb)
+
+                var kanjiList = mutableListOf(qas.answer)
 
                 for (v in shuffledList) {
                     Log.i(" kanaverb", v)
@@ -175,9 +176,16 @@ class QuizVM @Inject constructor(
                     val inflectedVerbMap = getVerbInflection(wordReading, isIchidan)
                     val inflectedVerb = inflectedVerbMap[verbForm]!!
                     newMCAlist.add(inflectedVerb)
+                    kanjiList.add(v)
                 }
 
-                newMCAlist.shuffle()
+                val indices = newMCAlist.indices.shuffled()
+
+                newMCAlist = indices.map { newMCAlist[it] }.toMutableList()
+
+
+
+                kanjiList = indices.map { kanjiList[it] }.toMutableList()
 
                 val target = if (isKana) {
                     correctInflectedVerb
@@ -202,7 +210,8 @@ class QuizVM @Inject constructor(
                         mcaList = newMCAlist,
                         isKanjiRecRequired = isKanjiRecRequired,
                         questionFormat = qas.format,
-                        explanation = example.sentence_en
+                        explanation = example.sentence_en,
+                        dictionaryFormAnswersList = kanjiList
                     )
 
                 }
@@ -366,40 +375,14 @@ class QuizVM @Inject constructor(
         _quizState.update { it.copy(questionType = type) }
     }
 
-    private fun setExplanation(question: Question) {
 
-        if (question.format == "kaki" || question.format == "type" || question.format == "mcq") {
-
-            val whole = if (question.format == "kaki") {
-                question.question.replace(question.target!!, question.answer)
-            } else if (question.format == "type") {
-                question.question
-            } else {
-                question.answer
-            }
-
-
-            Log.i("DEBUG whole", whole)
-
-            val explanation = managerDataSource.getWordInfo(whole)
-            if (explanation.isNotEmpty()) {
-                val explanation = explanation[0].explanation_ja ?: explanation[0].explanation_en
-
-
-                Log.i("DEBUG explanationJA", explanation!!)
-                _quizState.update { it.copy(explanation = explanation) }
-            } else {
-                _quizState.update { it.copy(explanation = null) }
-            }
-        }
-    }
 
     fun getExplanation(word: String): String {
 
-        val explanation = managerDataSource.getWordExplanation(word)
+        val explanation = managerDataSource.getWordInfo(word)
 
-        return if (explanation != null) {
-            val explanation = explanation.explanation_ja ?: explanation.explanation_en
+        return if (explanation.isNotEmpty()) {
+            val explanation = explanation[0].explanation_ja ?: explanation[0].explanation_en
 
             explanation ?: "no explanation"
 

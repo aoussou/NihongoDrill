@@ -80,15 +80,15 @@ fun getVerbInflection(verb: String, isIchidan: Boolean): Map<String, String>  {
             "te" to stem + "て",
             "past" to stem + "た",
             "negative" to stem + "な",
-            "negativeOld" to stem + "ぬ",
-            "negativeContinous" to stem + "ず",
+            "negative-old" to stem + "ぬ",
+            "negative-continous" to stem + "ず",
             "masu" to stem + "ま",
             "volitional" to stem + "よう",
             "imperative" to stem + "ろ",
             "hypothetical" to stem + "れば",
             "passive" to stem + "られ",
             "dictionary" to verb,
-            "masuForm" to stem,
+            "masu-form" to stem,
             "potential" to stem + "られ",
         )
     } else {

@@ -22,21 +22,21 @@ fun QuestionScreen(
     modifier: Modifier = Modifier,
 ) {
 
-        when (quizState.questionFormat){
-            "type" -> OneTargetQAScreen(quizState)
-            "kaki" -> OneTargetQAScreen(quizState)
-            "kousei" -> KouseiScreen(quizState,onQuizAction,onTrackingAction)
-            "shikibetsu" -> ShikibetsuScreen(quizState,onQuizAction)
-            "taigi" -> TaigiScreen(quizState,onQuizAction)
-            "goji" -> GojiScreen(quizState,onQuizAction)
-            "yoji" -> OneTargetQAScreen(quizState)
-            "douon" -> DouonScreen(quizState,onQuizAction)
-            "busyu" -> BusyuScreen(quizState,onQuizAction,onTrackingAction)
-            "bunpou" -> JLPTScreen(quizState,onQuizAction,onTrackingAction,onPopupAction, getExplanation)
-            "okuri" -> OneTargetQAScreen(quizState)
-            "mcq" -> JLPTScreen(quizState,onQuizAction,onTrackingAction,onPopupAction,getExplanation)
-            else -> Log.i("DEBUG",quizState.questionFormat.toString())
-        }
+    when (quizState.questionFormat){
+        "type" -> OneTargetQAScreen(quizState)
+        "kaki" -> OneTargetQAScreen(quizState)
+        "kousei" -> KouseiScreen(quizState,onQuizAction,onTrackingAction)
+        "shikibetsu" -> ShikibetsuScreen(quizState,onQuizAction)
+        "taigi" -> TaigiScreen(quizState,onQuizAction)
+        "goji" -> GojiScreen(quizState,onQuizAction)
+        "yoji" -> OneTargetQAScreen(quizState)
+        "douon" -> DouonScreen(quizState,onQuizAction)
+        "busyu" -> BusyuScreen(quizState,onQuizAction,onTrackingAction)
+        "bunpou" -> JLPTScreen(quizState,onQuizAction,onTrackingAction,onPopupAction, getExplanation)
+        "okuri" -> OneTargetQAScreen(quizState)
+        "mcq" -> JLPTScreen(quizState,onQuizAction,onTrackingAction,onPopupAction,getExplanation)
+        else -> Log.i("DEBUG",quizState.questionFormat.toString())
+    }
 
 
 

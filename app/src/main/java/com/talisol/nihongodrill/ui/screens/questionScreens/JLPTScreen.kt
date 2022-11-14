@@ -54,7 +54,7 @@ fun JLPTScreen(
         modifier = Modifier
             .fillMaxWidth()
 //            .fillMaxHeight(.75F)
-    ,
+        ,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
 
@@ -85,7 +85,7 @@ fun JLPTScreen(
 
                 if (quizState.explanation != null) {
                     Button(onClick = {onPopupAction(PopupAction.ShowAlertDialog(explanationPopup)) }) {
-                     Text(text = "see explanation")
+                        Text(text = "see explanation")
                     }
                 }
 
@@ -94,15 +94,15 @@ fun JLPTScreen(
 
 
 
-            MCAScreen(
-                quizState,
-                listKata,
-                listText!!,
-                onQuizAction,
-                onTrackingAction,
-                onPopupAction,
-                getExplanation = getExplanation
-            )
+        MCAScreen(
+            quizState,
+            listKata,
+            listText!!,
+            onQuizAction,
+            onTrackingAction,
+            onPopupAction,
+            getExplanation = getExplanation
+        )
 
 
     }

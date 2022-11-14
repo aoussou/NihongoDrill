@@ -1,5 +1,6 @@
 package com.talisol.nihongodrill.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -46,11 +47,14 @@ fun MCAScreen(
                         onQuizAction(QuizAction.InputAnswer(textAnswer))
                         onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
                     } else {
+
+
                         if (onPopupAction != null && getExplanation!=null) {
                             onQuizAction(QuizAction.SetExplanation(textAnswer))
+
                             val explanationPopup = PopupState(
-                                title = "$textAnswer:",
-                                dialogText = getExplanation(textAnswer),
+                                title = "${quizState.dictionaryFormAnswersList!![a]}:",
+                                dialogText = getExplanation(quizState.dictionaryFormAnswersList!![a]),
                                 onConfirmAction = {
                                     onPopupAction(PopupAction.CloseAlertDialog)
                                 },
