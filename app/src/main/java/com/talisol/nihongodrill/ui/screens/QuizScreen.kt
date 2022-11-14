@@ -37,7 +37,8 @@ fun QuizScreen(
     predictedKanji: String?,
     otherGuessesList: List<String>?,
     onTrackingAction: (TrackingAction) -> Unit,
-    onPopupAction: (PopupAction) -> Unit
+    onPopupAction: (PopupAction) -> Unit,
+    getExplanation: (String) -> String
 ) {
 
     QuizAlertDialog(popupState = popupState, onAction = onPopupAction)
@@ -59,7 +60,8 @@ fun QuizScreen(
                 quizState = quizState,
                 onQuizAction = onQuizAction,
                 onTrackingAction = onTrackingAction,
-                onPopupAction = onPopupAction
+                onPopupAction = onPopupAction,
+                getExplanation = getExplanation
             )
         }
 

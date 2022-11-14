@@ -49,6 +49,7 @@ class QuizVM @Inject constructor(
             is QuizAction.UpdateAnswersList -> updateAnswersList(action.answer, action.index)
             is QuizAction.SetSelectedSubQuestion -> setSelectedSubquestionNbr(action.number)
             is QuizAction.SetMCAnbr -> setMCAnumber(action.number)
+            is QuizAction.SetExplanation -> getExplanation(action.string)
         }
     }
 
@@ -112,7 +113,7 @@ class QuizVM @Inject constructor(
                 null
             }
 
-        getExplanation(qas)
+        setExplanation(qas)
 
         if (qas.question == "auto") {
             viewModelScope.launch {
@@ -295,7 +296,7 @@ class QuizVM @Inject constructor(
         _quizState.update { it.copy(questionType = type) }
     }
 
-    private fun getExplanation(question: Question) {
+    private fun setExplanation(question: Question) {
 
         if (question.format == "kaki" || question.format == "type" || question.format == "mcq") {
 
@@ -321,6 +322,21 @@ class QuizVM @Inject constructor(
                 _quizState.update { it.copy(explanation = null) }
             }
         }
+    }
+
+    fun getExplanation(word: String): String {
+
+        val explanation = managerDataSource.getWordExplanation(word)
+
+        return if (explanation != null) {
+            val explanation = explanation.explanation_ja ?: explanation.explanation_en
+
+            explanation ?: "no explanation"
+
+        } else {
+            "no explanation"
+        }
+
     }
 
     private suspend fun getJotobaExampleSentence(word: String) {

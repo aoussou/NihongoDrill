@@ -43,7 +43,7 @@ fun BusyuScreen(
                 listKata,
                 listText!!,
                 onQuizAction,
-                onTrackingAction,
+                onTrackingAction
             )
 
 

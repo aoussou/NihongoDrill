@@ -24,9 +24,12 @@ fun JLPTScreen(
     quizState: QuizState,
     onQuizAction: (QuizAction) -> Unit,
     onTrackingAction: (TrackingAction) -> Unit,
-    onPopupAction: (PopupAction) -> Unit
+    onPopupAction: (PopupAction) -> Unit,
+    getExplanation: (String) -> String
 ) {
     val scroll = rememberScrollState(0)
+    val scrollTranslation = rememberScrollState(0)
+
     val explanationPopup = PopupState(
         title = "Explanation:",
         dialogText = quizState.explanation,
@@ -74,7 +77,9 @@ fun JLPTScreen(
             if (quizState.isAnswerConfirmed) {
                 if (quizState.questionTranslation != null) {
                     Box(Modifier.padding(16.dp)) {
-                        Text(text = quizState.questionTranslation)
+                        Text(
+                            modifier = Modifier.verticalScroll(scrollTranslation),
+                            text = quizState.questionTranslation)
                     }
                 }
 
@@ -95,6 +100,8 @@ fun JLPTScreen(
                 listText!!,
                 onQuizAction,
                 onTrackingAction,
+                onPopupAction,
+                getExplanation = getExplanation
             )
 
 

@@ -1,31 +1,36 @@
 package com.talisol.nihongodrill.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.talisol.nihongodrill.actions.PopupAction
 import com.talisol.nihongodrill.actions.QuizAction
 import com.talisol.nihongodrill.actions.TrackingAction
 import com.talisol.nihongodrill.quizUtils.processTarget
+import com.talisol.nihongodrill.ui.states.PopupState
 import com.talisol.nihongodrill.ui.states.QuizState
 
 @Composable
-fun MCAScreen (
+fun MCAScreen(
     quizState: QuizState,
     answersList: List<String>,
     answerTextList: List<String>,
     onQuizAction: (QuizAction) -> Unit,
     onTrackingAction: (TrackingAction) -> Unit,
+    onPopupAction: ((PopupAction) -> Unit)? = null,
     modifier: Modifier = Modifier,
+    getExplanation: ((String) -> String)?= null
 ) {
 
 
     Column(
-    modifier = Modifier
-        .then(modifier)
-    ,
-    verticalArrangement = Arrangement.SpaceEvenly
+        modifier = Modifier
+            .then(modifier),
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
         for (a in answerTextList.indices) {
             val textAnswer = answerTextList[a]
@@ -40,16 +45,34 @@ fun MCAScreen (
                     if (!quizState.isAnswerConfirmed) {
                         onQuizAction(QuizAction.InputAnswer(textAnswer))
                         onQuizAction(QuizAction.ConfirmAnswer(onTrackingAction))
+                    } else {
+                        if (onPopupAction != null && getExplanation!=null) {
+                            onQuizAction(QuizAction.SetExplanation(textAnswer))
+                            val explanationPopup = PopupState(
+                                title = "$textAnswer:",
+                                dialogText = getExplanation(textAnswer),
+                                onConfirmAction = {
+                                    onPopupAction(PopupAction.CloseAlertDialog)
+                                },
+                                dismissButtonText = "OK",
+                                confirmButtonText = "OK"
+                            )
+                            onPopupAction(PopupAction.ShowAlertDialog(explanationPopup))
+                        }
                     }
 
                 },
                 textColor =
-                if (isShowCorrectAnswer) {Color.Green}
-                else if (
+                if (isShowCorrectAnswer) {
+                    Color.Green
+                } else if (
                     quizState.isAnswerConfirmed
                     && textAnswer == quizState.inputAnswer
-                ) {Color.Red}
-                else {Color.Black},
+                ) {
+                    Color.Red
+                } else {
+                    Color.Black
+                },
                 isSelected = (textAnswer == quizState.inputAnswer) || isShowCorrectAnswer
             )
         }

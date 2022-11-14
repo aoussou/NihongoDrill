@@ -18,6 +18,7 @@ fun QuestionScreen(
     onQuizAction: (QuizAction) -> Unit,
     onTrackingAction: (TrackingAction) -> Unit,
     onPopupAction: (PopupAction) -> Unit,
+    getExplanation: (String) -> String,
     modifier: Modifier = Modifier,
 ) {
 
@@ -31,9 +32,9 @@ fun QuestionScreen(
             "yoji" -> OneTargetQAScreen(quizState)
             "douon" -> DouonScreen(quizState,onQuizAction)
             "busyu" -> BusyuScreen(quizState,onQuizAction,onTrackingAction)
-            "bunpou" -> JLPTScreen(quizState,onQuizAction,onTrackingAction,onPopupAction)
+            "bunpou" -> JLPTScreen(quizState,onQuizAction,onTrackingAction,onPopupAction, getExplanation)
             "okuri" -> OneTargetQAScreen(quizState)
-            "mcq" -> JLPTScreen(quizState,onQuizAction,onTrackingAction,onPopupAction)
+            "mcq" -> JLPTScreen(quizState,onQuizAction,onTrackingAction,onPopupAction,getExplanation)
             else -> Log.i("DEBUG",quizState.questionFormat.toString())
         }
 
