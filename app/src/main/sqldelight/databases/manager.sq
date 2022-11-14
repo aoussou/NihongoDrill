@@ -48,8 +48,19 @@ INNER JOIN progress
 ON jlpt.global_id = progress.id
 ;
 
-wordExplanation:
-SELECT explanation_ja, explanation_en FROM
+wordInfo:
+SELECT * FROM
 explanation
 WHERE word =: word
+;
+
+wordInfoGivenReading:
+SELECT * FROM
+explanation
+WHERE word =: word AND reading =: reading
+;
+
+
+wordExample:
+SELECT * FROM example WHERE  word_id =: word_id
 ;

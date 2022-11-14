@@ -48,7 +48,7 @@ fun JLPTScreen(
         listOf()
     }
 
-    val annotatedString = processTarget(quizState.question, quizState.target!!)
+    val annotatedString = processTarget(quizState.question, quizState.target)
 
     Column(
         modifier = Modifier
