@@ -4,6 +4,6 @@ CREATE TABLE  example(
     sentence_ja TEXT NOT NULL,
     sentence_en TEXT,
     form TEXT,
-    is_hiragana INTEGER NOT NULL ,
+    is_kana INTEGER NOT NULL ,
     source_jp TEXT
 );

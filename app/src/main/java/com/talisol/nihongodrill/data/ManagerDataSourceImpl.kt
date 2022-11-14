@@ -44,7 +44,7 @@ class ManagerDataSourceImpl(
         return queries.wordExplanation(word).executeAsOneOrNull()
     }
 
-    override fun getExamplesList(word: String): List<WordExample> {
+    override fun getExamplesList(word: String): List<Example> {
         return queries.wordExample(word).executeAsList()
     }
 

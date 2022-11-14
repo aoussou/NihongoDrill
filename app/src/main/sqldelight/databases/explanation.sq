@@ -1,6 +1,8 @@
 CREATE TABLE  explanation(
     id INTEGER PRIMARY KEY NOT NULL,
     word TEXT,
+    reading TEXT,
+    is_usually_kana INTEGER,
     explanation_ja TEXT,
     explanation_en TEXT,
     source_jp TEXT

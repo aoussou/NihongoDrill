@@ -21,5 +21,5 @@ interface ManagerDataSource {
 
     fun getWordExplanation(word: String): WordExplanation?
 
-    fun getExamplesList(word: String): List<WordExample>
+    fun getExamplesList(word: String): List<Example>
 }
