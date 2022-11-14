@@ -24,9 +24,12 @@ fun JLPTScreen(
     quizState: QuizState,
     onQuizAction: (QuizAction) -> Unit,
     onTrackingAction: (TrackingAction) -> Unit,
-    onPopupAction: (PopupAction) -> Unit
+    onPopupAction: (PopupAction) -> Unit,
+    getExplanation: (String) -> String
 ) {
     val scroll = rememberScrollState(0)
+    val scrollTranslation = rememberScrollState(0)
+
     val explanationPopup = PopupState(
         title = "Explanation:",
         dialogText = quizState.explanation,
@@ -51,7 +54,7 @@ fun JLPTScreen(
         modifier = Modifier
             .fillMaxWidth()
 //            .fillMaxHeight(.75F)
-    ,
+        ,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
 
@@ -74,13 +77,15 @@ fun JLPTScreen(
             if (quizState.isAnswerConfirmed) {
                 if (quizState.questionTranslation != null) {
                     Box(Modifier.padding(16.dp)) {
-                        Text(text = quizState.questionTranslation)
+                        Text(
+                            modifier = Modifier.verticalScroll(scrollTranslation),
+                            text = quizState.questionTranslation)
                     }
                 }
 
                 if (quizState.explanation != null) {
                     Button(onClick = {onPopupAction(PopupAction.ShowAlertDialog(explanationPopup)) }) {
-                     Text(text = "see explanation")
+                        Text(text = "see explanation")
                     }
                 }
 
@@ -89,13 +94,15 @@ fun JLPTScreen(
 
 
 
-            MCAScreen(
-                quizState,
-                listKata,
-                listText!!,
-                onQuizAction,
-                onTrackingAction,
-            )
+        MCAScreen(
+            quizState,
+            listKata,
+            listText!!,
+            onQuizAction,
+            onTrackingAction,
+            onPopupAction,
+            getExplanation = getExplanation
+        )
 
 
     }

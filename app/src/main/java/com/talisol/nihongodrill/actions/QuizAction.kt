@@ -21,6 +21,8 @@ sealed class QuizAction {
 
     data class SetMCAnbr(val number: Int): QuizAction()
 
+    data class SetExplanation(val string: String): QuizAction()
+
 //    data class SelectAnswer(val number: Int): QuizActio
 
 

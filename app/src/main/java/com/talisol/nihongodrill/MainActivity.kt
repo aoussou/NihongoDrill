@@ -73,7 +73,8 @@ class MainActivity : ComponentActivity() {
                     onTrackingAction = trackingVM::onAction,
                     onPopupAction = popupVM::onAction,
                     localQAlist = localQAlist,
-                    getQuizQuestionList = quizSettingVM::getQuizQuestionList
+                    getQuizQuestionList = quizSettingVM::getQuizQuestionList,
+                    getExplanation = quizVM::getExplanation
                 )
 
 
