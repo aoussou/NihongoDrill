@@ -19,7 +19,9 @@ interface ManagerDataSource {
 
     fun getAllJLPTQuestions(): List<JlptQuestion>
 
-    fun getWordExplanation(word: String): WordExplanation?
+    fun getWordInfo(word: String): List<Explanation>
 
-    fun getExamplesList(word: String): List<Example>
+    fun getWordInfoGivenReading(word: String, reading: String): Explanation?
+
+    fun getExamplesList(wordId: Long): List<Example>
 }

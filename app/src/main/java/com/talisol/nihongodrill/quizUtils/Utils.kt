@@ -72,46 +72,50 @@ fun extractMapFromJson(jsonString: String, keyWord: String): JsonElement? {
 }
 
 
-fun getVerbInflection(verb: String, isIchidan: Boolean) {
+fun getVerbInflection(verb: String, isIchidan: Boolean): Map<String, String>  {
 
-    val stem = verb.substring(0, verb.length)
-    if (isIchidan) {
-        val ending = VerbInflections(
-            stem + "て",
-            stem + "た",
-            stem + "な",
-            stem + "ぬ",
-            stem + "ず",
-            stem + "ま",
-            stem + "よう",
-            stem + "ろ",
-            stem + "れば",
-            stem + "られ",
-            verb,
-            stem,
-            stem + "られ",
+    val stem = verb.substring(0, verb.length-1)
+    val ending =  if (isIchidan) {
+        mapOf(
+            "te" to stem + "て",
+            "past" to stem + "た",
+            "negative" to stem + "な",
+            "negativeOld" to stem + "ぬ",
+            "negativeContinous" to stem + "ず",
+            "masu" to stem + "ま",
+            "volitional" to stem + "よう",
+            "imperative" to stem + "ろ",
+            "hypothetical" to stem + "れば",
+            "passive" to stem + "られ",
+            "dictionary" to verb,
+            "masuForm" to stem,
+            "potential" to stem + "られ",
         )
     } else {
         val verbEnding = verb.last().toString()
-        val endings = VerbEndings.endingsMap[verbEnding]!!
+        Log.i("UTILSinflec0", verb)
+        Log.i("UTILSinflec1", verbEnding)
+        val godanEndings = VerbEndings.endingsMap[verbEnding]!!
 
-        val ending = VerbInflections(
-            stem + endings.teForm,
-            stem + endings.pastForm,
-            stem + endings.aForm + "な",
-            stem + endings.aForm + "ぬ",
-            stem + endings.aForm + "ず",
-            stem + endings.iForm + "ま",
-            stem + endings.oForm + "う",
-            stem + endings.eForm,
-            stem + endings.eForm + "ば",
-            stem + endings.aForm + "れ",
-            verb,
-            stem + endings.iForm,
-            stem + endings.eForm,
+        mapOf(
+            "te" to stem + godanEndings.teForm,
+            "past" to stem + godanEndings.pastForm,
+            "negative" to stem + godanEndings.aForm + "な",
+            "negative-old" to stem + godanEndings.aForm + "ぬ",
+            "negative-continous"  to stem + godanEndings.aForm + "ず",
+            "masu" to stem + godanEndings.iForm + "ま",
+            "volitional" to stem + godanEndings.oForm + "う",
+            "imperative"  to stem + godanEndings.eForm,
+            "hypothetical" to stem + godanEndings.eForm + "ば",
+            "passive" to stem + godanEndings.aForm + "れ",
+            "dictionary" to verb,
+            "masu-form" to stem + godanEndings.iForm,
+            "potential" to stem + godanEndings.eForm,
 
         )
 
     }
+
+    return ending
 
 }

@@ -1,9 +1,10 @@
-CREATE TABLE  example(
+CREATE TABLE example(
     id INTEGER PRIMARY KEY NOT NULL,
-    word TEXT NOT NULL,
+    word_id INTEGER,
     sentence_ja TEXT NOT NULL,
     sentence_en TEXT,
     form TEXT,
     is_kana INTEGER NOT NULL ,
-    source_jp TEXT
+    source_jp TEXT,
+    FOREIGN KEY (word_id) REFERENCES explanation(id)
 );
