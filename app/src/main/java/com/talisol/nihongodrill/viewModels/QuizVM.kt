@@ -140,6 +140,7 @@ class QuizVM @Inject constructor(
 
                 Log.i("DEB1 kanaverb_verb", qas.answer)
                 val wordInfo = managerDataSource.getWordInfoGivenReading(qas.answer, qas.target!!)!!
+                val isUsuallyKana = wordInfo.is_usually_kana == 1L
                 val wordReading = wordInfo.reading
                 Log.i("DEB1 kanaverb_reading", wordReading!!)
 
@@ -162,20 +163,32 @@ class QuizVM @Inject constructor(
 
                 Log.i("DEB1 kanaverb", verbForm!!)
                 val isIchidan = wordInfo.word_type == "ichidan"
-                val inflectedVerbMap = getVerbInflection(wordReading, isIchidan)
-                val correctInflectedVerb = inflectedVerbMap[verbForm]!!
-                Log.i("DEB1 inflected", correctInflectedVerb)
+
+                val readingInflectedMap = getVerbInflection(wordReading, isIchidan)
+                val wordInflectedMap =   getVerbInflection(qas.answer, isIchidan)
+                val targetInflectedVerbMap = if (isKana) {
+                    readingInflectedMap
+                } else {
+                    wordInflectedMap
+                }
+
+
+                val targetInflectedVerb = targetInflectedVerbMap[verbForm]!!
+                val wordInflectedVerb = wordInflectedMap[verbForm]!!
+
                 val mcaList = extractStringFromJson(qas.mca_list!!).toMutableList()
                 val shuffledList =
                     mcaList.shuffled().take(_quizState.value.mcaNumber - 1).toMutableList()
-                var newMCAlist = mutableListOf(correctInflectedVerb)
+                var newMCAlist = mutableListOf(wordInflectedVerb)
                 var kanjiList = mutableListOf(qas.answer)
+                var readingList = mutableListOf(wordReading)
+
                 for (v in shuffledList) {
                     Log.i(" kanaverb", v)
                     val qWordInfo = managerDataSource.getWordInfo(v)[0]
                     val isIchidan = qWordInfo.word_type == "ichidan"
 
-                    val inflectedVerbMap = if (isKana) {
+                    val inflectedVerbMap = if (isUsuallyKana) {
                         getVerbInflection(qWordInfo.reading!!, isIchidan)
                     } else {
                         getVerbInflection(qWordInfo.word!!, isIchidan)
@@ -184,25 +197,19 @@ class QuizVM @Inject constructor(
                     val inflectedVerb = inflectedVerbMap[verbForm]!!
                     newMCAlist.add(inflectedVerb)
                     kanjiList.add(v)
+                    readingList.add(qWordInfo.reading!!)
                 }
 
                 val indices = newMCAlist.indices.shuffled()
 
                 newMCAlist = indices.map { newMCAlist[it] }.toMutableList()
                 kanjiList = indices.map { kanjiList[it] }.toMutableList()
+                readingList = indices.map { readingList[it] }.toMutableList()
 
-                val target = if (isKana) {
-                    correctInflectedVerb
-                } else {
-                    val kanjiInflectedVerbMap = getVerbInflection(qas.answer, isIchidan)
-                    kanjiInflectedVerbMap[verbForm]!!
-                }
-
-                Log.i("DEBUG TARGET",target)
 
                 val question = if (exampleSentences.isNotEmpty()) {
                     val example = exampleSentences[0]
-                    example.sentence_ja.replace(target, "（　）")
+                    example.sentence_ja.replace(targetInflectedVerb, "（　）")
                 } else {
                     wordInfo.explanation_en
                 }!!
@@ -223,7 +230,7 @@ class QuizVM @Inject constructor(
                 _quizState.update {
                     it.copy(
                         localQuestionNumber = localQuestionNumber,
-                        correctAnswer = correctInflectedVerb,
+                        correctAnswer = wordInflectedVerb,
                         question = question,
                         target = null,
                         questionGlobalId = qas.global_id.toInt(),
@@ -233,7 +240,8 @@ class QuizVM @Inject constructor(
                         isKanjiRecRequired = isKanjiRecRequired,
                         questionFormat = qas.format,
                         explanation = explanation,
-                        dictionaryFormAnswersList = kanjiList
+                        dictionaryFormAnswersList = kanjiList,
+                        readingAnswersList = readingList
                     )
 
                 }

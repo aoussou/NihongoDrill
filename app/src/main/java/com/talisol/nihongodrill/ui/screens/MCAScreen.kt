@@ -24,7 +24,7 @@ fun MCAScreen(
     onTrackingAction: (TrackingAction) -> Unit,
     onPopupAction: ((PopupAction) -> Unit)? = null,
     modifier: Modifier = Modifier,
-    getExplanation: ((String) -> String)?= null
+    getExplanation: ((String) -> String)? = null
 ) {
 
 
@@ -49,11 +49,11 @@ fun MCAScreen(
                     } else {
 
 
-                        if (onPopupAction != null && getExplanation!=null) {
+                        if (onPopupAction != null && getExplanation != null) {
                             onQuizAction(QuizAction.SetExplanation(textAnswer))
 
                             val explanationPopup = PopupState(
-                                title = "${quizState.dictionaryFormAnswersList!![a]}:",
+                                title = "${quizState.dictionaryFormAnswersList!![a]} (${quizState.readingAnswersList!![a]}):",
                                 dialogText = getExplanation(quizState.dictionaryFormAnswersList!![a]),
                                 onConfirmAction = {
                                     onPopupAction(PopupAction.CloseAlertDialog)
