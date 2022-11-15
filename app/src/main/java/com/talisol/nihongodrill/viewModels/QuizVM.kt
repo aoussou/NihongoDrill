@@ -145,35 +145,42 @@ class QuizVM @Inject constructor(
 
                 val exampleSentences = managerDataSource.getExamplesList(wordInfo.id).shuffled()
 
-                val example = exampleSentences[0]
-                val isKana = example.is_kana == 1L
-                val verbForm = example.form
+                val verbForm = if (exampleSentences.isNotEmpty()) {
+                    val example = exampleSentences[0]
+                    example.form
+//                    val isKana = example.is_kana == 1L
+                } else {
+                    "dictionary"
+                }
+
+                val isKana = if (exampleSentences.isNotEmpty()) {
+                    val example = exampleSentences[0]
+                    example.is_kana == 1L
+                } else {
+                    false
+                }
+
                 Log.i("DEB1 kanaverb", verbForm!!)
-
                 val isIchidan = wordInfo.word_type == "ichidan"
-
                 val inflectedVerbMap = getVerbInflection(wordReading, isIchidan)
                 val correctInflectedVerb = inflectedVerbMap[verbForm]!!
-
                 Log.i("DEB1 inflected", correctInflectedVerb)
-
-
                 val mcaList = extractStringFromJson(qas.mca_list!!).toMutableList()
-
                 val shuffledList =
                     mcaList.shuffled().take(_quizState.value.mcaNumber - 1).toMutableList()
-
-
                 var newMCAlist = mutableListOf(correctInflectedVerb)
-
                 var kanjiList = mutableListOf(qas.answer)
-
                 for (v in shuffledList) {
                     Log.i(" kanaverb", v)
                     val qWordInfo = managerDataSource.getWordInfo(v)[0]
-                    val wordReading = qWordInfo.reading!!
                     val isIchidan = qWordInfo.word_type == "ichidan"
-                    val inflectedVerbMap = getVerbInflection(wordReading, isIchidan)
+
+                    val inflectedVerbMap = if (isKana) {
+                        getVerbInflection(qWordInfo.reading!!, isIchidan)
+                    } else {
+                        getVerbInflection(qWordInfo.word!!, isIchidan)
+                    }
+
                     val inflectedVerb = inflectedVerbMap[verbForm]!!
                     newMCAlist.add(inflectedVerb)
                     kanjiList.add(v)
@@ -182,19 +189,34 @@ class QuizVM @Inject constructor(
                 val indices = newMCAlist.indices.shuffled()
 
                 newMCAlist = indices.map { newMCAlist[it] }.toMutableList()
-
-
-
                 kanjiList = indices.map { kanjiList[it] }.toMutableList()
 
                 val target = if (isKana) {
                     correctInflectedVerb
                 } else {
-                    val kajiInflectedVerbMap = getVerbInflection(wordReading, isIchidan)
-                    kajiInflectedVerbMap[verbForm]!!
+                    val kanjiInflectedVerbMap = getVerbInflection(qas.answer, isIchidan)
+                    kanjiInflectedVerbMap[verbForm]!!
                 }
 
-                val question = example.sentence_ja.replace(target,"（　）")
+                Log.i("DEBUG TARGET",target)
+
+                val question = if (exampleSentences.isNotEmpty()) {
+                    val example = exampleSentences[0]
+                    example.sentence_ja.replace(target, "（　）")
+                } else {
+                    wordInfo.explanation_en
+                }!!
+
+                val explanation = if (exampleSentences.isNotEmpty()) {
+                    val example = exampleSentences[0]
+                    example.sentence_en
+                } else {
+                    ""
+                }!!
+
+
+
+
 
                 Log.i("DEB1 question", question)
 
@@ -210,11 +232,12 @@ class QuizVM @Inject constructor(
                         mcaList = newMCAlist,
                         isKanjiRecRequired = isKanjiRecRequired,
                         questionFormat = qas.format,
-                        explanation = example.sentence_en,
+                        explanation = explanation,
                         dictionaryFormAnswersList = kanjiList
                     )
 
                 }
+
 
             }
         } else {
@@ -374,7 +397,6 @@ class QuizVM @Inject constructor(
     private fun setQuizType(type: String?) {
         _quizState.update { it.copy(questionType = type) }
     }
-
 
 
     fun getExplanation(word: String): String {
