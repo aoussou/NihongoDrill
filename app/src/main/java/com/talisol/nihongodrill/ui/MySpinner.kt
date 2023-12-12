@@ -1,8 +1,8 @@
 package com.talisol.nihongodrill.ui
 
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Text
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.talisol.nihongodrill.actions.KanjiRecAction
 import com.talisol.nihongodrill.actions.PopupAction
@@ -37,9 +37,9 @@ fun MySpinner(
 
 
 
-            }) {
-                Text(text = element)
-            }
+            },
+                text = {Text(text = element)}
+            )
         }
     }
 

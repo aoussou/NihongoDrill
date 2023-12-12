@@ -1,8 +1,8 @@
 package com.talisol.nihongodrill.di
 
 import android.app.Application
-import com.squareup.sqldelight.android.AndroidSqliteDriver
-import com.squareup.sqldelight.db.SqlDriver
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.talisol.nihongodrill.NihongoDatabase
 import com.talisol.nihongodrill.data.ManagerDataSource
 import com.talisol.nihongodrill.data.ManagerDataSourceImpl
@@ -20,7 +20,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSqlDriver(app:Application): SqlDriver{
+    fun provideSqlDriver(app:Application): SqlDriver {
         return AndroidSqliteDriver(
             schema = NihongoDatabase.Schema,
             context = app,

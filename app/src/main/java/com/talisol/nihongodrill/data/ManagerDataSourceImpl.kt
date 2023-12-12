@@ -1,7 +1,12 @@
 package com.talisol.nihongodrill.data
 
+
+
 import com.talisol.nihongodrill.NihongoDatabase
-import databases.*
+import databases.Example
+import databases.Explanation
+import databases.JlptQuestion
+import databases.KankenQuestion
 
 
 class ManagerDataSourceImpl(
